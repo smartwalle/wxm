@@ -1,3 +1,3 @@
-module github.com/smartwalle/wx
+module github.com/smartwalle/wxm
 
 go 1.13
