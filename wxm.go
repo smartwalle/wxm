@@ -52,6 +52,21 @@ func (this *Client) GetAccessToken() (result string, err error) {
 	return this.accessToken.AccessToken, nil
 }
 
+func (this *Client) RefreshAccessToken() (err error) {
+	this.mu.Lock()
+	defer this.mu.Unlock()
+	this.accessToken, err = this.getAccessToken()
+	if err != nil {
+		return err
+	}
+
+	if this.accessToken.ErrCode != 0 {
+		return errors.New(this.accessToken.ErrMsg)
+	}
+
+	return nil
+}
+
 func (this *Client) getAccessToken() (result *AccessToken, err error) {
 	var url = fmt.Sprintf(kAccessTokenURL, "client_credential", this.appId, this.appSecret)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
