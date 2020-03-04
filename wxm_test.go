@@ -20,7 +20,7 @@ func TestClient_GetAccessToken(t *testing.T) {
 func TestClient_GetUnlimited(t *testing.T) {
 	var p = GetUnlimitedParam{}
 	p.Scene = "1"
-	p.Page = "pages/assist/productDetail/productDetail"
+	p.Page = "pages/assist/gooddetail/gooddetail"
 
 	fmt.Println(client.GetUnlimited(p))
 }

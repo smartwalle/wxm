@@ -97,7 +97,7 @@ func (this *Client) getAccessToken() (result *AccessToken, err error) {
 }
 
 // GetUnlimited 获取小程序码
-func (this *Client) GetUnlimited(param GetUnlimitedParam) (result []byte, err error) {
+func (this *Client) GetUnlimited(param GetUnlimitedParam) (result *GetUnlimitedRsp, err error) {
 	accessToken, err := this.GetAccessToken()
 	if err != nil {
 		return nil, err
@@ -127,14 +127,16 @@ func (this *Client) GetUnlimited(param GetUnlimitedParam) (result []byte, err er
 	}
 
 	if data[0] == '{' {
-		var nErr *Error
-		if err = json.Unmarshal(data, &nErr); err != nil {
+		if err = json.Unmarshal(data, &result); err != nil {
 			return nil, err
 		}
-		return nil, nErr
+		return result, nil
 	}
 
-	result = data
+	result = &GetUnlimitedRsp{}
+	result.ErrCode = 0
+	result.ErrMsg = "ok"
+	result.Data = data
 
 	return result, nil
 }

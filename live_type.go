@@ -1,15 +1,18 @@
 package wxm
 
 type GetLiveInfoParam struct {
-	Start int `json:"start"`
-	Limit int `json:"limit"`
+	Action string `json:"action,omitempty"`  // 获取回放列表的时候需要传递字符串 get_replay
+	RoomId int    `json:"room_id,omitempty"` // 获取回放列表的时候需要传递
+	Start  int    `json:"start"`
+	Limit  int    `json:"limit"`
 }
 
 type GetLiveInfoRsp struct {
-	ErrCode  int             `json:"errcode"`
-	ErrMsg   string          `json:"errmsg"`
-	RoomInfo []*LiveRoomInfo `json:"room_info"`
-	Total    int             `json:"total"`
+	ErrCode    ErrCode         `json:"errcode"`
+	ErrMsg     string          `json:"errmsg"`
+	RoomInfo   []*LiveRoomInfo `json:"room_info"`
+	LiveReplay []*LiveReplay   `json:"live_replay"`
+	Total      int             `json:"total"`
 }
 
 type LiveRoomInfo struct {
@@ -29,4 +32,10 @@ type LiveGoodsInfo struct {
 	URL      string `json:"url"`
 	Price    int    `json:"price"`
 	Name     string `json:"name"`
+}
+
+type LiveReplay struct {
+	CreateTime string `json:"create_time"`
+	ExpireTime string `json:"expire_time"`
+	MediaURL   string `json:"media_url"`
 }
