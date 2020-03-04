@@ -96,6 +96,7 @@ func (this *Client) getAccessToken() (result *AccessToken, err error) {
 	return result, nil
 }
 
+// GetUnlimited 获取小程序码
 func (this *Client) GetUnlimited(param GetUnlimitedParam) (result []byte, err error) {
 	accessToken, err := this.GetAccessToken()
 	if err != nil {
