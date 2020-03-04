@@ -17,7 +17,7 @@ type GetLiveInfoRsp struct {
 
 type LiveRoomInfo struct {
 	Name       string           `json:"name"`
-	RoomId     int64            `json:"room_id"`
+	RoomId     int64            `json:"roomid"`
 	CoverImg   string           `json:"cover_img"`
 	LiveStatus int              `json:"live_status"`
 	StartTime  int64            `json:"start_time"`
