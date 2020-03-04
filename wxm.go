@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -96,20 +97,23 @@ func (this *Client) getAccessToken() (result *AccessToken, err error) {
 	return result, nil
 }
 
-// GetUnlimited 获取小程序码
-func (this *Client) GetUnlimited(param GetUnlimitedParam) (result *GetUnlimitedRsp, err error) {
+func (this *Client) request(method, api string, param interface{}) (data []byte, err error) {
+	return this.request2(method, api, param, true)
+}
+
+func (this *Client) request2(method, api string, param interface{}, reTry bool) (data []byte, err error) {
 	accessToken, err := this.GetAccessToken()
 	if err != nil {
 		return nil, err
 	}
-	var url = fmt.Sprintf(kGetUnlimitURL, accessToken)
+	var url = fmt.Sprintf(api, accessToken)
 
-	data, err := json.Marshal(param)
+	data, err = json.Marshal(param)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
+	req, err := http.NewRequest(method, url, bytes.NewReader(data))
 	if err != nil {
 		return nil, err
 	}
@@ -126,6 +130,21 @@ func (this *Client) GetUnlimited(param GetUnlimitedParam) (result *GetUnlimitedR
 		return nil, err
 	}
 
+	if reTry && string(data[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
+		if err = this.RefreshAccessToken(); err != nil {
+			return nil, err
+		}
+		return this.request2(method, api, param, false)
+	}
+	return data, nil
+}
+
+// GetUnlimited 获取小程序码
+func (this *Client) GetUnlimited(param GetUnlimitedParam) (result *GetUnlimitedRsp, err error) {
+	data, err := this.request(http.MethodPost, kGetUnlimitURL, param)
+	if err != nil {
+		return nil, err
+	}
 	if data[0] == '{' {
 		if err = json.Unmarshal(data, &result); err != nil {
 			return nil, err
