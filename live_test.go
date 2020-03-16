@@ -9,6 +9,7 @@ func TestClient_GetLiveInfo(t *testing.T) {
 	var p = GetLiveInfoParam{}
 	p.Start = 0
 	p.Limit = 100
+	p.RoomId = 1
 
 	rsp, err := client.GetLiveInfo(p)
 	if err != nil {
