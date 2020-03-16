@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -14,6 +15,8 @@ import (
 
 const (
 	kAccessTokenURL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=%s&appid=%s&secret=%s"
+
+	kJSCode2SessionURL = "https://api.weixin.qq.com/sns/jscode2session?grant_type=%s&appid=%s&secret=%s&js_code=%s"
 
 	kGetUnlimitURL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=%s"
 )
@@ -97,23 +100,27 @@ func (this *Client) getAccessToken() (result *AccessToken, err error) {
 	return result, nil
 }
 
-func (this *Client) request(method, api string, param interface{}) (data []byte, err error) {
+func (this *Client) request(method, api string, param interface{}) (result []byte, err error) {
 	return this.request2(method, api, param, true)
 }
 
-func (this *Client) request2(method, api string, param interface{}, reTry bool) (data []byte, err error) {
+func (this *Client) request2(method, api string, param interface{}, reTry bool) (result []byte, err error) {
 	accessToken, err := this.GetAccessToken()
 	if err != nil {
 		return nil, err
 	}
 	var url = fmt.Sprintf(api, accessToken)
 
-	data, err = json.Marshal(param)
-	if err != nil {
-		return nil, err
+	var body io.Reader
+	if param != nil {
+		data, err := json.Marshal(param)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(data)
 	}
 
-	req, err := http.NewRequest(method, url, bytes.NewReader(data))
+	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
 	}
@@ -125,18 +132,44 @@ func (this *Client) request2(method, api string, param interface{}, reTry bool) 
 		return nil, err
 	}
 
-	data, err = ioutil.ReadAll(rsp.Body)
+	result, err = ioutil.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	if reTry && string(data[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
+	if reTry && string(result[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
 		if err = this.RefreshAccessToken(); err != nil {
 			return nil, err
 		}
 		return this.request2(method, api, param, false)
 	}
-	return data, nil
+	return result, nil
+}
+
+// JSCode2Session 获取 session
+func (this *Client) JSCode2Session(code string) (result *JSCode2SessionRsp, err error) {
+	var url = fmt.Sprintf(kJSCode2SessionURL, "authorization_code", this.appId, this.appSecret, code)
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	rsp, err := this.client.Do(req)
+	if rsp != nil && rsp.Body != nil {
+		defer rsp.Body.Close()
+	}
+	if err != nil {
+		return nil, err
+	}
+	data, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = json.Unmarshal(data, &result); err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 // GetUnlimited 获取小程序码

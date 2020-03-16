@@ -24,3 +24,7 @@ func TestClient_GetUnlimited(t *testing.T) {
 
 	fmt.Println(client.GetUnlimited(p))
 }
+
+func TestClient_JSCode2Session(t *testing.T) {
+	fmt.Println(client.JSCode2Session("111"))
+}
