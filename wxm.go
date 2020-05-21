@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strconv"
 	"sync"
 	"time"
@@ -101,16 +102,19 @@ func (this *Client) getAccessToken() (result *AccessToken, err error) {
 	return result, nil
 }
 
-func (this *Client) request(method, api string, param interface{}) (result []byte, err error) {
-	return this.requestWithRetry(method, api, param, true)
+func (this *Client) request(method, api string, param interface{}, values url.Values) (result []byte, err error) {
+	return this.requestWithRetry(method, api, param, values, true)
 }
 
-func (this *Client) requestWithRetry(method, api string, param interface{}, retry bool) (result []byte, err error) {
+func (this *Client) requestWithRetry(method, api string, param interface{}, values url.Values, retry bool) (result []byte, err error) {
 	accessToken, err := this.GetAccessToken()
 	if err != nil {
 		return nil, err
 	}
-	var url = fmt.Sprintf(api, accessToken)
+	var nURL = fmt.Sprintf(api, accessToken)
+	if values != nil {
+		nURL = nURL + "&" + values.Encode()
+	}
 
 	var body io.Reader
 	if param != nil {
@@ -121,7 +125,7 @@ func (this *Client) requestWithRetry(method, api string, param interface{}, retr
 		body = bytes.NewReader(data)
 	}
 
-	req, err := http.NewRequest(method, url, body)
+	req, err := http.NewRequest(method, nURL, body)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +146,7 @@ func (this *Client) requestWithRetry(method, api string, param interface{}, retr
 		if err = this.RefreshAccessToken(); err != nil {
 			return nil, err
 		}
-		return this.requestWithRetry(method, api, param, false)
+		return this.requestWithRetry(method, api, param, values, false)
 	}
 	return result, nil
 }
@@ -177,7 +181,7 @@ func (this *Client) JSCode2Session(code string) (result *JSCode2SessionRsp, err 
 
 // GetUnlimited 小程序-获取小程序码 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
 func (this *Client) GetUnlimited(param GetUnlimitedParam) (result *GetUnlimitedRsp, err error) {
-	data, err := this.request(http.MethodPost, kGetUnlimitURL, param)
+	data, err := this.request(http.MethodPost, kGetUnlimitURL, param, nil)
 	if err != nil {
 		return nil, err
 	}
