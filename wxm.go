@@ -146,7 +146,7 @@ func (this *Client) requestWithRetry(method, api string, param interface{}, retr
 	return result, nil
 }
 
-// JSCode2Session 小程序-获取 session https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
+// JSCode2Session 小程序-登录 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
 func (this *Client) JSCode2Session(code string) (result *JSCode2SessionRsp, err error) {
 	var url = fmt.Sprintf(kJSCode2SessionURL, "authorization_code", this.appId, this.appSecret, code)
 
