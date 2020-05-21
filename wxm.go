@@ -74,8 +74,8 @@ func (this *Client) RefreshAccessToken() (err error) {
 }
 
 func (this *Client) getAccessToken() (result *AccessToken, err error) {
-	var url = fmt.Sprintf(kAccessTokenURL, "client_credential", this.appId, this.appSecret)
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	var nURL = fmt.Sprintf(kAccessTokenURL, "client_credential", this.appId, this.appSecret)
+	req, err := http.NewRequest(http.MethodGet, nURL, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -153,9 +153,9 @@ func (this *Client) requestWithRetry(method, api string, param interface{}, valu
 
 // JSCode2Session 小程序-登录 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
 func (this *Client) JSCode2Session(code string) (result *JSCode2SessionRsp, err error) {
-	var url = fmt.Sprintf(kJSCode2SessionURL, "authorization_code", this.appId, this.appSecret, code)
+	var nURL = fmt.Sprintf(kJSCode2SessionURL, "authorization_code", this.appId, this.appSecret, code)
 
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := http.NewRequest(http.MethodGet, nURL, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -168,7 +168,6 @@ func (this *Client) JSCode2Session(code string) (result *JSCode2SessionRsp, err 
 	}
 	data, err := ioutil.ReadAll(rsp.Body)
 
-	fmt.Println(string(data))
 	if err != nil {
 		return nil, err
 	}
