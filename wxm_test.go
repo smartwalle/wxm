@@ -9,8 +9,8 @@ import (
 var client *Client
 
 func TestMain(m *testing.M) {
-	client = New("wx7262a2f023e9aef8", "133850581b156b304ed23b30766aee90")
-	//client = New("wx6149efb9af013077", "871f204df0dfedc51ec57bef56eca353")
+	//client = New("wx7262a2f023e9aef8", "133850581b156b304ed23b30766aee90")
+	client = New("wx6149efb9af013077", "871f204df0dfedc51ec57bef56eca353")
 	os.Exit(m.Run())
 }
 
