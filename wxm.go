@@ -38,6 +38,7 @@ func New(appId, appSecret string) *Client {
 	return c
 }
 
+// GetAccessToken 小程序-获取小程序全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
 func (this *Client) GetAccessToken() (result string, err error) {
 	this.mu.Lock()
 	defer this.mu.Unlock()
@@ -174,7 +175,7 @@ func (this *Client) JSCode2Session(code string) (result *JSCode2SessionRsp, err 
 	return result, nil
 }
 
-// GetUnlimited 获取小程序码
+// GetUnlimited 小程序-获取小程序码 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
 func (this *Client) GetUnlimited(param GetUnlimitedParam) (result *GetUnlimitedRsp, err error) {
 	data, err := this.request(http.MethodPost, kGetUnlimitURL, param)
 	if err != nil {
