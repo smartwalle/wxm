@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-
 	var client = wxm.New("wx7262a2f023e9aef8", "133850581b156b304ed23b30766aee90")
 
 	var openIdRsp, _ = client.GetUserOpenIdList("")
