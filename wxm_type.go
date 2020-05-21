@@ -26,7 +26,7 @@ func (this *Error) Error() string {
 	return fmt.Sprintf("%d-%s", this.ErrCode, this.ErrMsg)
 }
 
-type AccessToken struct {
+type Token struct {
 	ErrCode     ErrCode `json:"errcode"`
 	ErrMsg      string  `json:"errmsg"`
 	AccessToken string  `json:"access_token"`
@@ -34,7 +34,7 @@ type AccessToken struct {
 	CreateTime  int64   `json:"create_time"`
 }
 
-func (this *AccessToken) Valid() bool {
+func (this *Token) Valid() bool {
 	var now = time.Now().Unix()
 	if now < this.CreateTime+this.ExpiresIn-10 {
 		return true

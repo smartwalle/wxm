@@ -15,11 +15,11 @@ import (
 )
 
 const (
-	kAccessTokenURL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=%s&appid=%s&secret=%s"
+	kGetTokenURL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=%s&appid=%s&secret=%s"
 
 	kJSCode2SessionURL = "https://api.weixin.qq.com/sns/jscode2session?grant_type=%s&appid=%s&secret=%s&js_code=%s"
 
-	kGetUnlimitURL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=%s"
+	kGetUnLimitURL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=%s"
 )
 
 type Client struct {
@@ -27,8 +27,8 @@ type Client struct {
 	appSecret string
 	client    *http.Client
 
-	mu          sync.Mutex
-	accessToken *AccessToken
+	mu    sync.Mutex
+	token *Token
 }
 
 func New(appId, appSecret string) *Client {
@@ -39,42 +39,42 @@ func New(appId, appSecret string) *Client {
 	return c
 }
 
-// GetAccessToken 小程序-获取小程序全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
-func (this *Client) GetAccessToken() (result string, err error) {
+// GetToken 小程序-获取小程序全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
+func (this *Client) GetToken() (result string, err error) {
 	this.mu.Lock()
 	defer this.mu.Unlock()
-	if this.accessToken != nil && this.accessToken.AccessToken != "" && this.accessToken.Valid() {
-		return this.accessToken.AccessToken, nil
+	if this.token != nil && this.token.AccessToken != "" && this.token.Valid() {
+		return this.token.AccessToken, nil
 	}
-	this.accessToken, err = this.getAccessToken()
+	this.token, err = this.getToken()
 	if err != nil {
 		return "", err
 	}
 
-	if this.accessToken.ErrCode != 0 {
-		return "", errors.New(this.accessToken.ErrMsg)
+	if this.token.ErrCode != 0 {
+		return "", errors.New(this.token.ErrMsg)
 	}
 
-	return this.accessToken.AccessToken, nil
+	return this.token.AccessToken, nil
 }
 
-func (this *Client) RefreshAccessToken() (err error) {
+func (this *Client) RefreshToken() (err error) {
 	this.mu.Lock()
 	defer this.mu.Unlock()
-	this.accessToken, err = this.getAccessToken()
+	this.token, err = this.getToken()
 	if err != nil {
 		return err
 	}
 
-	if this.accessToken.ErrCode != 0 {
-		return errors.New(this.accessToken.ErrMsg)
+	if this.token.ErrCode != 0 {
+		return errors.New(this.token.ErrMsg)
 	}
 
 	return nil
 }
 
-func (this *Client) getAccessToken() (result *AccessToken, err error) {
-	var nURL = fmt.Sprintf(kAccessTokenURL, "client_credential", this.appId, this.appSecret)
+func (this *Client) getToken() (result *Token, err error) {
+	var nURL = fmt.Sprintf(kGetTokenURL, "client_credential", this.appId, this.appSecret)
 	req, err := http.NewRequest(http.MethodGet, nURL, nil)
 	if err != nil {
 		return nil, err
@@ -107,7 +107,7 @@ func (this *Client) request(method, api string, param interface{}, values url.Va
 }
 
 func (this *Client) requestWithRetry(method, api string, param interface{}, values url.Values, retry bool) (result []byte, err error) {
-	accessToken, err := this.GetAccessToken()
+	accessToken, err := this.GetToken()
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func (this *Client) requestWithRetry(method, api string, param interface{}, valu
 	}
 
 	if retry && string(result[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
-		if err = this.RefreshAccessToken(); err != nil {
+		if err = this.RefreshToken(); err != nil {
 			return nil, err
 		}
 		return this.requestWithRetry(method, api, param, values, false)
@@ -178,9 +178,9 @@ func (this *Client) JSCode2Session(code string) (result *JSCode2SessionRsp, err 
 	return result, nil
 }
 
-// GetUnlimited 小程序-获取小程序码 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
-func (this *Client) GetUnlimited(param GetUnlimitedParam) (result *GetUnlimitedRsp, err error) {
-	data, err := this.request(http.MethodPost, kGetUnlimitURL, param, nil)
+// GetUnLimited 小程序-获取小程序码 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
+func (this *Client) GetUnLimited(param GetUnlimitedParam) (result *GetUnlimitedRsp, err error) {
+	data, err := this.request(http.MethodPost, kGetUnLimitURL, param, nil)
 	if err != nil {
 		return nil, err
 	}
