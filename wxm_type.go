@@ -46,7 +46,8 @@ type JSCode2SessionRsp struct {
 	ErrCode    ErrCode `json:"errcode"`
 	ErrMsg     string  `json:"errmsg"`
 	SessionKey string  `json:"session_key"`
-	OpenId     int     `json:"open_id"`
+	OpenId     string  `json:"openid"`
+	UnionId    string  `json:"unionid"`
 }
 
 type GetUnlimitedParam struct {

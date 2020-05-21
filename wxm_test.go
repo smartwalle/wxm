@@ -9,7 +9,7 @@ import (
 var client *Client
 
 func TestMain(m *testing.M) {
-	client = New("wx143cd4036f7c65c5", "94b3359451d867b91d0a78eb74030c9c")
+	client = New("wx6149efb9af013077", "871f204df0dfedc51ec57bef56eca353")
 	os.Exit(m.Run())
 }
 
@@ -26,5 +26,5 @@ func TestClient_GetUnlimited(t *testing.T) {
 }
 
 func TestClient_JSCode2Session(t *testing.T) {
-	fmt.Println(client.JSCode2Session("111"))
+	fmt.Println(client.JSCode2Session("033fnP0Q0fDnC62DFLXP0Syz0Q0fnP0-"))
 }

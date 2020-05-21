@@ -101,10 +101,10 @@ func (this *Client) getAccessToken() (result *AccessToken, err error) {
 }
 
 func (this *Client) request(method, api string, param interface{}) (result []byte, err error) {
-	return this.request2(method, api, param, true)
+	return this.requestWithRetry(method, api, param, true)
 }
 
-func (this *Client) request2(method, api string, param interface{}, reTry bool) (result []byte, err error) {
+func (this *Client) requestWithRetry(method, api string, param interface{}, retry bool) (result []byte, err error) {
 	accessToken, err := this.GetAccessToken()
 	if err != nil {
 		return nil, err
@@ -137,16 +137,16 @@ func (this *Client) request2(method, api string, param interface{}, reTry bool) 
 		return nil, err
 	}
 
-	if reTry && string(result[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
+	if retry && string(result[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
 		if err = this.RefreshAccessToken(); err != nil {
 			return nil, err
 		}
-		return this.request2(method, api, param, false)
+		return this.requestWithRetry(method, api, param, false)
 	}
 	return result, nil
 }
 
-// JSCode2Session 获取 session
+// JSCode2Session 小程序-获取 session https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
 func (this *Client) JSCode2Session(code string) (result *JSCode2SessionRsp, err error) {
 	var url = fmt.Sprintf(kJSCode2SessionURL, "authorization_code", this.appId, this.appSecret, code)
 
@@ -162,6 +162,8 @@ func (this *Client) JSCode2Session(code string) (result *JSCode2SessionRsp, err 
 		return nil, err
 	}
 	data, err := ioutil.ReadAll(rsp.Body)
+
+	fmt.Println(string(data))
 	if err != nil {
 		return nil, err
 	}
