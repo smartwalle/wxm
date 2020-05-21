@@ -26,8 +26,8 @@ func (this *Client) GetUserOpenIdList(nextOpenId string) (result *GetUserOpenIdL
 	return result, nil
 }
 
-// GetUserBasicInfo 公众号-获取用户基本信息 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Get_users_basic_information_UnionID.html#UinonId
-func (this *Client) GetUserBasicInfo(openId, lang string) (result *GetUserBasicInfoRsp, err error) {
+// GetUserInfo 公众号-获取用户基本信息 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Get_users_basic_information_UnionID.html#UinonId
+func (this *Client) GetUserInfo(openId, lang string) (result *GetUserInfoRsp, err error) {
 	var values = url.Values{}
 	values.Add("openid", openId)
 	values.Add("lang", lang)

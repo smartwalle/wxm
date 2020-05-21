@@ -11,7 +11,7 @@ type GetUserOpenIdListRsp struct {
 	NextOpenId string `json:"next_openid"`
 }
 
-type GetUserBasicInfoRsp struct {
+type GetUserInfoRsp struct {
 	ErrCode        ErrCode `json:"errcode"`
 	ErrMsg         string  `json:"errmsg"`
 	Subscribe      int     `json"subscribe"`

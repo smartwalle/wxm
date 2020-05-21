@@ -10,7 +10,7 @@ func main() {
 
 	var openIdRsp, _ = client.GetUserOpenIdList("")
 	for _, openId := range openIdRsp.Data.OpenId {
-		rsp, _ := client.GetUserBasicInfo(openId, "")
+		rsp, _ := client.GetUserInfo(openId, "")
 		fmt.Println(rsp.Nickname, rsp.OpenId, rsp.UnionId)
 	}
 }
