@@ -10,7 +10,7 @@ import (
 
 const (
 	kAuthorizeURL      = "https://open.weixin.qq.com/connect/oauth2/authorize"
-	kQRConnect         = "https://open.weixin.qq.com/connect/qrconnect"
+	kQRConnectURL      = "https://open.weixin.qq.com/connect/qrconnect"
 	kAccessTokenURL    = "https://api.weixin.qq.com/sns/oauth2/access_token"
 	kJSCode2SessionURL = "https://api.weixin.qq.com/sns/jscode2session?grant_type=%s&appid=%s&secret=%s&js_code=%s"
 )
@@ -37,7 +37,7 @@ func (this *Website) QRConnect(redirectURL string, state string) string {
 	v.Add("response_type", "code")
 	v.Add("scope", "snsapi_login")
 	v.Add("state", state)
-	return kQRConnect + "?" + v.Encode()
+	return kQRConnectURL + "?" + v.Encode()
 }
 
 // GetAccessToken 微信用户-通过 Code 获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
