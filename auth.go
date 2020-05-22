@@ -15,7 +15,7 @@ const (
 // 1. 服务端调用 GetAuthorizeURL 生成登录 URL，微信 APP 中访问该 URL 成功之后，会重定向到 redirectURL
 // 2. 服务端对应的 redirectURL 接口获取 code 参数，然后调用 GetAccessToken 获取 AccessToken 信息
 
-// GetAuthorizeURL 获取公众号登录 URL
+// GetAuthorizeURL 微信用户-获取公众号登录 URL
 func (this *Client) GetAuthorizeURL(redirectURL string, scope AuthScope, state string) string {
 	var v = url.Values{}
 	v.Add("appid", this.appId)
@@ -26,7 +26,7 @@ func (this *Client) GetAuthorizeURL(redirectURL string, scope AuthScope, state s
 	return kAuthorizeURL + "?" + v.Encode()
 }
 
-// GetAccessToken 通过 Code 获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
+// GetAccessToken 微信用户-通过 Code 获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
 func (this *Client) GetAccessToken(code string) (result *AccessToken, err error) {
 	var v = url.Values{}
 	v.Add("appid", this.appId)
