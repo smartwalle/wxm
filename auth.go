@@ -18,7 +18,7 @@ const (
 // 1. 服务端调用 GetAuthorizeURL 或者 GetQRConnectURL 生成登录 URL，微信 APP 或者浏览器 中访问该 URL 成功之后，会重定向到 redirectURL
 // 2. 服务端对应的 redirectURL 接口获取 code 参数，然后调用 GetAccessToken 获取 AccessToken 信息
 
-// GetAuthorizeURL 微信用户-获取公众号登录 URL
+// GetAuthorizeURL 公众号-获取公众号登录 URL https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
 func (this *OfficialAccount) GetAuthorizeURL(redirectURL string, scope AuthScope, state string) string {
 	var v = url.Values{}
 	v.Add("appid", this.client.appId)
@@ -40,7 +40,7 @@ func (this *Website) GetQRConnectURL(redirectURL string, state string) string {
 	return kQRConnectURL + "?" + v.Encode()
 }
 
-// GetAccessToken 微信用户-通过 Code 获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
+// GetAccessToken 通过 Code 获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
 func (this *client) GetAccessToken(code string) (result *AccessToken, err error) {
 	var v = url.Values{}
 	v.Add("appid", this.appId)
@@ -82,7 +82,7 @@ func (this *Website) GetAccessToken(code string) (result *AccessToken, err error
 	return this.client.GetAccessToken(code)
 }
 
-// JSCode2Session 小程序-登录 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
+// JSCode2Session 小程序-登录凭证校验 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
 func (this *MiniProgram) JSCode2Session(code string) (result *JSCode2SessionRsp, err error) {
 	var nURL = fmt.Sprintf(kJSCode2SessionURL, "authorization_code", this.client.appId, this.client.appSecret, code)
 
