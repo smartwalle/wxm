@@ -13,11 +13,11 @@ const (
 )
 
 // GetUserOpenIdList 公众号-获取帐号的关注者列表 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
-func (this *Client) GetUserOpenIdList(nextOpenId string) (result *GetUserOpenIdListRsp, err error) {
+func (this *OfficialAccount) GetUserOpenIdList(nextOpenId string) (result *GetUserOpenIdListRsp, err error) {
 	var values = url.Values{}
 	values.Add("next_openid", nextOpenId)
 
-	data, err := this.request(http.MethodGet, kGetUserOpenIdListURL, nil, values)
+	data, err := this.client.request(http.MethodGet, kGetUserOpenIdListURL, nil, values)
 	if err != nil {
 		return nil, err
 	}
@@ -28,12 +28,12 @@ func (this *Client) GetUserOpenIdList(nextOpenId string) (result *GetUserOpenIdL
 }
 
 // GetUserInfo 公众号-获取用户基本信息 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Get_users_basic_information_UnionID.html#UinonId
-func (this *Client) GetUserInfo(openId, lang string) (result *GetUserInfoRsp, err error) {
+func (this *OfficialAccount) GetUserInfo(openId, lang string) (result *GetUserInfoRsp, err error) {
 	var values = url.Values{}
 	values.Add("openid", openId)
 	values.Add("lang", lang)
 
-	data, err := this.request(http.MethodGet, kGetUserInfoURL, nil, values)
+	data, err := this.client.request(http.MethodGet, kGetUserInfoURL, nil, values)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (this *Client) GetUserInfo(openId, lang string) (result *GetUserInfoRsp, er
 }
 
 // GetUserInfoList 公众号-批量获取用户基本信息
-func (this *Client) GetUserInfoList(openIds ...string) (result *GetUserInfoListRsp, err error) {
+func (this *OfficialAccount) GetUserInfoList(openIds ...string) (result *GetUserInfoListRsp, err error) {
 	if len(openIds) == 0 {
 		return &GetUserInfoListRsp{}, nil
 	}
@@ -52,7 +52,7 @@ func (this *Client) GetUserInfoList(openIds ...string) (result *GetUserInfoListR
 	var param = &GetUserInfoListParam{}
 	param.AddOpenId(openIds...)
 
-	data, err := this.request(http.MethodPost, kGetUserInfoListURL, param, nil)
+	data, err := this.client.request(http.MethodPost, kGetUserInfoListURL, param, nil)
 	if err != nil {
 		return nil, err
 	}

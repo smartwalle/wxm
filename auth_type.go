@@ -17,3 +17,11 @@ type AccessToken struct {
 	Scope        AuthScope `json:"scope"`
 	UnionId      string    `json"unionid"`
 }
+
+type JSCode2SessionRsp struct {
+	ErrCode    ErrCode `json:"errcode"`
+	ErrMsg     string  `json:"errmsg"`
+	SessionKey string  `json:"session_key"`
+	OpenId     string  `json:"openid"`
+	UnionId    string  `json:"unionid"`
+}

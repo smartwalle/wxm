@@ -1,12 +1,13 @@
-package wxm
+package wxm_test
 
 import (
 	"encoding/json"
+	"github.com/smartwalle/wxm"
 	"testing"
 )
 
 func TestClient_SendSubscribeMessage(t *testing.T) {
-	var p = SendSubscribeMessageParam{}
+	var p = wxm.SendSubscribeMessageParam{}
 	p.ToUser = "o45lH49xBSpfFndnPY5g6dM9cgvE"
 	p.TemplateId = "eyVwkflimGWuuO0n_jJ5QQaiiJpOfcsg53NqPPA_D6k"
 	p.AddData("thing1", "hah")
@@ -14,7 +15,7 @@ func TestClient_SendSubscribeMessage(t *testing.T) {
 	p.AddData("date3", "2015年01月05日")
 	p.AddData("thing4", "aaa")
 
-	rsp, err := client.SendSubscribeMessage(p)
+	rsp, err := miniProgram.SendSubscribeMessage(p)
 	if err != nil {
 		t.Error(err)
 	}
@@ -24,7 +25,7 @@ func TestClient_SendSubscribeMessage(t *testing.T) {
 }
 
 func TestClient_SendTemplateMessage(t *testing.T) {
-	var p = SendTemplateMessageParam{}
+	var p = wxm.SendTemplateMessageParam{}
 	p.ToUser = "ocGXK1H6qbqcJ84MmES8Z5y5ItaE"
 	p.TemplateId = "WITmIZMRP_GkiDmGwdMmeMM2Qlr6dZ8EqtiLVapf67Q"
 	p.AddData("first", "hello first message", "#173177")
@@ -35,7 +36,7 @@ func TestClient_SendTemplateMessage(t *testing.T) {
 	p.AddData("customerPhone", "18180103029", "#173177")
 	p.AddData("remark", "something else", "#173177")
 
-	rsp, err := client.SendTemplateMessage(p)
+	rsp, err := officialAccount.SendTemplateMessage(p)
 	if err != nil {
 		t.Error(err)
 	}

@@ -41,18 +41,18 @@ type SendSubscribeMessageRsp struct {
 	ErrMsg  string  `json:"errmsg"`
 }
 
-type MiniProgram struct {
+type MiniProgramInfo struct {
 	AppId    string `json:"appid"`    // 是 所需跳转到的小程序appid（该小程序appid必须与发模板消息的公众号是绑定关联关系，暂不支持小游戏）
 	PagePath string `json:"pagepath"` // 否 所需跳转到小程序的具体页面路径，支持带参数, （示例index?foo = bar），要求该小程序已发布，暂不支持小游戏
 }
 
 // SendTemplateMessageParam https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html
 type SendTemplateMessageParam struct {
-	ToUser      string       `json:"touser"`                // 是 接收者（用户）的 openid
-	TemplateId  string       `json:"template_id"`           // 是 模板ID
-	URL         string       `json:"url"`                   // 否 模板跳转链接（海外帐号没有跳转能力）
-	MiniProgram *MiniProgram `json:"miniprogram,omitempty"` // 否 跳小程序所需数据，不需跳小程序可不用传该数据
-	Data        MessageData  `json:"data"`                  // 是 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }
+	ToUser      string           `json:"touser"`                // 是 接收者（用户）的 openid
+	TemplateId  string           `json:"template_id"`           // 是 模板ID
+	URL         string           `json:"url"`                   // 否 模板跳转链接（海外帐号没有跳转能力）
+	MiniProgram *MiniProgramInfo `json:"miniprogram,omitempty"` // 否 跳小程序所需数据，不需跳小程序可不用传该数据
+	Data        MessageData      `json:"data"`                  // 是 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }
 }
 
 func (this *SendTemplateMessageParam) AddData(key, value, color string) {
