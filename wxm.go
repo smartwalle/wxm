@@ -39,7 +39,7 @@ func New(appId, appSecret string) *Client {
 	return c
 }
 
-// GetToken 小程序-获取小程序全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
+// GetToken 小程序、公众号-获取小程序全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
 func (this *Client) GetToken() (result string, err error) {
 	this.mu.Lock()
 	defer this.mu.Unlock()

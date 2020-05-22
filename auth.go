@@ -9,6 +9,7 @@ import (
 
 const (
 	kAuthorizeURL   = "https://open.weixin.qq.com/connect/oauth2/authorize"
+	kQRConnect      = "https://open.weixin.qq.com/connect/qrconnect"
 	kAccessTokenURL = "https://api.weixin.qq.com/sns/oauth2/access_token"
 )
 
@@ -24,6 +25,17 @@ func (this *Client) GetAuthorizeURL(redirectURL string, scope AuthScope, state s
 	v.Add("scope", string(scope))
 	v.Add("state", state)
 	return kAuthorizeURL + "?" + v.Encode()
+}
+
+// QRConnect 微信用户-获取网站应用微信登录 URL https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html
+func (this *Client) QRConnect(redirectURL string, state string) string {
+	var v = url.Values{}
+	v.Add("appid", this.appId)
+	v.Add("redirect_uri", redirectURL)
+	v.Add("response_type", "code")
+	v.Add("scope", "snsapi_login")
+	v.Add("state", state)
+	return kQRConnect + "?" + v.Encode()
 }
 
 // GetAccessToken 微信用户-通过 Code 获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
