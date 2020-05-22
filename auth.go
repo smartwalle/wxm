@@ -26,7 +26,7 @@ func (this *Client) GetAuthorizeURL(redirectURL string, scope AuthScope, state s
 	return kAuthorizeURL + "?" + v.Encode()
 }
 
-// GetAccessToken 获取 AccessToken
+// GetAccessToken 通过 code 获取 access_token https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
 func (this *Client) GetAccessToken(code string) (result *AccessToken, err error) {
 	var v = url.Values{}
 	v.Add("appid", this.appId)
