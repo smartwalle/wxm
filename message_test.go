@@ -26,7 +26,7 @@ func TestMiniProgram_SendSubscribeMessage(t *testing.T) {
 
 func TestMiniProgram_SendUniformMessage(t *testing.T) {
 	var p = wxm.SendUniformMessageParam{}
-	p.ToUser = "o-wmv4nnpvU_yj0fvwu_jAX2s38w"
+	p.ToUser = "o-wmv4r6OLL26bPEObqkkneBy4EI"
 	p.MPTemplateMsg = &wxm.MPTemplateMsg{}
 	p.MPTemplateMsg.AppId = "wx7262a2f023e9aef8"
 	p.MPTemplateMsg.TemplateId = "WITmIZMRP_GkiDmGwdMmeMM2Qlr6dZ8EqtiLVapf67Q"
