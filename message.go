@@ -7,12 +7,25 @@ import (
 
 const (
 	kSendSubscribeMessageURL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=%s"
+	kSendUniformMessageURL   = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=%s"
 	kSendTemplateMessageURL  = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s"
 )
 
 // SendSubscribeMessage 小程序-发送订阅消息 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/subscribe-message/subscribeMessage.send.html
 func (this *MiniProgram) SendSubscribeMessage(param SendSubscribeMessageParam) (result *SendSubscribeMessageRsp, err error) {
 	data, err := this.client.request(http.MethodPost, kSendSubscribeMessageURL, param, nil)
+	if err != nil {
+		return nil, err
+	}
+	if err = json.Unmarshal(data, &result); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SendUniformMessage 小程序-下发小程序和公众号统一的服务消息 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/uniform-message/uniformMessage.send.html
+func (this *MiniProgram) SendUniformMessage(param SendUniformMessageParam) (result *SendUniformMessageRsp, err error) {
+	data, err := this.client.request(http.MethodPost, kSendUniformMessageURL, param, nil)
 	if err != nil {
 		return nil, err
 	}

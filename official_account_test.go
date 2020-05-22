@@ -8,6 +8,6 @@ import (
 
 var officialAccount = wxm.NewOfficialAccount("xxx", "xxx")
 
-func TestOfficial_GetToken(t *testing.T) {
+func TestOfficialAccount_GetToken(t *testing.T) {
 	fmt.Println(miniProgram.GetToken())
 }
