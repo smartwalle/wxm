@@ -11,5 +11,5 @@ func TestMiniProgram_GetUnlimited(t *testing.T) {
 	p.Scene = "1"
 	p.Page = "pages/assist/gooddetail/gooddetail"
 
-	fmt.Println(miniProgram.GetUnLimited(p))
+	fmt.Println(miniProgram.GetUnlimited(p))
 }
