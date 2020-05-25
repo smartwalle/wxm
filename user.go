@@ -13,10 +13,11 @@ const (
 	kGetUserInfoListURL   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
 )
 
-func (this *client) GetUserBaseInfo(accessToken, openId string) (result *GetUserBaseInfoRsp, err error) {
+func (this *client) GetUserBaseInfo(accessToken, openId string, lang string) (result *GetUserBaseInfoRsp, err error) {
 	var v = url.Values{}
 	v.Add("access_token", accessToken)
 	v.Add("openid", openId)
+	v.Add("lang", lang)
 
 	data, err := this.RequestWithoutAccessToken(http.MethodGet, kGetUserBaseInfoURL, nil, v)
 	if err != nil {
@@ -29,13 +30,13 @@ func (this *client) GetUserBaseInfo(accessToken, openId string) (result *GetUser
 }
 
 // GetUserBaseInfo 公众号-获取用户信息 https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
-func (this *OfficialAccount) GetUserBaseInfo(accessToken, openId string) (result *GetUserBaseInfoRsp, err error) {
-	return this.client.GetUserBaseInfo(accessToken, openId)
+func (this *OfficialAccount) GetUserBaseInfo(accessToken, openId, lang string) (result *GetUserBaseInfoRsp, err error) {
+	return this.client.GetUserBaseInfo(accessToken, openId, lang)
 }
 
 // GetUserBaseInfo 微信-获取用户信息 https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
-func (this *MobileApp) GetUserBaseInfo(accessToken, openId string) (result *GetUserBaseInfoRsp, err error) {
-	return this.client.GetUserBaseInfo(accessToken, openId)
+func (this *MobileApp) GetUserBaseInfo(accessToken, openId, lang string) (result *GetUserBaseInfoRsp, err error) {
+	return this.client.GetUserBaseInfo(accessToken, openId, lang)
 }
 
 // GetUserOpenIdList 公众号-获取帐号的关注者列表 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
