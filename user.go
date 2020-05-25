@@ -14,11 +14,11 @@ const (
 )
 
 func (this *client) GetUserBaseInfo(accessToken, openId string) (result *GetUserBaseInfoRsp, err error) {
-	var values = url.Values{}
-	values.Add("access_token", accessToken)
-	values.Add("openid", openId)
+	var v = url.Values{}
+	v.Add("access_token", accessToken)
+	v.Add("openid", openId)
 
-	data, err := this.RequestWithoutAccessToken(http.MethodGet, kGetUserBaseInfoURL, nil, values)
+	data, err := this.RequestWithoutAccessToken(http.MethodGet, kGetUserBaseInfoURL, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -40,10 +40,10 @@ func (this *MobileApp) GetUserBaseInfo(accessToken, openId string) (result *GetU
 
 // GetUserOpenIdList 公众号-获取帐号的关注者列表 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
 func (this *OfficialAccount) GetUserOpenIdList(nextOpenId string) (result *GetUserOpenIdListRsp, err error) {
-	var values = url.Values{}
-	values.Add("next_openid", nextOpenId)
+	var v = url.Values{}
+	v.Add("next_openid", nextOpenId)
 
-	data, err := this.client.RequestWithAccessToken(http.MethodGet, kGetUserOpenIdListURL, nil, values)
+	data, err := this.client.RequestWithAccessToken(http.MethodGet, kGetUserOpenIdListURL, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -55,11 +55,11 @@ func (this *OfficialAccount) GetUserOpenIdList(nextOpenId string) (result *GetUs
 
 // GetUserInfo 公众号-获取用户基本信息 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Get_users_basic_information_UnionID.html#UinonId
 func (this *OfficialAccount) GetUserInfo(openId, lang string) (result *GetUserInfoRsp, err error) {
-	var values = url.Values{}
-	values.Add("openid", openId)
-	values.Add("lang", lang)
+	var v = url.Values{}
+	v.Add("openid", openId)
+	v.Add("lang", lang)
 
-	data, err := this.client.RequestWithAccessToken(http.MethodGet, kGetUserInfoURL, nil, values)
+	data, err := this.client.RequestWithAccessToken(http.MethodGet, kGetUserInfoURL, nil, v)
 	if err != nil {
 		return nil, err
 	}
