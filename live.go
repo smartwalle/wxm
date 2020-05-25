@@ -6,12 +6,12 @@ import (
 )
 
 const (
-	kGetLiveInfoURL = "http://api.weixin.qq.com/wxa/business/getliveinfo?access_token=%s"
+	kGetLiveInfoURL = "http://api.weixin.qq.com/wxa/business/getliveinfo"
 )
 
 // GetLiveInfo 小程序-获取直播房间列表 https://developers.weixin.qq.com/miniprogram/dev/framework/liveplayer/live-player-plugin.html
 func (this *MiniProgram) GetLiveInfo(param GetLiveInfoParam) (result *GetLiveInfoRsp, err error) {
-	data, err := this.client.request(http.MethodPost, kGetLiveInfoURL, param, nil)
+	data, err := this.client.RequestWithAccessToken(http.MethodPost, kGetLiveInfoURL, param, nil)
 	if err != nil {
 		return nil, err
 	}

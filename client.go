@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -15,7 +14,7 @@ import (
 )
 
 const (
-	kGetTokenURL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=%s&appid=%s&secret=%s"
+	kGetTokenURL = "https://api.weixin.qq.com/cgi-bin/token"
 )
 
 type client struct {
@@ -70,19 +69,12 @@ func (this *client) RefreshToken() (err error) {
 }
 
 func (this *client) getToken() (result *Token, err error) {
-	var nURL = fmt.Sprintf(kGetTokenURL, "client_credential", this.appId, this.appSecret)
-	req, err := http.NewRequest(http.MethodGet, nURL, nil)
-	if err != nil {
-		return nil, err
-	}
-	rsp, err := this.client.Do(req)
-	if rsp != nil && rsp.Body != nil {
-		defer rsp.Body.Close()
-	}
-	if err != nil {
-		return nil, err
-	}
-	data, err := ioutil.ReadAll(rsp.Body)
+	var v = url.Values{}
+	v.Add("appid", this.appId)
+	v.Add("secret", this.appSecret)
+	v.Add("grant_type", "client_credential")
+
+	data, err := this.RequestWithoutAccessToken(http.MethodGet, kGetTokenURL, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -98,19 +90,30 @@ func (this *client) getToken() (result *Token, err error) {
 	return result, nil
 }
 
-func (this *client) request(method, api string, param interface{}, values url.Values) (result []byte, err error) {
-	return this.requestWithRetry(method, api, param, values, true)
+func (this *client) RequestWithAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
+	return this.request(method, api, param, values, true, true)
 }
 
-func (this *client) requestWithRetry(method, api string, param interface{}, values url.Values, retry bool) (result []byte, err error) {
-	accessToken, err := this.GetToken()
-	if err != nil {
-		return nil, err
+func (this *client) RequestWithoutAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
+	return this.request(method, api, param, values, false, false)
+}
+
+func (this *client) request(method, api string, param interface{}, values url.Values, withAccessToken, retry bool) (result []byte, err error) {
+	if values == nil {
+		values = url.Values{}
 	}
-	var nURL = fmt.Sprintf(api, accessToken)
-	if values != nil {
-		nURL = nURL + "&" + values.Encode()
+
+	if withAccessToken {
+		accessToken, err := this.GetToken()
+		if err != nil {
+			return nil, err
+		}
+
+		values.Del("access_token")
+		values.Add("access_token", accessToken)
 	}
+
+	var nURL = api + "?" + values.Encode()
 
 	var body io.Reader
 	if param != nil {
@@ -142,7 +145,7 @@ func (this *client) requestWithRetry(method, api string, param interface{}, valu
 		if err = this.RefreshToken(); err != nil {
 			return nil, err
 		}
-		return this.requestWithRetry(method, api, param, values, false)
+		return this.request(method, api, param, values, withAccessToken, false)
 	}
 	return result, nil
 }

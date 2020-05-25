@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	kGetUserOpenIdListURL = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=%s"
-	kGetUserInfoURL       = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s"
-	kGetUserInfoListURL   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=%s"
+	kGetUserOpenIdListURL = "https://api.weixin.qq.com/cgi-bin/user/get"
+	kGetUserInfoURL       = "https://api.weixin.qq.com/cgi-bin/user/info"
+	kGetUserInfoListURL   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
 )
 
 // GetUserOpenIdList 公众号-获取帐号的关注者列表 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
@@ -17,7 +17,7 @@ func (this *OfficialAccount) GetUserOpenIdList(nextOpenId string) (result *GetUs
 	var values = url.Values{}
 	values.Add("next_openid", nextOpenId)
 
-	data, err := this.client.request(http.MethodGet, kGetUserOpenIdListURL, nil, values)
+	data, err := this.client.RequestWithAccessToken(http.MethodGet, kGetUserOpenIdListURL, nil, values)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (this *OfficialAccount) GetUserInfo(openId, lang string) (result *GetUserIn
 	values.Add("openid", openId)
 	values.Add("lang", lang)
 
-	data, err := this.client.request(http.MethodGet, kGetUserInfoURL, nil, values)
+	data, err := this.client.RequestWithAccessToken(http.MethodGet, kGetUserInfoURL, nil, values)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (this *OfficialAccount) GetUserInfoList(openIds ...string) (result *GetUser
 	var param = &GetUserInfoListParam{}
 	param.AddOpenId(openIds...)
 
-	data, err := this.client.request(http.MethodPost, kGetUserInfoListURL, param, nil)
+	data, err := this.client.RequestWithAccessToken(http.MethodPost, kGetUserInfoListURL, param, nil)
 	if err != nil {
 		return nil, err
 	}
