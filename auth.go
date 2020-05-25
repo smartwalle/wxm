@@ -39,7 +39,7 @@ func (this *Website) GetQRConnectURL(redirectURL string, state string) string {
 	return kQRConnectURL + "?" + v.Encode()
 }
 
-// GetAccessToken 通过 Code 获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
+// GetAccessToken 通过 Code 获取 AccessToken
 func (this *client) GetAccessToken(code string) (result *AccessToken, err error) {
 	var v = url.Values{}
 	v.Add("appid", this.appId)
@@ -57,14 +57,17 @@ func (this *client) GetAccessToken(code string) (result *AccessToken, err error)
 	return result, nil
 }
 
+// GetAccessToken 公众号-获取 AccessToken https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
 func (this *OfficialAccount) GetAccessToken(code string) (result *AccessToken, err error) {
 	return this.client.GetAccessToken(code)
 }
 
+// GetAccessToken 网站-获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html
 func (this *Website) GetAccessToken(code string) (result *AccessToken, err error) {
 	return this.client.GetAccessToken(code)
 }
 
+// GetAccessToken 微信-获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
 func (this *MobileApp) GetAccessToken(code string) (result *AccessToken, err error) {
 	return this.client.GetAccessToken(code)
 }
@@ -85,14 +88,17 @@ func (this *client) RefreshAccessToken(refreshToken string) (result *RefreshToke
 	return result, nil
 }
 
+// RefreshAccessToken 公众号-刷新 AccessToken https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
 func (this *OfficialAccount) RefreshAccessToken(refreshToken string) (result *RefreshToken, err error) {
 	return this.client.RefreshAccessToken(refreshToken)
 }
 
+// RefreshAccessToken 网站-刷新 AccessToken https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html
 func (this *Website) RefreshAccessToken(refreshToken string) (result *RefreshToken, err error) {
 	return this.client.RefreshAccessToken(refreshToken)
 }
 
+// RefreshAccessToken 微信-刷新 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
 func (this *MobileApp) RefreshAccessToken(refreshToken string) (result *RefreshToken, err error) {
 	return this.client.RefreshAccessToken(refreshToken)
 }

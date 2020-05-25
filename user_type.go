@@ -11,6 +11,24 @@ type GetUserOpenIdListRsp struct {
 	NextOpenId string `json:"next_openid"`
 }
 
+type GetUserBaseInfoRsp struct {
+	ErrCode ErrCode `json:"errcode"`
+	ErrMsg  string  `json:"errmsg"`
+	UserBaseInfo
+}
+
+type UserBaseInfo struct {
+	OpenId     string   `json"openid"`
+	Nickname   string   `json"nickname"`
+	Sex        int      `json"sex"`
+	City       string   `json"city"`
+	Province   string   `json"province"`
+	Country    string   `json"country"`
+	HeadImgURL string   `json"headimgurl"`
+	UnionId    string   `json"unionid"`
+	Privilege  []string `json:"privilege"`
+}
+
 type UserInfo struct {
 	Subscribe      int    `json"subscribe"`
 	OpenId         string `json"openid"`
