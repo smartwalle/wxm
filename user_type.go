@@ -1,5 +1,17 @@
 package wxm
 
+type Watermark struct {
+	AppId     string `json:"appid"`
+	Timestamp int64  `json:"timestamp"`
+}
+
+type GetPhoneNumberRsp struct {
+	PhoneNumber     string     `json:"phoneNumber"`
+	PurePhoneNumber string     `json:"purePhoneNumber"`
+	CountryCode     string     `json:"countryCode"`
+	Watermark       *Watermark `json:"watermark"`
+}
+
 type GetUserOpenIdListRsp struct {
 	ErrCode ErrCode `json:"errcode"`
 	ErrMsg  string  `json:"errmsg"`
