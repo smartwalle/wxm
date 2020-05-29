@@ -15,7 +15,7 @@ type AccessToken struct {
 	RefreshToken string    `json:"refresh_token"`
 	OpenId       string    `json:"openid"`
 	Scope        AuthScope `json:"scope"`
-	UnionId      string    `json"unionid"`
+	UnionId      string    `json:"unionid"`
 }
 
 type RefreshToken struct {

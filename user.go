@@ -1,7 +1,6 @@
 package wxm
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"net/http"
 	"net/url"
@@ -17,29 +16,22 @@ const (
 // GetPhoneNumber 小程序-解密手机号码数据 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html
 //
 // 小程序端申请获取用户的手机号码之后，获取到的是加密的数据，需要调用本方法对该数据进行解密，以获取手机号码。
-func (this *MiniProgram) GetPhoneNumber(sessionKey, encryptedData, iv string) (result *GetPhoneNumberRsp, err error) {
-	sessionKeyBytes, err := base64.StdEncoding.DecodeString(sessionKey)
-	if err != nil {
-		return nil, err
-	}
-	encryptedBytes, err := base64.StdEncoding.DecodeString(encryptedData)
-	if err != nil {
-		return nil, err
-	}
-	ivBytes, err := base64.StdEncoding.DecodeString(iv)
-	if err != nil {
-		return nil, err
-	}
-
-	decryptedBytes, err := AESCBCDecrypt(encryptedBytes, sessionKeyBytes, ivBytes)
-	if err != nil {
-		return nil, err
-	}
-
+func (this *MiniProgram) GetPhoneNumber(sessionKey, encryptedData, iv string) (result *MiniProgramPhoneNumber, err error) {
+	decryptedBytes, err := this.decrypt(sessionKey, encryptedData, iv)
 	if err = json.Unmarshal(decryptedBytes, &result); err != nil {
 		return nil, err
 	}
+	return result, nil
+}
 
+// GetUserInfo 小程序-解密用户数据 https://developers.weixin.qq.com/miniprogram/dev/api/open-api/user-info/wx.getUserInfo.html
+//
+// 小程序端申请获取用户的信息之后，获取到的有加密的数据，需要调用本方法对该数据进行解密，以获取加密信息。
+func (this *MiniProgram) GetUserInfo(sessionKey, encryptedData, iv string) (result *MiniProgramUserInfo, err error) {
+	decryptedBytes, err := this.decrypt(sessionKey, encryptedData, iv)
+	if err = json.Unmarshal(decryptedBytes, &result); err != nil {
+		return nil, err
+	}
 	return result, nil
 }
 
