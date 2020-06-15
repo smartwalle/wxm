@@ -89,6 +89,13 @@ type MiniProgramInfo struct {
 	PagePath string `json:"pagepath"` // 否 所需跳转到小程序的具体页面路径，支持带参数, （示例index?foo = bar），要求该小程序已发布，暂不支持小游戏
 }
 
+func NewMiniProgramInfo(appId, pagePath string) *MiniProgramInfo {
+	return &MiniProgramInfo{
+		AppId:    appId,
+		PagePath: pagePath,
+	}
+}
+
 // SendTemplateMessageParam https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html
 type SendTemplateMessageParam struct {
 	ToUser      string           `json:"touser"`                // 是 接收者（用户）的 openid

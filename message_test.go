@@ -26,17 +26,17 @@ func TestMiniProgram_SendSubscribeMessage(t *testing.T) {
 
 func TestMiniProgram_SendUniformMessage(t *testing.T) {
 	var p = wxm.SendUniformMessageParam{}
-	p.ToUser = "o-wmv4r6OLL26bPEObqkkneBy4EI"
+	p.ToUser = "o-wmv4nnpvU_yj0fvwu_jAX2s38w"
 	p.MPTemplateMsg = &wxm.MPTemplateMsg{}
 	p.MPTemplateMsg.AppId = "wx7262a2f023e9aef8"
-	p.MPTemplateMsg.TemplateId = "WITmIZMRP_GkiDmGwdMmeMM2Qlr6dZ8EqtiLVapf67Q"
-	p.MPTemplateMsg.AddData("first", "ww hello first message", "#173177")
-	p.MPTemplateMsg.AddData("Day", "2020-05-21", "#173177")
-	p.MPTemplateMsg.AddData("orderId", "test-order-id", "#173177")
-	p.MPTemplateMsg.AddData("orderType", "order-type", "#173177")
-	p.MPTemplateMsg.AddData("customerName", "customer", "#173177")
-	p.MPTemplateMsg.AddData("customerPhone", "18180103029", "#173177")
-	p.MPTemplateMsg.AddData("remark", "something else", "#173177")
+	p.MPTemplateMsg.TemplateId = "zbTRULuZeGLJgjQbXhlp6DkhwF5Gb6uXMt-VAV_APrg"
+	p.MPTemplateMsg.MiniProgram = wxm.NewMiniProgramInfo("wx6149efb9af013077", "/packageC/pages/cindex/cindex")
+	p.MPTemplateMsg.AddData("first", "您好，您有新的订单！", "#173177")
+	p.MPTemplateMsg.AddData("keyword1", "晚安服务匹配订单", "#173177")
+	p.MPTemplateMsg.AddData("keyword2", "nickname", "#173177")
+	p.MPTemplateMsg.AddData("keyword3", "2006-01-02 15:04:06", "#173177")
+	p.MPTemplateMsg.AddData("keyword4", "10.19元", "#173177")
+	p.MPTemplateMsg.AddData("remark", "请及时查看处理！", "#173177")
 
 	rsp, err := miniProgram.SendUniformMessage(p)
 	if err != nil {
