@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"sort"
 	"strings"
 )
@@ -87,8 +86,6 @@ func (this *MiniProgram) ParsePushMessage(token, timestamp, nonce, signature, ke
 
 		var index = bytes.LastIndex(pData, []byte("}"))
 		pData = pData[20 : index+1]
-
-		fmt.Println(string(pData))
 
 		var info *MessageInfo
 		if err = json.Unmarshal(pData, &info); err != nil {
