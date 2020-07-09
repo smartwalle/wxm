@@ -1,6 +1,12 @@
 package wxm
 
-import "encoding/base64"
+import (
+	"crypto/sha1"
+	"encoding/base64"
+	"encoding/hex"
+	"sort"
+	"strings"
+)
 
 type MiniProgram struct {
 	client *client
@@ -41,4 +47,17 @@ func (this *MiniProgram) decrypt(sessionKey, encryptedData, iv string) (result [
 		return nil, err
 	}
 	return decryptedBytes, err
+}
+
+// CheckMessagePushServer 小程序-验证消息来自微信服务器 https://developers.weixin.qq.com/miniprogram/dev/framework/server-ability/message-push.html#option-url
+func (this *MiniProgram) CheckMessagePushServer(token, timestamp, nonce, signature string) bool {
+	var ps = []string{token, timestamp, nonce}
+	sort.Strings(ps)
+
+	var s = sha1.New()
+	s.Write([]byte(strings.Join(ps, "")))
+	if hex.EncodeToString(s.Sum(nil)) == signature {
+		return true
+	}
+	return false
 }
