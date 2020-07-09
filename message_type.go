@@ -96,6 +96,52 @@ func NewMiniProgramInfo(appId, pagePath string) *MiniProgramInfo {
 	}
 }
 
+// SendCustomerServiceMessageParam https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.send.html
+type SendCustomerServiceMessageParam struct {
+	ToUser          string              `json:"touser"`                    // 是 用户的 OpenID
+	MsgType         MsgType             `json:"msgtype"`                   // 是 消息类型
+	Text            *MsgText            `json:"text,omitempty"`            // 是 文本消息，msgtype="text" 时必填
+	Image           *MsgImage           `json:"image,omitempty"`           // 是 图片消息，msgtype="image" 时必填
+	Link            *MsgLink            `json:"link,omitempty"`            // 是 图文链接，msgtype="link" 时必填
+	MiniProgramPage *MsgMiniProgramPage `json:"miniprogrampage,omitempty"` // 是 小程序卡片，msgtype="miniprogrampage" 时必填
+
+}
+
+type MsgType string
+
+const (
+	MsgTypeOfText            MsgType = "text"
+	MsgTypeOfImage           MsgType = "image"
+	MsgTypeOfLink            MsgType = "link"
+	MsgTypeOfMiniProgramPage MsgType = "miniprogrampage"
+)
+
+type MsgText struct {
+	Content string `json:"content"`
+}
+
+type MsgImage struct {
+	MediaId string `json:"media_id"`
+}
+
+type MsgLink struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	URL         string `json:"url"`
+	ThumbURL    string `json:"thumb_url"`
+}
+
+type MsgMiniProgramPage struct {
+	Title        string `json:"title"`
+	PagePath     string `json:"pagepath"`
+	ThumbMediaId string `json:"thumb_media_id"`
+}
+
+type SendCustomerServiceMessageRsp struct {
+	ErrCode ErrCode `json:"errcode"`
+	ErrMsg  string  `json:"errmsg"`
+}
+
 // SendTemplateMessageParam https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html
 type SendTemplateMessageParam struct {
 	ToUser      string           `json:"touser"`                // 是 接收者（用户）的 openid

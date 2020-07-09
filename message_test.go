@@ -47,6 +47,21 @@ func TestMiniProgram_SendUniformMessage(t *testing.T) {
 	t.Log(string(rspBytes))
 }
 
+func TestMiniProgram_SendCustomerServiceMessage(t *testing.T) {
+	var p = wxm.SendCustomerServiceMessageParam{}
+	p.ToUser = "o45lH49xBSpfFndnPY5g6dM9cgvE"
+	p.MsgType = wxm.MsgTypeOfImage
+	p.Image = &wxm.MsgImage{}
+	p.Image.MediaId = "Ge2GGIhdVoRBX2-R9wYrdWjjENa_KEp4Ag9VDy3VhALgKQBMA2EFdcRQjKKPl-J4"
+
+	rsp, err := miniProgram.SendCustomerServiceMessage(p)
+	if err != nil {
+		t.Error(err)
+	}
+	rspBytes, _ := json.Marshal(rsp)
+	t.Log(string(rspBytes))
+}
+
 func TestOfficialAccount_SendTemplateMessage(t *testing.T) {
 	var p = wxm.SendTemplateMessageParam{}
 	p.ToUser = "ocGXK1H6qbqcJ84MmES8Z5y5ItaE"
