@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -62,21 +61,19 @@ func (this *client) RefreshToken() (err error) {
 	if err != nil {
 		return err
 	}
-
 	if this.token.ErrCode != 0 {
 		return errors.New(this.token.ErrMsg)
 	}
-
 	return nil
 }
 
 func (this *client) getToken() (result *Token, err error) {
-	var v = url.Values{}
-	v.Add("appid", this.appId)
-	v.Add("secret", this.appSecret)
-	v.Add("grant_type", "client_credential")
+	var values = url.Values{}
+	values.Add("appid", this.appId)
+	values.Add("secret", this.appSecret)
+	values.Add("grant_type", "client_credential")
 
-	data, err := this.RequestWithoutAccessToken(http.MethodGet, kGetTokenURL, nil, v)
+	data, err := this.RequestWithoutAccessToken(http.MethodGet, kGetTokenURL, nil, values)
 	if err != nil {
 		return nil, err
 	}
@@ -110,12 +107,8 @@ func (this *client) request(method, api string, param interface{}, values url.Va
 		if err != nil {
 			return nil, err
 		}
-
-		values.Del("access_token")
-		values.Add("access_token", accessToken)
+		values.Set("access_token", accessToken)
 	}
-
-	var nURL = api + "?" + values.Encode()
 
 	var body io.Reader
 	if param != nil {
@@ -126,19 +119,18 @@ func (this *client) request(method, api string, param interface{}, values url.Va
 		body = bytes.NewReader(data)
 	}
 
+	var nURL = api + "?" + values.Encode()
 	req, err := http.NewRequest(method, nURL, body)
 	if err != nil {
 		return nil, err
 	}
 	rsp, err := this.client.Do(req)
-	if rsp != nil && rsp.Body != nil {
-		defer rsp.Body.Close()
-	}
 	if err != nil {
 		return nil, err
 	}
+	defer rsp.Body.Close()
 
-	result, err = ioutil.ReadAll(rsp.Body)
+	result, err = io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -166,12 +158,8 @@ func (this *client) upload(method, api, fieldName, filePath string, values url.V
 		if err != nil {
 			return nil, err
 		}
-
-		values.Del("access_token")
-		values.Add("access_token", accessToken)
+		values.Set("access_token", accessToken)
 	}
-
-	var nURL = api + "?" + values.Encode()
 
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -194,6 +182,7 @@ func (this *client) upload(method, api, fieldName, filePath string, values url.V
 		return nil, err
 	}
 
+	var nURL = api + "?" + values.Encode()
 	req, err := http.NewRequest(method, nURL, body)
 	if err != nil {
 		return nil, err
@@ -201,14 +190,12 @@ func (this *client) upload(method, api, fieldName, filePath string, values url.V
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
 	rsp, err := this.client.Do(req)
-	if rsp != nil && rsp.Body != nil {
-		defer rsp.Body.Close()
-	}
 	if err != nil {
 		return nil, err
 	}
+	defer rsp.Body.Close()
 
-	result, err = ioutil.ReadAll(rsp.Body)
+	result, err = io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, err
 	}
