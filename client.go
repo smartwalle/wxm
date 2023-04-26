@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	kGetTokenURL = "https://api.weixin.qq.com/cgi-bin/token"
+	kGetToken = "https://api.weixin.qq.com/cgi-bin/token"
 )
 
 type client struct {
@@ -73,7 +73,7 @@ func (this *client) getToken() (result *Token, err error) {
 	values.Add("secret", this.appSecret)
 	values.Add("grant_type", "client_credential")
 
-	data, err := this.requestWithoutAccessToken(http.MethodGet, kGetTokenURL, nil, values)
+	data, err := this.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, values)
 	if err != nil {
 		return nil, err
 	}

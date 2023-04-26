@@ -7,11 +7,11 @@ import (
 )
 
 const (
-	kAuthorizeURL      = "https://open.weixin.qq.com/connect/oauth2/authorize"
-	kQRConnectURL      = "https://open.weixin.qq.com/connect/qrconnect"
-	kAccessTokenURL    = "https://api.weixin.qq.com/sns/oauth2/access_token"
-	kRefreshTokenURL   = "https://api.weixin.qq.com/sns/oauth2/refresh_token"
-	kJSCode2SessionURL = "https://api.weixin.qq.com/sns/jscode2session"
+	kAuthorize      = "https://open.weixin.qq.com/connect/oauth2/authorize"
+	kQRConnect      = "https://open.weixin.qq.com/connect/qrconnect"
+	kAccessToken    = "https://api.weixin.qq.com/sns/oauth2/access_token"
+	kRefreshToken   = "https://api.weixin.qq.com/sns/oauth2/refresh_token"
+	kJSCode2Session = "https://api.weixin.qq.com/sns/jscode2session"
 )
 
 // 1. 服务端调用 GetAuthorizeURL 或者 GetQRConnectURL 生成登录 URL，微信 APP 或者浏览器 中访问该 URL 成功之后，会重定向到 redirectURL
@@ -25,7 +25,7 @@ func (this *OfficialAccount) GetAuthorizeURL(redirectURL string, scope AuthScope
 	v.Add("response_type", "code")
 	v.Add("scope", string(scope))
 	v.Add("state", state)
-	return kAuthorizeURL + "?" + v.Encode()
+	return kAuthorize + "?" + v.Encode()
 }
 
 // GetQRConnectURL 网站-获取网站应用微信登录 URL https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html
@@ -36,7 +36,7 @@ func (this *Website) GetQRConnectURL(redirectURL string, state string) string {
 	v.Add("response_type", "code")
 	v.Add("scope", "snsapi_login")
 	v.Add("state", state)
-	return kQRConnectURL + "?" + v.Encode()
+	return kQRConnect + "?" + v.Encode()
 }
 
 // GetAccessToken 通过 Code 获取 AccessToken
@@ -47,7 +47,7 @@ func (this *client) GetAccessToken(code string) (result *AccessToken, err error)
 	v.Add("code", code)
 	v.Add("grant_type", "authorization_code")
 
-	data, err := this.requestWithoutAccessToken(http.MethodGet, kAccessTokenURL, nil, v)
+	data, err := this.requestWithoutAccessToken(http.MethodGet, kAccessToken, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (this *client) RefreshAccessToken(refreshToken string) (result *RefreshToke
 	v.Add("refresh_token", refreshToken)
 	v.Add("grant_type", "refresh_token")
 
-	data, err := this.requestWithoutAccessToken(http.MethodGet, kRefreshTokenURL, nil, v)
+	data, err := this.requestWithoutAccessToken(http.MethodGet, kRefreshToken, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ func (this *MiniProgram) JSCode2Session(code string) (result *JSCode2SessionRsp,
 	v.Add("js_code", code)
 	v.Add("grant_type", "authorization_code")
 
-	data, err := this.client.requestWithoutAccessToken(http.MethodGet, kJSCode2SessionURL, nil, v)
+	data, err := this.client.requestWithoutAccessToken(http.MethodGet, kJSCode2Session, nil, v)
 	if err != nil {
 		return nil, err
 	}

@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	kGetUserBaseInfoURL   = "https://api.weixin.qq.com/sns/userinfo"
-	kGetUserOpenIdListURL = "https://api.weixin.qq.com/cgi-bin/user/get"
-	kGetUserInfoURL       = "https://api.weixin.qq.com/cgi-bin/user/info"
-	kGetUserInfoListURL   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
+	kGetUserBaseInfo   = "https://api.weixin.qq.com/sns/userinfo"
+	kGetUserOpenIdList = "https://api.weixin.qq.com/cgi-bin/user/get"
+	kGetUserInfo       = "https://api.weixin.qq.com/cgi-bin/user/info"
+	kGetUserInfoList   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
 )
 
 // GetPhoneNumber 小程序-解密手机号码数据 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html
@@ -41,7 +41,7 @@ func (this *client) GetUserBaseInfo(accessToken, openId string, lang string) (re
 	v.Add("openid", openId)
 	v.Add("lang", lang)
 
-	data, err := this.requestWithoutAccessToken(http.MethodGet, kGetUserBaseInfoURL, nil, v)
+	data, err := this.requestWithoutAccessToken(http.MethodGet, kGetUserBaseInfo, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (this *OfficialAccount) GetUserOpenIdList(nextOpenId string) (result *GetUs
 	var v = url.Values{}
 	v.Add("next_openid", nextOpenId)
 
-	data, err := this.client.requestWithAccessToken(http.MethodGet, kGetUserOpenIdListURL, nil, v)
+	data, err := this.client.requestWithAccessToken(http.MethodGet, kGetUserOpenIdList, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (this *OfficialAccount) GetUserInfo(openId, lang string) (result *GetUserIn
 	v.Add("openid", openId)
 	v.Add("lang", lang)
 
-	data, err := this.client.requestWithAccessToken(http.MethodGet, kGetUserInfoURL, nil, v)
+	data, err := this.client.requestWithAccessToken(http.MethodGet, kGetUserInfo, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func (this *OfficialAccount) GetUserInfoList(openIds ...string) (result *GetUser
 	var param = &GetUserInfoListParam{}
 	param.AddOpenId(openIds...)
 
-	data, err := this.client.requestWithAccessToken(http.MethodPost, kGetUserInfoListURL, param, nil)
+	data, err := this.client.requestWithAccessToken(http.MethodPost, kGetUserInfoList, param, nil)
 	if err != nil {
 		return nil, err
 	}

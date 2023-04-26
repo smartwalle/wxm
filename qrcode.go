@@ -6,12 +6,12 @@ import (
 )
 
 const (
-	kGetUnLimitURL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit"
+	kGetUnLimit = "https://api.weixin.qq.com/wxa/getwxacodeunlimit"
 )
 
 // GetUnlimited 小程序-获取小程序码 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
 func (this *MiniProgram) GetUnlimited(param GetUnlimitedParam) (result *GetUnlimitedRsp, err error) {
-	data, err := this.client.requestWithAccessToken(http.MethodPost, kGetUnLimitURL, param, nil)
+	data, err := this.client.requestWithAccessToken(http.MethodPost, kGetUnLimit, param, nil)
 	if err != nil {
 		return nil, err
 	}
