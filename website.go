@@ -1,7 +1,7 @@
 package wxm
 
 type Website struct {
-	client *client
+	*client
 }
 
 func NewWebsite(appId, appSecret string) *Website {

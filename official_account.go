@@ -1,7 +1,7 @@
 package wxm
 
 type OfficialAccount struct {
-	client *client
+	*client
 }
 
 func NewOfficialAccount(appId, appSecret string) *OfficialAccount {

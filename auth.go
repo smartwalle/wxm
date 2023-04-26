@@ -47,7 +47,7 @@ func (this *client) GetAccessToken(code string) (result *AccessToken, err error)
 	v.Add("code", code)
 	v.Add("grant_type", "authorization_code")
 
-	data, err := this.RequestWithoutAccessToken(http.MethodGet, kAccessTokenURL, nil, v)
+	data, err := this.requestWithoutAccessToken(http.MethodGet, kAccessTokenURL, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (this *client) RefreshAccessToken(refreshToken string) (result *RefreshToke
 	v.Add("refresh_token", refreshToken)
 	v.Add("grant_type", "refresh_token")
 
-	data, err := this.RequestWithoutAccessToken(http.MethodGet, kRefreshTokenURL, nil, v)
+	data, err := this.requestWithoutAccessToken(http.MethodGet, kRefreshTokenURL, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ func (this *MiniProgram) JSCode2Session(code string) (result *JSCode2SessionRsp,
 	v.Add("js_code", code)
 	v.Add("grant_type", "authorization_code")
 
-	data, err := this.client.RequestWithoutAccessToken(http.MethodGet, kJSCode2SessionURL, nil, v)
+	data, err := this.client.requestWithoutAccessToken(http.MethodGet, kJSCode2SessionURL, nil, v)
 	if err != nil {
 		return nil, err
 	}

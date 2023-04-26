@@ -19,7 +19,7 @@ func (this *MiniProgram) UploadTempMedia(mediaType MediaType, filePath string) (
 	var v = url.Values{}
 	v.Add("type", string(mediaType))
 
-	data, err := this.client.Upload(http.MethodPost, kUploadMediaURL, "media", filePath, v, true)
+	data, err := this.client.upload(http.MethodPost, kUploadMediaURL, "media", filePath, v, true)
 	if err != nil {
 		return nil, err
 	}

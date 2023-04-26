@@ -21,7 +21,7 @@ const (
 type client struct {
 	appId     string
 	appSecret string
-	client    *http.Client
+	Client    *http.Client
 
 	mu    sync.Mutex
 	token *Token
@@ -31,7 +31,7 @@ func newClient(appId, appSecret string) *client {
 	var c = &client{}
 	c.appId = appId
 	c.appSecret = appSecret
-	c.client = http.DefaultClient
+	c.Client = http.DefaultClient
 	return c
 }
 
@@ -73,7 +73,7 @@ func (this *client) getToken() (result *Token, err error) {
 	values.Add("secret", this.appSecret)
 	values.Add("grant_type", "client_credential")
 
-	data, err := this.RequestWithoutAccessToken(http.MethodGet, kGetTokenURL, nil, values)
+	data, err := this.requestWithoutAccessToken(http.MethodGet, kGetTokenURL, nil, values)
 	if err != nil {
 		return nil, err
 	}
@@ -89,11 +89,11 @@ func (this *client) getToken() (result *Token, err error) {
 	return result, nil
 }
 
-func (this *client) RequestWithAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
+func (this *client) requestWithAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
 	return this.request(method, api, param, values, true, true)
 }
 
-func (this *client) RequestWithoutAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
+func (this *client) requestWithoutAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
 	return this.request(method, api, param, values, false, false)
 }
 
@@ -124,7 +124,7 @@ func (this *client) request(method, api string, param interface{}, values url.Va
 	if err != nil {
 		return nil, err
 	}
-	rsp, err := this.client.Do(req)
+	rsp, err := this.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -144,11 +144,11 @@ func (this *client) request(method, api string, param interface{}, values url.Va
 	return result, nil
 }
 
-func (this *client) Upload(method, api, fieldName, filePath string, values url.Values, withAccessToken bool) (result []byte, err error) {
-	return this.upload(method, api, fieldName, filePath, values, withAccessToken, true)
+func (this *client) upload(method, api, fieldName, filePath string, values url.Values, withAccessToken bool) (result []byte, err error) {
+	return this._upload(method, api, fieldName, filePath, values, withAccessToken, true)
 }
 
-func (this *client) upload(method, api, fieldName, filePath string, values url.Values, withAccessToken, retry bool) (result []byte, err error) {
+func (this *client) _upload(method, api, fieldName, filePath string, values url.Values, withAccessToken, retry bool) (result []byte, err error) {
 	if values == nil {
 		values = url.Values{}
 	}
@@ -189,7 +189,7 @@ func (this *client) upload(method, api, fieldName, filePath string, values url.V
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
-	rsp, err := this.client.Do(req)
+	rsp, err := this.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -204,7 +204,7 @@ func (this *client) upload(method, api, fieldName, filePath string, values url.V
 		if err = this.RefreshToken(); err != nil {
 			return nil, err
 		}
-		return this.upload(method, api, fieldName, filePath, values, withAccessToken, false)
+		return this._upload(method, api, fieldName, filePath, values, withAccessToken, false)
 	}
 	return result, nil
 }

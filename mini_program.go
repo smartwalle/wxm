@@ -12,7 +12,7 @@ import (
 )
 
 type MiniProgram struct {
-	client *client
+	*client
 }
 
 func NewMiniProgram(appId, appSecret string) *MiniProgram {

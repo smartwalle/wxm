@@ -41,7 +41,7 @@ func (this *client) GetUserBaseInfo(accessToken, openId string, lang string) (re
 	v.Add("openid", openId)
 	v.Add("lang", lang)
 
-	data, err := this.RequestWithoutAccessToken(http.MethodGet, kGetUserBaseInfoURL, nil, v)
+	data, err := this.requestWithoutAccessToken(http.MethodGet, kGetUserBaseInfoURL, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (this *OfficialAccount) GetUserOpenIdList(nextOpenId string) (result *GetUs
 	var v = url.Values{}
 	v.Add("next_openid", nextOpenId)
 
-	data, err := this.client.RequestWithAccessToken(http.MethodGet, kGetUserOpenIdListURL, nil, v)
+	data, err := this.client.requestWithAccessToken(http.MethodGet, kGetUserOpenIdListURL, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (this *OfficialAccount) GetUserInfo(openId, lang string) (result *GetUserIn
 	v.Add("openid", openId)
 	v.Add("lang", lang)
 
-	data, err := this.client.RequestWithAccessToken(http.MethodGet, kGetUserInfoURL, nil, v)
+	data, err := this.client.requestWithAccessToken(http.MethodGet, kGetUserInfoURL, nil, v)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func (this *OfficialAccount) GetUserInfoList(openIds ...string) (result *GetUser
 	var param = &GetUserInfoListParam{}
 	param.AddOpenId(openIds...)
 
-	data, err := this.client.RequestWithAccessToken(http.MethodPost, kGetUserInfoListURL, param, nil)
+	data, err := this.client.requestWithAccessToken(http.MethodPost, kGetUserInfoListURL, param, nil)
 	if err != nil {
 		return nil, err
 	}
