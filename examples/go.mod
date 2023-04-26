@@ -1,4 +1,4 @@
-module github.com/smartwalle/wxm/cmd
+module github.com/smartwalle/wxm/examples
 
 require (
 	github.com/gin-gonic/gin v1.7.7 // indirect
