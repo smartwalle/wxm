@@ -1,7 +1,7 @@
 package wxm
 
 const (
-	CodeEmptyRoomList ErrCode = 1 // 没有房间信息
+	CodeEmptyRoomList Code = 1 // 没有房间信息
 )
 
 // GetLiveInfoParam https://developers.weixin.qq.com/miniprogram/dev/framework/liveplayer/live-player-plugin.html
@@ -13,8 +13,7 @@ type GetLiveInfoParam struct {
 }
 
 type GetLiveInfoRsp struct {
-	ErrCode    ErrCode         `json:"errcode"`
-	ErrMsg     string          `json:"errmsg"`
+	Error
 	RoomInfo   []*LiveRoomInfo `json:"room_info"`
 	LiveReplay []*LiveReplay   `json:"live_replay"`
 	Total      int             `json:"total"`

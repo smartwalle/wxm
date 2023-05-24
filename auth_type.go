@@ -8,8 +8,7 @@ const (
 )
 
 type AccessToken struct {
-	ErrCode      ErrCode   `json:"errcode"`
-	ErrMsg       string    `json:"errmsg"`
+	Error
 	AccessToken  string    `json:"access_token"`
 	ExpiresIn    int64     `json:"expires_in"`
 	RefreshToken string    `json:"refresh_token"`
@@ -27,9 +26,8 @@ type RefreshToken struct {
 }
 
 type JSCode2SessionRsp struct {
-	ErrCode    ErrCode `json:"errcode"`
-	ErrMsg     string  `json:"errmsg"`
-	SessionKey string  `json:"session_key"`
-	OpenId     string  `json:"openid"`
-	UnionId    string  `json:"unionid"`
+	Error
+	SessionKey string `json:"session_key"`
+	OpenId     string `json:"openid"`
+	UnionId    string `json:"unionid"`
 }

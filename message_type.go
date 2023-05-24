@@ -37,8 +37,7 @@ func (this *SendSubscribeMessageParam) AddData(key, value string) {
 }
 
 type SendSubscribeMessageRsp struct {
-	ErrCode ErrCode `json:"errcode"`
-	ErrMsg  string  `json:"errmsg"`
+	Error
 }
 
 // SendUniformMessageParam https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/uniform-message/uniformMessage.send.html
@@ -80,8 +79,7 @@ func (this *MPTemplateMsg) AddData(key, value, color string) {
 }
 
 type SendUniformMessageRsp struct {
-	ErrCode ErrCode `json:"errcode"`
-	ErrMsg  string  `json:"errmsg"`
+	Error
 }
 
 type MiniProgramInfo struct {
@@ -138,8 +136,7 @@ type MsgMiniProgramPage struct {
 }
 
 type SendCustomerServiceMessageRsp struct {
-	ErrCode ErrCode `json:"errcode"`
-	ErrMsg  string  `json:"errmsg"`
+	Error
 }
 
 // SendTemplateMessageParam https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html
@@ -160,6 +157,5 @@ func (this *SendTemplateMessageParam) AddData(key, value, color string) {
 }
 
 type SendTemplateMessageRsp struct {
-	ErrCode ErrCode `json:"errcode"`
-	ErrMsg  string  `json:"errmsg"`
+	Error
 }

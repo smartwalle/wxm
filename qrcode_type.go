@@ -17,7 +17,6 @@ type LineColor struct {
 }
 
 type GetUnlimitedRsp struct {
-	ErrCode ErrCode `json:"errcode"`
-	ErrMsg  string  `json:"errmsg"`
-	Data    []byte  `json:"data"`
+	Error
+	Data []byte `json:"data"`
 }

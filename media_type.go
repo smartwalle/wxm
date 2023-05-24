@@ -7,8 +7,7 @@ const (
 )
 
 type UploadMediaRsp struct {
-	ErrCode   ErrCode   `json:"errcode"`
-	ErrMsg    string    `json:"errmsg"`
+	Error
 	Type      MediaType `json:"type"`
 	MediaId   string    `json:"media_id"`
 	CreatedAt int64     `json:"created_at"`
