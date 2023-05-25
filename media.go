@@ -1,7 +1,6 @@
 package wxm
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/url"
 )
@@ -19,11 +18,7 @@ func (this *MiniProgram) UploadTempMedia(mediaType MediaType, filePath string) (
 	var v = url.Values{}
 	v.Add("type", string(mediaType))
 
-	data, err := this.client.upload(http.MethodPost, kUploadMedia, "media", filePath, v, true)
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(data, &result); err != nil {
+	if err = this.client.upload(http.MethodPost, kUploadMedia, "media", filePath, v, true, &result); err != nil {
 		return nil, err
 	}
 	return result, nil

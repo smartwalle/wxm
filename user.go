@@ -41,11 +41,7 @@ func (this *client) GetUserBaseInfo(accessToken, openId string, lang string) (re
 	v.Add("openid", openId)
 	v.Add("lang", lang)
 
-	data, err := this.requestWithoutAccessToken(http.MethodGet, kGetUserBaseInfo, nil, v)
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(data, &result); err != nil {
+	if err = this.requestWithoutAccessToken(http.MethodGet, kGetUserBaseInfo, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
@@ -66,11 +62,7 @@ func (this *OfficialAccount) GetUserOpenIdList(nextOpenId string) (result *GetUs
 	var v = url.Values{}
 	v.Add("next_openid", nextOpenId)
 
-	data, err := this.client.requestWithAccessToken(http.MethodGet, kGetUserOpenIdList, nil, v)
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(data, &result); err != nil {
+	if err = this.client.requestWithAccessToken(http.MethodGet, kGetUserOpenIdList, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
@@ -82,11 +74,7 @@ func (this *OfficialAccount) GetUserInfo(openId, lang string) (result *GetUserIn
 	v.Add("openid", openId)
 	v.Add("lang", lang)
 
-	data, err := this.client.requestWithAccessToken(http.MethodGet, kGetUserInfo, nil, v)
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(data, &result); err != nil {
+	if err = this.client.requestWithAccessToken(http.MethodGet, kGetUserInfo, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
@@ -101,11 +89,7 @@ func (this *OfficialAccount) GetUserInfoList(openIds ...string) (result *GetUser
 	var param = &GetUserInfoListParam{}
 	param.AddOpenId(openIds...)
 
-	data, err := this.client.requestWithAccessToken(http.MethodPost, kGetUserInfoList, param, nil)
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(data, &result); err != nil {
+	if err = this.client.requestWithAccessToken(http.MethodPost, kGetUserInfoList, param, nil, &result); err != nil {
 		return nil, err
 	}
 	return result, nil

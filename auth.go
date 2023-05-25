@@ -1,7 +1,6 @@
 package wxm
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/url"
 )
@@ -47,11 +46,7 @@ func (this *client) GetAccessToken(code string) (result *AccessToken, err error)
 	v.Add("code", code)
 	v.Add("grant_type", "authorization_code")
 
-	data, err := this.requestWithoutAccessToken(http.MethodGet, kAccessToken, nil, v)
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(data, &result); err != nil {
+	if err = this.requestWithoutAccessToken(http.MethodGet, kAccessToken, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
@@ -78,11 +73,7 @@ func (this *client) RefreshAccessToken(refreshToken string) (result *RefreshToke
 	v.Add("refresh_token", refreshToken)
 	v.Add("grant_type", "refresh_token")
 
-	data, err := this.requestWithoutAccessToken(http.MethodGet, kRefreshToken, nil, v)
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(data, &result); err != nil {
+	if err = this.requestWithoutAccessToken(http.MethodGet, kRefreshToken, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
@@ -111,11 +102,7 @@ func (this *MiniProgram) JSCode2Session(code string) (result *JSCode2SessionRsp,
 	v.Add("js_code", code)
 	v.Add("grant_type", "authorization_code")
 
-	data, err := this.client.requestWithoutAccessToken(http.MethodGet, kJSCode2Session, nil, v)
-	if err != nil {
-		return nil, err
-	}
-	if err = json.Unmarshal(data, &result); err != nil {
+	if err = this.client.requestWithoutAccessToken(http.MethodGet, kJSCode2Session, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil

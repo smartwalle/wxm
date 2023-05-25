@@ -73,12 +73,7 @@ func (this *client) getToken() (result *Token, err error) {
 	values.Add("secret", this.appSecret)
 	values.Add("grant_type", "client_credential")
 
-	data, err := this.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, values)
-	if err != nil {
-		return nil, err
-	}
-
-	if err = json.Unmarshal(data, &result); err != nil {
+	if err := this.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, values, &result); err != nil {
 		return nil, err
 	}
 
@@ -89,15 +84,26 @@ func (this *client) getToken() (result *Token, err error) {
 	return result, nil
 }
 
-func (this *client) requestWithAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
-	return this._request(method, api, param, values, true, true)
+func (this *client) requestWithAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
+	var data, err = this.request(method, api, param, values, true, true)
+	if err != nil {
+		return err
+	}
+	if err = json.Unmarshal(data, result); err != nil {
+		return err
+	}
+	return nil
 }
 
-func (this *client) requestWithoutAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
-	return this._request(method, api, param, values, false, false)
+func (this *client) requestWithoutAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
+	var data, err = this.request(method, api, param, values, false, false)
+	if err = json.Unmarshal(data, result); err != nil {
+		return err
+	}
+	return nil
 }
 
-func (this *client) _request(method, api string, param interface{}, values url.Values, needAuth, retry bool) (result []byte, err error) {
+func (this *client) request(method, api string, param interface{}, values url.Values, needAuth, retry bool) (result []byte, err error) {
 	if values == nil {
 		values = url.Values{}
 	}
@@ -139,16 +145,16 @@ func (this *client) _request(method, api string, param interface{}, values url.V
 		if err = this.RefreshToken(); err != nil {
 			return nil, err
 		}
-		return this._request(method, api, param, values, needAuth, false)
+		return this.request(method, api, param, values, needAuth, false)
 	}
 	return result, nil
 }
 
-func (this *client) upload(method, api, fieldName, filePath string, values url.Values, needAuth bool) (result []byte, err error) {
-	return this._upload(method, api, fieldName, filePath, values, needAuth, true)
+func (this *client) upload(method, api, fieldName, filePath string, values url.Values, needAuth bool, result interface{}) error {
+	return this._upload(method, api, fieldName, filePath, values, needAuth, true, result)
 }
 
-func (this *client) _upload(method, api, fieldName, filePath string, values url.Values, needAuth, retry bool) (result []byte, err error) {
+func (this *client) _upload(method, api, fieldName, filePath string, values url.Values, needAuth, retry bool, result interface{}) error {
 	if values == nil {
 		values = url.Values{}
 	}
@@ -156,14 +162,14 @@ func (this *client) _upload(method, api, fieldName, filePath string, values url.
 	if needAuth {
 		accessToken, err := this.GetToken()
 		if err != nil {
-			return nil, err
+			return err
 		}
 		values.Set("access_token", accessToken)
 	}
 
 	file, err := os.Open(filePath)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer file.Close()
 
@@ -172,39 +178,43 @@ func (this *client) _upload(method, api, fieldName, filePath string, values url.
 
 	part, err := writer.CreateFormFile(fieldName, filePath)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	_, err = io.Copy(part, file)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if err = writer.Close(); err != nil {
-		return nil, err
+		return err
 	}
 
 	var nURL = api + "?" + values.Encode()
 	req, err := http.NewRequest(method, nURL, body)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
 	rsp, err := this.Client.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer rsp.Body.Close()
 
-	result, err = io.ReadAll(rsp.Body)
+	bodyBytes, err := io.ReadAll(rsp.Body)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	if retry && string(result[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
+	if retry && string(bodyBytes[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
 		if err = this.RefreshToken(); err != nil {
-			return nil, err
+			return err
 		}
-		return this._upload(method, api, fieldName, filePath, values, needAuth, false)
+		return this._upload(method, api, fieldName, filePath, values, needAuth, false, result)
 	}
-	return result, nil
+
+	if err = json.Unmarshal(bodyBytes, result); err != nil {
+		return err
+	}
+	return nil
 }
