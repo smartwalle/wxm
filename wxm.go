@@ -47,8 +47,8 @@ func (this *client) GetToken() (result string, err error) {
 		return "", err
 	}
 
-	if this.token.ErrCode != 0 {
-		return "", errors.New(this.token.ErrMsg)
+	if this.token.Code != 0 {
+		return "", errors.New(this.token.Msg)
 	}
 
 	return this.token.AccessToken, nil

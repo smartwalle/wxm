@@ -97,20 +97,20 @@ func (this *MiniProgram) ParsePushMessage(token, timestamp, nonce, signature, ke
 	return result, nil
 }
 
-func (this *MiniProgram) decryptMessage(key, encryptedData string) (result []byte, err error) {
+func (this *MiniProgram) decryptMessage(key, data string) (result []byte, err error) {
 	key = key + "="
 	keyBytes, err := base64.StdEncoding.DecodeString(key)
 	if err != nil {
 		return nil, err
 	}
-	encryptedBytes, err := base64.StdEncoding.DecodeString(encryptedData)
+	ciphertext, err := base64.StdEncoding.DecodeString(data)
 	if err != nil {
 		return nil, err
 	}
 
-	decryptedBytes, err := AESCBCDecrypt(encryptedBytes, keyBytes, keyBytes[0:16])
+	plaintext, err := AESCBCDecrypt(ciphertext, keyBytes, keyBytes[0:16])
 	if err != nil {
 		return nil, err
 	}
-	return decryptedBytes, err
+	return plaintext, err
 }

@@ -1,7 +1,6 @@
 package wxm_test
 
 import (
-	"encoding/json"
 	"github.com/smartwalle/wxm"
 	"testing"
 )
@@ -13,9 +12,11 @@ func TestMiniProgram_GetLiveInf(t *testing.T) {
 
 	rsp, err := miniProgram.GetLiveInfo(p)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
-	rspBytes, _ := json.Marshal(rsp)
-	t.Log(string(rspBytes))
+	if rsp.IsFailure() {
+		t.Fatal(rsp.Msg)
+	}
+	t.Logf("%v", rsp)
 }

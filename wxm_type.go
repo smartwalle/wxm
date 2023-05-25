@@ -26,20 +26,20 @@ const (
 )
 
 type Error struct {
-	ErrCode Code   `json:"errcode"`
-	ErrMsg  string `json:"errmsg"`
+	Code Code   `json:"errcode"`
+	Msg  string `json:"errmsg"`
 }
 
 func (this Error) Error() string {
-	return fmt.Sprintf("%d-%s", this.ErrCode, this.ErrMsg)
+	return fmt.Sprintf("%d-%s", this.Code, this.Msg)
 }
 
 func (this Error) IsSuccess() bool {
-	return this.ErrCode.IsSuccess()
+	return this.Code.IsSuccess()
 }
 
 func (this Error) IsFailure() bool {
-	return this.ErrCode.IsFailure()
+	return this.Code.IsFailure()
 }
 
 type Token struct {

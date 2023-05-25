@@ -23,8 +23,8 @@ func (this *MiniProgram) GetUnlimited(param GetUnlimitedParam) (result *GetUnlim
 	}
 
 	result = &GetUnlimitedRsp{}
-	result.ErrCode = 0
-	result.ErrMsg = "ok"
+	result.Code = CodeSuccess
+	result.Msg = "ok"
 	result.Data = data
 
 	return result, nil

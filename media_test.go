@@ -11,5 +11,8 @@ func TestMiniProgram_UploadTempMedia(t *testing.T) {
 		t.Error(err)
 	}
 
-	t.Log(rsp.MediaId)
+	if rsp.IsFailure() {
+		t.Fatal(rsp.Msg)
+	}
+	t.Logf("%v", rsp)
 }

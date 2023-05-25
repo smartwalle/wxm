@@ -1,7 +1,6 @@
 package wxm_test
 
 import (
-	"encoding/json"
 	"github.com/smartwalle/wxm"
 	"testing"
 )
@@ -17,11 +16,13 @@ func TestMiniProgram_SendSubscribeMessage(t *testing.T) {
 
 	rsp, err := miniProgram.SendSubscribeMessage(p)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
-	rspBytes, _ := json.Marshal(rsp)
-	t.Log(string(rspBytes))
+	if rsp.IsFailure() {
+		t.Fatal(rsp.Msg)
+	}
+	t.Logf("%v", rsp)
 }
 
 func TestMiniProgram_SendUniformMessage(t *testing.T) {
@@ -40,11 +41,13 @@ func TestMiniProgram_SendUniformMessage(t *testing.T) {
 
 	rsp, err := miniProgram.SendUniformMessage(p)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
-	rspBytes, _ := json.Marshal(rsp)
-	t.Log(string(rspBytes))
+	if rsp.IsFailure() {
+		t.Fatal(rsp.Msg)
+	}
+	t.Logf("%v", rsp)
 }
 
 func TestMiniProgram_SendCustomerServiceMessage(t *testing.T) {
@@ -56,10 +59,13 @@ func TestMiniProgram_SendCustomerServiceMessage(t *testing.T) {
 
 	rsp, err := miniProgram.SendCustomerServiceMessage(p)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
-	rspBytes, _ := json.Marshal(rsp)
-	t.Log(string(rspBytes))
+
+	if rsp.IsFailure() {
+		t.Fatal(rsp.Msg)
+	}
+	t.Logf("%v", rsp)
 }
 
 func TestOfficialAccount_SendTemplateMessage(t *testing.T) {
@@ -76,9 +82,11 @@ func TestOfficialAccount_SendTemplateMessage(t *testing.T) {
 
 	rsp, err := officialAccount.SendTemplateMessage(p)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
-	rspBytes, _ := json.Marshal(rsp)
-	t.Log(string(rspBytes))
+	if rsp.IsFailure() {
+		t.Fatal(rsp.Msg)
+	}
+	t.Logf("%v", rsp)
 }
