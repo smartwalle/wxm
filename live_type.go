@@ -4,8 +4,8 @@ const (
 	CodeEmptyRoomList Code = 1 // 没有房间信息
 )
 
-// GetLiveInfoParam https://developers.weixin.qq.com/miniprogram/dev/framework/liveplayer/live-player-plugin.html
-type GetLiveInfoParam struct {
+// GetLiveInfo https://developers.weixin.qq.com/miniprogram/dev/framework/liveplayer/live-player-plugin.html
+type GetLiveInfo struct {
 	Action string `json:"action,omitempty"`  // 获取回放列表的时候需要传递字符串 get_replay
 	RoomId int    `json:"room_id,omitempty"` // 获取回放列表的时候需要传递
 	Start  int    `json:"start"`

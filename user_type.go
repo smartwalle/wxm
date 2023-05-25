@@ -77,11 +77,11 @@ type GetUserInfoRsp struct {
 	UserInfo
 }
 
-type GetUserInfoListParam struct {
+type GetUserInfoList struct {
 	UserList []map[string]string `json:"user_list"`
 }
 
-func (this *GetUserInfoListParam) AddOpenId(openIds ...string) {
+func (this *GetUserInfoList) AddOpenId(openIds ...string) {
 	if len(openIds) == 0 {
 		return
 	}

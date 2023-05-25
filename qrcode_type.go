@@ -1,7 +1,7 @@
 package wxm
 
-// GetUnlimitedParam https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
-type GetUnlimitedParam struct {
+// GetUnlimited https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
+type GetUnlimited struct {
 	Scene     string     `json:"scene"`
 	Page      string     `json:"page"`
 	Width     int        `json:"width,omitempty"`

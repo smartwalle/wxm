@@ -6,7 +6,7 @@ import (
 )
 
 func TestMiniProgram_SendSubscribeMessage(t *testing.T) {
-	var p = wxm.SendSubscribeMessageParam{}
+	var p = wxm.SendSubscribeMessage{}
 	p.ToUser = "o45lH49xBSpfFndnPY5g6dM9cgvE"
 	p.TemplateId = "eyVwkflimGWuuO0n_jJ5QQaiiJpOfcsg53NqPPA_D6k"
 	p.AddData("thing1", "hah")
@@ -26,7 +26,7 @@ func TestMiniProgram_SendSubscribeMessage(t *testing.T) {
 }
 
 func TestMiniProgram_SendUniformMessage(t *testing.T) {
-	var p = wxm.SendUniformMessageParam{}
+	var p = wxm.SendUniformMessage{}
 	p.ToUser = "o-wmv4nnpvU_yj0fvwu_jAX2s38w"
 	p.MPTemplateMsg = &wxm.MPTemplateMsg{}
 	p.MPTemplateMsg.AppId = "wx7262a2f023e9aef8"
@@ -51,7 +51,7 @@ func TestMiniProgram_SendUniformMessage(t *testing.T) {
 }
 
 func TestMiniProgram_SendCustomerServiceMessage(t *testing.T) {
-	var p = wxm.SendCustomerServiceMessageParam{}
+	var p = wxm.SendCustomerServiceMessage{}
 	p.ToUser = "o45lH49xBSpfFndnPY5g6dM9cgvE"
 	p.MsgType = wxm.MsgTypeOfImage
 	p.Image = &wxm.MsgImage{}
@@ -69,7 +69,7 @@ func TestMiniProgram_SendCustomerServiceMessage(t *testing.T) {
 }
 
 func TestOfficialAccount_SendTemplateMessage(t *testing.T) {
-	var p = wxm.SendTemplateMessageParam{}
+	var p = wxm.SendTemplateMessage{}
 	p.ToUser = "ocGXK1H6qbqcJ84MmES8Z5y5ItaE"
 	p.TemplateId = "WITmIZMRP_GkiDmGwdMmeMM2Qlr6dZ8EqtiLVapf67Q"
 	p.AddData("first", "hello first message", "#173177")

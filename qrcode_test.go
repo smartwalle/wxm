@@ -6,7 +6,7 @@ import (
 )
 
 func TestMiniProgram_GetUnlimited(t *testing.T) {
-	var p = wxm.GetUnlimitedParam{}
+	var p = wxm.GetUnlimited{}
 	p.Scene = "1"
 	p.Page = "pages/assist/gooddetail/gooddetail"
 

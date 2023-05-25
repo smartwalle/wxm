@@ -86,7 +86,7 @@ func (this *OfficialAccount) GetUserInfoList(openIds ...string) (result *GetUser
 		return &GetUserInfoListRsp{}, nil
 	}
 
-	var param = &GetUserInfoListParam{}
+	var param = &GetUserInfoList{}
 	param.AddOpenId(openIds...)
 
 	if err = this.client.requestWithAccessToken(http.MethodPost, kGetUserInfoList, param, nil, &result); err != nil {
