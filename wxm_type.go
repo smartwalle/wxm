@@ -30,21 +30,20 @@ type Error struct {
 	ErrMsg  string `json:"errmsg"`
 }
 
-func (this *Error) Error() string {
+func (this Error) Error() string {
 	return fmt.Sprintf("%d-%s", this.ErrCode, this.ErrMsg)
 }
 
-func (this *Error) IsSuccess() bool {
+func (this Error) IsSuccess() bool {
 	return this.ErrCode.IsSuccess()
 }
 
-func (this *Error) IsFailure() bool {
+func (this Error) IsFailure() bool {
 	return this.ErrCode.IsFailure()
 }
 
 type Token struct {
-	ErrCode     Code   `json:"errcode"`
-	ErrMsg      string `json:"errmsg"`
+	Error
 	AccessToken string `json:"access_token"`
 	ExpiresIn   int64  `json:"expires_in"`
 	CreateTime  int64  `json:"create_time"`

@@ -61,8 +61,8 @@ func (this *client) RefreshToken() (err error) {
 	if err != nil {
 		return err
 	}
-	if this.token.ErrCode != 0 {
-		return errors.New(this.token.ErrMsg)
+	if this.token.IsFailure() {
+		return this.token.Error
 	}
 	return nil
 }
