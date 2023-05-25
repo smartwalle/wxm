@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var officialAccount = wxm.NewOfficialAccount("wx7262a2f023e9aef8", "133850581b156b304ed23b30766aee90")
+var officialAccount = wxm.NewOfficialAccount("xxx", "xxx")
 
 func TestOfficialAccount_GetToken(t *testing.T) {
 	t.Log(miniProgram.GetToken())

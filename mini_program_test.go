@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var miniProgram = wxm.NewMiniProgram("wx143cd4036f7c65c5", "94b3359451d867b91d0a78eb74030c9c")
+var miniProgram = wxm.NewMiniProgram("xxx", "xxx")
 
 func TestMiniProgram_GetToken(t *testing.T) {
 	t.Log(miniProgram.GetToken())
