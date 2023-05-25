@@ -31,12 +31,12 @@ func (this *MiniProgram) RefreshToken() (err error) {
 	return this.client.RefreshToken()
 }
 
-func (this *MiniProgram) decrypt(sessionKey, encryptedData, iv string) (result []byte, err error) {
+func (this *MiniProgram) decrypt(sessionKey, ciphertext, iv string) (result []byte, err error) {
 	sessionKeyBytes, err := base64.StdEncoding.DecodeString(sessionKey)
 	if err != nil {
 		return nil, err
 	}
-	encryptedBytes, err := base64.StdEncoding.DecodeString(encryptedData)
+	ciphertextBytes, err := base64.StdEncoding.DecodeString(ciphertext)
 	if err != nil {
 		return nil, err
 	}
@@ -45,56 +45,54 @@ func (this *MiniProgram) decrypt(sessionKey, encryptedData, iv string) (result [
 		return nil, err
 	}
 
-	decryptedBytes, err := AESCBCDecrypt(encryptedBytes, sessionKeyBytes, ivBytes)
+	plaintextBytes, err := AESCBCDecrypt(ciphertextBytes, sessionKeyBytes, ivBytes)
 	if err != nil {
 		return nil, err
 	}
-	return decryptedBytes, err
+	return plaintextBytes, err
 }
 
-// CheckMessagePushServer 小程序-验证消息来自微信服务器 https://developers.weixin.qq.com/miniprogram/dev/framework/server-ability/message-push.html#option-url
-func (this *MiniProgram) CheckMessagePushServer(token, timestamp, nonce, signature string) bool {
-	var ps = []string{token, timestamp, nonce}
-	if this.signWithSHA1(ps) == signature {
-		return true
-	}
-	return false
+// CheckMessageFromPushServer 小程序-验证消息来自微信服务器 https://developers.weixin.qq.com/miniprogram/dev/framework/server-ability/message-push.html#option-url
+func (this *MiniProgram) CheckMessageFromPushServer(token, timestamp, nonce, signature string) bool {
+	var nList = []string{token, timestamp, nonce}
+	return this.verifyMessage(nList, signature)
 }
 
-func (this *MiniProgram) signWithSHA1(ps []string) string {
-	sort.Strings(ps)
-	var s = sha1.New()
-	s.Write([]byte(strings.Join(ps, "")))
-	return hex.EncodeToString(s.Sum(nil))
-}
-
-// ParsePushMessage 小程序-获取来自微信服务器的推送消息 https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Message_Encryption/Technical_Plan.html
-func (this *MiniProgram) ParsePushMessage(token, timestamp, nonce, signature, key string, data []byte) (result *MessageInfo, err error) {
+// DecodePushMessage 小程序-获取来自微信服务器的推送消息 https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Message_Encryption/Technical_Plan.html
+func (this *MiniProgram) DecodePushMessage(token, timestamp, nonce, signature, key string, data []byte) (result *MessageInfo, err error) {
 	if err = json.Unmarshal(data, &result); err != nil {
 		return nil, err
 	}
 
 	if result.Encrypt != "" {
-		var ps = []string{token, timestamp, nonce, result.Encrypt}
-		if this.signWithSHA1(ps) != signature {
+		var nList = []string{token, timestamp, nonce, result.Encrypt}
+		if !this.verifyMessage(nList, signature) {
 			return nil, errors.New("failed to verify signature")
 		}
-		pData, err := this.decryptMessage(key, result.Encrypt)
+		var plaintext []byte
+		plaintext, err = this.decryptMessage(key, result.Encrypt)
 		if err != nil {
 			return nil, err
 		}
 
-		var index = bytes.LastIndex(pData, []byte("}"))
-		pData = pData[20 : index+1]
+		var index = bytes.LastIndex(plaintext, []byte("}"))
+		plaintext = plaintext[20 : index+1]
 
 		var info *MessageInfo
-		if err = json.Unmarshal(pData, &info); err != nil {
+		if err = json.Unmarshal(plaintext, &info); err != nil {
 			return nil, err
 		}
 		result = info
 		return result, nil
 	}
 	return result, nil
+}
+
+func (this *MiniProgram) verifyMessage(values []string, signature string) bool {
+	sort.Strings(values)
+	var hashed = sha1.New()
+	hashed.Write([]byte(strings.Join(values, "")))
+	return hex.EncodeToString(hashed.Sum(nil)) == signature
 }
 
 func (this *MiniProgram) decryptMessage(key, data string) (result []byte, err error) {

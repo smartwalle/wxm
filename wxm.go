@@ -90,19 +90,19 @@ func (this *client) getToken() (result *Token, err error) {
 }
 
 func (this *client) requestWithAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
-	return this.request(method, api, param, values, true, true)
+	return this._request(method, api, param, values, true, true)
 }
 
 func (this *client) requestWithoutAccessToken(method, api string, param interface{}, values url.Values) (result []byte, err error) {
-	return this.request(method, api, param, values, false, false)
+	return this._request(method, api, param, values, false, false)
 }
 
-func (this *client) request(method, api string, param interface{}, values url.Values, withAccessToken, retry bool) (result []byte, err error) {
+func (this *client) _request(method, api string, param interface{}, values url.Values, needAuth, retry bool) (result []byte, err error) {
 	if values == nil {
 		values = url.Values{}
 	}
 
-	if withAccessToken {
+	if needAuth {
 		accessToken, err := this.GetToken()
 		if err != nil {
 			return nil, err
@@ -139,21 +139,21 @@ func (this *client) request(method, api string, param interface{}, values url.Va
 		if err = this.RefreshToken(); err != nil {
 			return nil, err
 		}
-		return this.request(method, api, param, values, withAccessToken, false)
+		return this._request(method, api, param, values, needAuth, false)
 	}
 	return result, nil
 }
 
-func (this *client) upload(method, api, fieldName, filePath string, values url.Values, withAccessToken bool) (result []byte, err error) {
-	return this._upload(method, api, fieldName, filePath, values, withAccessToken, true)
+func (this *client) upload(method, api, fieldName, filePath string, values url.Values, needAuth bool) (result []byte, err error) {
+	return this._upload(method, api, fieldName, filePath, values, needAuth, true)
 }
 
-func (this *client) _upload(method, api, fieldName, filePath string, values url.Values, withAccessToken, retry bool) (result []byte, err error) {
+func (this *client) _upload(method, api, fieldName, filePath string, values url.Values, needAuth, retry bool) (result []byte, err error) {
 	if values == nil {
 		values = url.Values{}
 	}
 
-	if withAccessToken {
+	if needAuth {
 		accessToken, err := this.GetToken()
 		if err != nil {
 			return nil, err
@@ -204,7 +204,7 @@ func (this *client) _upload(method, api, fieldName, filePath string, values url.
 		if err = this.RefreshToken(); err != nil {
 			return nil, err
 		}
-		return this._upload(method, api, fieldName, filePath, values, withAccessToken, false)
+		return this._upload(method, api, fieldName, filePath, values, needAuth, false)
 	}
 	return result, nil
 }
