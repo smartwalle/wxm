@@ -13,7 +13,7 @@ const (
 	kGetUserInfoList   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
 )
 
-// DecodePhoneNumber 小程序-解密手机号码数据 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html
+// DecodePhoneNumber 小程序-解密手机号码数据 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/deprecatedGetPhoneNumber.html
 //
 // 小程序端申请获取用户的手机号码之后，获取到的是加密的数据，需要调用本方法对该数据进行解密，以获取手机号码。
 func (this *MiniProgram) DecodePhoneNumber(sessionKey, encryptedData, iv string) (result *MiniProgramPhoneNumber, err error) {
