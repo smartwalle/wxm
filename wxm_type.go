@@ -30,16 +30,16 @@ type Error struct {
 	Msg  string `json:"errmsg"`
 }
 
-func (this Error) Error() string {
-	return fmt.Sprintf("%d-%s", this.Code, this.Msg)
+func (e Error) Error() string {
+	return fmt.Sprintf("%d-%s", e.Code, e.Msg)
 }
 
-func (this Error) IsSuccess() bool {
-	return this.Code.IsSuccess()
+func (e Error) IsSuccess() bool {
+	return e.Code.IsSuccess()
 }
 
-func (this Error) IsFailure() bool {
-	return this.Code.IsFailure()
+func (e Error) IsFailure() bool {
+	return e.Code.IsFailure()
 }
 
 type Token struct {
@@ -49,9 +49,9 @@ type Token struct {
 	CreateTime  int64  `json:"create_time"`
 }
 
-func (this *Token) Valid() bool {
+func (t *Token) Valid() bool {
 	var now = time.Now().Unix()
-	if now < this.CreateTime+this.ExpiresIn-10 {
+	if now < t.CreateTime+t.ExpiresIn-60 {
 		return true
 	}
 	return false

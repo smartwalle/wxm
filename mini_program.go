@@ -22,16 +22,16 @@ func NewMiniProgram(appId, appSecret string) *MiniProgram {
 }
 
 // GetToken 小程序-获取全局唯一后台接口调用凭据（access_token）https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
-func (this *MiniProgram) GetToken() (result string, err error) {
-	return this.client.GetToken()
+func (m *MiniProgram) GetToken() (result string, err error) {
+	return m.client.GetToken()
 }
 
 // RefreshToken 小程序-刷新本地全局唯一后台接口调用凭据（access_token）
-func (this *MiniProgram) RefreshToken() (err error) {
-	return this.client.RefreshToken()
+func (m *MiniProgram) RefreshToken() (err error) {
+	return m.client.RefreshToken()
 }
 
-func (this *MiniProgram) decrypt(sessionKey, ciphertext, iv string) (result []byte, err error) {
+func (m *MiniProgram) decrypt(sessionKey, ciphertext, iv string) (result []byte, err error) {
 	sessionKeyBytes, err := base64.StdEncoding.DecodeString(sessionKey)
 	if err != nil {
 		return nil, err
@@ -53,24 +53,24 @@ func (this *MiniProgram) decrypt(sessionKey, ciphertext, iv string) (result []by
 }
 
 // CheckMessageFromPushServer 小程序-验证消息来自微信服务器 https://developers.weixin.qq.com/miniprogram/dev/framework/server-ability/message-push.html#option-url
-func (this *MiniProgram) CheckMessageFromPushServer(token, timestamp, nonce, signature string) bool {
+func (m *MiniProgram) CheckMessageFromPushServer(token, timestamp, nonce, signature string) bool {
 	var nList = []string{token, timestamp, nonce}
-	return this.verifyMessage(nList, signature)
+	return m.verifyMessage(nList, signature)
 }
 
 // DecodePushMessage 小程序-获取来自微信服务器的推送消息 https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Message_Encryption/Technical_Plan.html
-func (this *MiniProgram) DecodePushMessage(token, timestamp, nonce, signature, key string, data []byte) (result *MessageInfo, err error) {
+func (m *MiniProgram) DecodePushMessage(token, timestamp, nonce, signature, key string, data []byte) (result *MessageInfo, err error) {
 	if err = json.Unmarshal(data, &result); err != nil {
 		return nil, err
 	}
 
 	if result.Encrypt != "" {
 		var nList = []string{token, timestamp, nonce, result.Encrypt}
-		if !this.verifyMessage(nList, signature) {
+		if !m.verifyMessage(nList, signature) {
 			return nil, errors.New("failed to verify signature")
 		}
 		var plaintext []byte
-		plaintext, err = this.decryptMessage(key, result.Encrypt)
+		plaintext, err = m.decryptMessage(key, result.Encrypt)
 		if err != nil {
 			return nil, err
 		}
@@ -88,14 +88,14 @@ func (this *MiniProgram) DecodePushMessage(token, timestamp, nonce, signature, k
 	return result, nil
 }
 
-func (this *MiniProgram) verifyMessage(values []string, signature string) bool {
+func (m *MiniProgram) verifyMessage(values []string, signature string) bool {
 	sort.Strings(values)
 	var hashed = sha1.New()
 	hashed.Write([]byte(strings.Join(values, "")))
 	return hex.EncodeToString(hashed.Sum(nil)) == signature
 }
 
-func (this *MiniProgram) decryptMessage(key, data string) (result []byte, err error) {
+func (m *MiniProgram) decryptMessage(key, data string) (result []byte, err error) {
 	key = key + "="
 	keyBytes, err := base64.StdEncoding.DecodeString(key)
 	if err != nil {

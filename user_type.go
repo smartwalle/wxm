@@ -81,16 +81,16 @@ type GetUserInfoList struct {
 	UserList []map[string]string `json:"user_list"`
 }
 
-func (this *GetUserInfoList) AddOpenId(openIds ...string) {
+func (u *GetUserInfoList) AddOpenId(openIds ...string) {
 	if len(openIds) == 0 {
 		return
 	}
-	if len(this.UserList) == 0 {
-		this.UserList = make([]map[string]string, 0, len(openIds))
+	if len(u.UserList) == 0 {
+		u.UserList = make([]map[string]string, 0, len(openIds))
 	}
 
 	for _, openId := range openIds {
-		this.UserList = append(this.UserList, map[string]string{"openid": openId})
+		u.UserList = append(u.UserList, map[string]string{"openid": openId})
 	}
 }
 

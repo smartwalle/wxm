@@ -10,13 +10,13 @@ const (
 
 type MessageData map[string]map[string]string
 
-func (this MessageData) add(param, key, value string) {
-	var m = this[param]
-	if m == nil {
-		m = make(map[string]string)
+func (m MessageData) add(param, key, value string) {
+	var values = m[param]
+	if values == nil {
+		values = make(map[string]string)
 	}
-	m[key] = value
-	this[param] = m
+	values[key] = value
+	m[param] = values
 }
 
 // SendSubscribeMessage https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/subscribe-message/subscribeMessage.send.html
@@ -29,11 +29,11 @@ type SendSubscribeMessage struct {
 	Lang             string           `json:"lang,omitempty"`              // 否 进入小程序查看”的语言类型，支持zh_CN(简体中文)、en_US(英文)、zh_HK(繁体中文)、zh_TW(繁体中文)，默认为zh_CN
 }
 
-func (this *SendSubscribeMessage) AddData(key, value string) {
-	if this.Data == nil {
-		this.Data = make(MessageData)
+func (m *SendSubscribeMessage) AddData(key, value string) {
+	if m.Data == nil {
+		m.Data = make(MessageData)
 	}
-	this.Data.add(key, "value", value)
+	m.Data.add(key, "value", value)
 }
 
 type SendSubscribeMessageRsp struct {
@@ -55,11 +55,11 @@ type WeAppTemplateMsg struct {
 	EmphasisKeyword string      `json:"emphasis_keyword"` // 是	小程序模板放大关键词
 }
 
-func (this *WeAppTemplateMsg) AddData(key, value string) {
-	if this.Data == nil {
-		this.Data = make(MessageData)
+func (m *WeAppTemplateMsg) AddData(key, value string) {
+	if m.Data == nil {
+		m.Data = make(MessageData)
 	}
-	this.Data.add(key, "value", value)
+	m.Data.add(key, "value", value)
 }
 
 type MPTemplateMsg struct {
@@ -70,12 +70,12 @@ type MPTemplateMsg struct {
 	Data        MessageData      `json:"data"`                  // 是 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }
 }
 
-func (this *MPTemplateMsg) AddData(key, value, color string) {
-	if this.Data == nil {
-		this.Data = make(MessageData)
+func (m *MPTemplateMsg) AddData(key, value, color string) {
+	if m.Data == nil {
+		m.Data = make(MessageData)
 	}
-	this.Data.add(key, "value", value)
-	this.Data.add(key, "color", color)
+	m.Data.add(key, "value", value)
+	m.Data.add(key, "color", color)
 }
 
 type SendUniformMessageRsp struct {
@@ -148,12 +148,12 @@ type SendTemplateMessage struct {
 	Data        MessageData      `json:"data"`                  // 是 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }
 }
 
-func (this *SendTemplateMessage) AddData(key, value, color string) {
-	if this.Data == nil {
-		this.Data = make(MessageData)
+func (m *SendTemplateMessage) AddData(key, value, color string) {
+	if m.Data == nil {
+		m.Data = make(MessageData)
 	}
-	this.Data.add(key, "value", value)
-	this.Data.add(key, "color", color)
+	m.Data.add(key, "value", value)
+	m.Data.add(key, "color", color)
 }
 
 type SendTemplateMessageRsp struct {

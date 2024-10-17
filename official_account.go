@@ -11,11 +11,11 @@ func NewOfficialAccount(appId, appSecret string) *OfficialAccount {
 }
 
 // GetToken 公众号-获取全局唯一后台接口调用凭据（access_token）https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Get_access_token.html
-func (this *OfficialAccount) GetToken() (result string, err error) {
-	return this.client.GetToken()
+func (o *OfficialAccount) GetToken() (result string, err error) {
+	return o.client.GetToken()
 }
 
 // RefreshToken 公众号-刷新本地全局唯一后台接口调用凭据（access_token）
-func (this *OfficialAccount) RefreshToken() (err error) {
-	return this.client.RefreshToken()
+func (o *OfficialAccount) RefreshToken() (err error) {
+	return o.client.RefreshToken()
 }

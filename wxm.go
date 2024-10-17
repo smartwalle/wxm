@@ -36,44 +36,44 @@ func newClient(appId, appSecret string) *client {
 }
 
 // GetToken 小程序、公众号-获取全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
-func (this *client) GetToken() (result string, err error) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
-	if this.token != nil && this.token.AccessToken != "" && this.token.Valid() {
-		return this.token.AccessToken, nil
+func (c *client) GetToken() (result string, err error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if c.token != nil && c.token.AccessToken != "" && c.token.Valid() {
+		return c.token.AccessToken, nil
 	}
-	this.token, err = this.getToken()
+	c.token, err = c.getToken()
 	if err != nil {
 		return "", err
 	}
 
-	if this.token.Code != 0 {
-		return "", errors.New(this.token.Msg)
+	if c.token.Code != 0 {
+		return "", errors.New(c.token.Msg)
 	}
 
-	return this.token.AccessToken, nil
+	return c.token.AccessToken, nil
 }
 
-func (this *client) RefreshToken() (err error) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
-	this.token, err = this.getToken()
+func (c *client) RefreshToken() (err error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.token, err = c.getToken()
 	if err != nil {
 		return err
 	}
-	if this.token.IsFailure() {
-		return this.token.Error
+	if c.token.IsFailure() {
+		return c.token.Error
 	}
 	return nil
 }
 
-func (this *client) getToken() (result *Token, err error) {
+func (c *client) getToken() (result *Token, err error) {
 	var values = url.Values{}
-	values.Add("appid", this.appId)
-	values.Add("secret", this.appSecret)
+	values.Add("appid", c.appId)
+	values.Add("secret", c.appSecret)
 	values.Add("grant_type", "client_credential")
 
-	if err := this.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, values, &result); err != nil {
+	if err := c.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, values, &result); err != nil {
 		return nil, err
 	}
 
@@ -84,8 +84,8 @@ func (this *client) getToken() (result *Token, err error) {
 	return result, nil
 }
 
-func (this *client) requestWithAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
-	var data, err = this.request(method, api, param, values, true, true)
+func (c *client) requestWithAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
+	var data, err = c.request(method, api, param, values, true, true)
 	if err != nil {
 		return err
 	}
@@ -95,21 +95,21 @@ func (this *client) requestWithAccessToken(method, api string, param interface{}
 	return nil
 }
 
-func (this *client) requestWithoutAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
-	var data, err = this.request(method, api, param, values, false, false)
+func (c *client) requestWithoutAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
+	var data, err = c.request(method, api, param, values, false, false)
 	if err = json.Unmarshal(data, result); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (this *client) request(method, api string, param interface{}, values url.Values, needAuth, retry bool) (result []byte, err error) {
+func (c *client) request(method, api string, param interface{}, values url.Values, needAuth, retry bool) (result []byte, err error) {
 	if values == nil {
 		values = url.Values{}
 	}
 
 	if needAuth {
-		accessToken, err := this.GetToken()
+		accessToken, err := c.GetToken()
 		if err != nil {
 			return nil, err
 		}
@@ -130,7 +130,7 @@ func (this *client) request(method, api string, param interface{}, values url.Va
 	if err != nil {
 		return nil, err
 	}
-	rsp, err := this.Client.Do(req)
+	rsp, err := c.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -142,25 +142,25 @@ func (this *client) request(method, api string, param interface{}, values url.Va
 	}
 
 	if retry && string(result[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
-		if err = this.RefreshToken(); err != nil {
+		if err = c.RefreshToken(); err != nil {
 			return nil, err
 		}
-		return this.request(method, api, param, values, needAuth, false)
+		return c.request(method, api, param, values, needAuth, false)
 	}
 	return result, nil
 }
 
-func (this *client) upload(method, api, fieldName, filePath string, values url.Values, needAuth bool, result interface{}) error {
-	return this._upload(method, api, fieldName, filePath, values, needAuth, true, result)
+func (c *client) uploadWithRetry(method, api, fieldName, filePath string, values url.Values, needAuth bool, result interface{}) error {
+	return c.upload(method, api, fieldName, filePath, values, needAuth, true, result)
 }
 
-func (this *client) _upload(method, api, fieldName, filePath string, values url.Values, needAuth, retry bool, result interface{}) error {
+func (c *client) upload(method, api, fieldName, filePath string, values url.Values, needAuth, retry bool, result interface{}) error {
 	if values == nil {
 		values = url.Values{}
 	}
 
 	if needAuth {
-		accessToken, err := this.GetToken()
+		accessToken, err := c.GetToken()
 		if err != nil {
 			return err
 		}
@@ -195,7 +195,7 @@ func (this *client) _upload(method, api, fieldName, filePath string, values url.
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
-	rsp, err := this.Client.Do(req)
+	rsp, err := c.Client.Do(req)
 	if err != nil {
 		return err
 	}
@@ -207,10 +207,10 @@ func (this *client) _upload(method, api, fieldName, filePath string, values url.
 	}
 
 	if retry && string(bodyBytes[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
-		if err = this.RefreshToken(); err != nil {
+		if err = c.RefreshToken(); err != nil {
 			return err
 		}
-		return this._upload(method, api, fieldName, filePath, values, needAuth, false, result)
+		return c.upload(method, api, fieldName, filePath, values, needAuth, false, result)
 	}
 
 	if err = json.Unmarshal(bodyBytes, result); err != nil {

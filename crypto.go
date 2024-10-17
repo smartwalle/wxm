@@ -5,7 +5,7 @@ import (
 	"crypto/cipher"
 )
 
-func AESCBCDecrypt(data, key, iv []byte) ([]byte, error) {
+func AESCBCDecrypt(ciphertext, key, iv []byte) ([]byte, error) {
 	var block, err = aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -13,15 +13,15 @@ func AESCBCDecrypt(data, key, iv []byte) ([]byte, error) {
 	var blockSize = block.BlockSize()
 	iv = iv[:blockSize]
 
-	var dst = make([]byte, len(data))
+	var dst = make([]byte, len(ciphertext))
 
 	var mode = cipher.NewCBCDecrypter(block, iv)
-	mode.CryptBlocks(dst, data)
-	dst = PKCS7UnPadding(dst)
+	mode.CryptBlocks(dst, ciphertext)
+	dst = PKCS7UnPad(dst)
 	return dst, nil
 }
 
-func PKCS7UnPadding(data []byte) []byte {
+func PKCS7UnPad(data []byte) []byte {
 	var length = len(data)
 	var unpadding = int(data[length-1])
 	if length < unpadding {
