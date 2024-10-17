@@ -5,14 +5,14 @@ type Watermark struct {
 	Timestamp int64  `json:"timestamp"`
 }
 
-type MiniProgramPhoneNumber struct {
+type MiniProgramPhoneNumberResponse struct {
 	PhoneNumber     string     `json:"phoneNumber"`
 	PurePhoneNumber string     `json:"purePhoneNumber"`
 	CountryCode     string     `json:"countryCode"`
 	Watermark       *Watermark `json:"watermark"`
 }
 
-type MiniProgramUserInfo struct {
+type MiniProgramUserInfoResponse struct {
 	OpenId    string     `json:"openid"`
 	Nickname  string     `json:"nickname"`
 	Gender    int        `json:"gender"`
@@ -25,7 +25,7 @@ type MiniProgramUserInfo struct {
 	Watermark *Watermark `json:"watermark"`
 }
 
-type GetUserOpenIdListRsp struct {
+type GetUserOpenIdListResponse struct {
 	Error
 	Total int `json:"total"`
 	Count int `json:"count"`
@@ -35,7 +35,7 @@ type GetUserOpenIdListRsp struct {
 	NextOpenId string `json:"next_openid"`
 }
 
-type GetUserBaseInfoRsp struct {
+type GetUserBaseInfoResponse struct {
 	Error
 	UserBaseInfo
 }
@@ -72,16 +72,16 @@ type UserInfo struct {
 	QRSceneStr     string  `json:"qr_scene_str"`
 }
 
-type GetUserInfoRsp struct {
+type GetUserInfoResponse struct {
 	Error
 	UserInfo
 }
 
-type GetUserInfoList struct {
+type GetUserInfoListParam struct {
 	UserList []map[string]string `json:"user_list"`
 }
 
-func (u *GetUserInfoList) AddOpenId(openIds ...string) {
+func (u *GetUserInfoListParam) AddOpenId(openIds ...string) {
 	if len(openIds) == 0 {
 		return
 	}
@@ -94,7 +94,7 @@ func (u *GetUserInfoList) AddOpenId(openIds ...string) {
 	}
 }
 
-type GetUserInfoListRsp struct {
+type GetUserInfoListResponse struct {
 	Error
 	UserInfoList []*UserInfo `json:"user_info_list"`
 }

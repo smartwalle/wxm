@@ -10,7 +10,7 @@ const (
 )
 
 // UploadTempMedia 小程序-上传媒体文件到微信服务器 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.uploadTempMedia.html
-func (m *MiniProgram) UploadTempMedia(mediaType MediaType, filePath string) (result *UploadMediaRsp, err error) {
+func (m *MiniProgram) UploadTempMedia(mediaType MediaType, filePath string) (result *UploadMediaResponse, err error) {
 	if mediaType == "" {
 		mediaType = MediaTypeOfImage
 	}

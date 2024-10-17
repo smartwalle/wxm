@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestMiniProgram_GetLiveInf(t *testing.T) {
-	var p = wxm.GetLiveInfo{}
+func TestMiniProgram_GetLiveInfo(t *testing.T) {
+	var p = wxm.GetLiveInfoParam{}
 	p.Start = 0
 	p.Limit = 100
 

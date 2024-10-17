@@ -6,7 +6,7 @@ const (
 	MediaTypeOfImage MediaType = "image"
 )
 
-type UploadMediaRsp struct {
+type UploadMediaResponse struct {
 	Error
 	Type      MediaType `json:"type"`
 	MediaId   string    `json:"media_id"`
