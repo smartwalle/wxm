@@ -6,11 +6,11 @@ import (
 )
 
 func TestMiniProgram_GetUnlimited(t *testing.T) {
-	var p = wxm.GetUnlimitedParam{}
+	var p = wxm.GetUnlimitedQRCodeParam{}
 	p.Scene = "1"
 	p.Page = "pages/assist/gooddetail/gooddetail"
 
-	rsp, err := miniProgram.GetUnlimited(p)
+	rsp, err := miniProgram.GetUnlimitedQRCode(p)
 	if err != nil {
 		t.Fatal(err)
 	}
