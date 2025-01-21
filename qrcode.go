@@ -11,7 +11,7 @@ const (
 
 // GetUnlimitedQRCode 小程序-获取小程序码 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
 func (m *MiniProgram) GetUnlimitedQRCode(param GetUnlimitedQRCodeParam) (result *GetUnlimitedQRCodeResponse, err error) {
-	data, err := m.client.request(http.MethodPost, kGetUnLimit, param, nil, true, true)
+	data, err := m.client.request(http.MethodPost, kGetUnLimit, true, param, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,1 +1,1 @@
-package wxm
+package wxm_test

@@ -3,14 +3,11 @@ package wxm
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"os"
-	"strconv"
-	"sync"
 	"time"
 )
 
@@ -18,74 +15,74 @@ const (
 	kGetToken = "https://api.weixin.qq.com/cgi-bin/token"
 )
 
-type client struct {
-	appId     string
-	appSecret string
-	Client    *http.Client
+type Option func(client *client)
 
-	mu    sync.Mutex
-	token *Token
+func WithAccessToken(accessToken string) Option {
+	return func(c *client) {
+		c.accessToken = accessToken
+	}
+}
+
+func WithHTTPClient(c *http.Client) Option {
+	return func(nc *client) {
+		nc.client = c
+	}
+}
+
+type client struct {
+	appId       string
+	appSecret   string
+	client      *http.Client
+	accessToken string
 }
 
 func newClient(appId, appSecret string) *client {
 	var c = &client{}
 	c.appId = appId
 	c.appSecret = appSecret
-	c.Client = http.DefaultClient
+	c.client = http.DefaultClient
 	return c
 }
 
+func (c *client) With(opts ...Option) *client {
+	var n = *c
+	var np = &n
+	for _, opt := range opts {
+		if opt != nil {
+			opt(np)
+		}
+	}
+	return np
+}
+
+func (c *client) SetAccessToken(accessToken string) {
+	c.accessToken = accessToken
+}
+
+func (c *client) SetHTTPClient(client *http.Client) {
+	c.client = client
+}
+
 // GetToken 小程序、公众号-获取全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
-func (c *client) GetToken() (result string, err error) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	if c.token != nil && c.token.AccessToken != "" && c.token.Valid() {
-		return c.token.AccessToken, nil
-	}
-	c.token, err = c.getToken()
-	if err != nil {
-		return "", err
-	}
-
-	if c.token.Code != 0 {
-		return "", errors.New(c.token.Msg)
-	}
-
-	return c.token.AccessToken, nil
-}
-
-func (c *client) RefreshToken() (err error) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	c.token, err = c.getToken()
-	if err != nil {
-		return err
-	}
-	if c.token.IsFailure() {
-		return c.token.Error
-	}
-	return nil
-}
-
-func (c *client) getToken() (result *Token, err error) {
+func (c *client) GetToken() (token *Token, err error) {
 	var values = url.Values{}
 	values.Add("appid", c.appId)
 	values.Add("secret", c.appSecret)
 	values.Add("grant_type", "client_credential")
 
-	if err := c.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, values, &result); err != nil {
+	if err = c.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, values, &token); err != nil {
 		return nil, err
 	}
 
-	if result != nil {
-		result.CreateTime = time.Now().Unix()
+	if token != nil && token.IsSuccess() {
+		token.CreateTime = time.Now().Unix()
 	}
 
-	return result, nil
+	return token, nil
 }
 
 func (c *client) requestWithAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
-	var data, err = c.request(method, api, param, values, true, true)
+	var data, err = c.request(method, api, true, param, values)
 	if err != nil {
 		return err
 	}
@@ -96,7 +93,7 @@ func (c *client) requestWithAccessToken(method, api string, param interface{}, v
 }
 
 func (c *client) requestWithoutAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
-	var data, err = c.request(method, api, param, values, false, false)
+	var data, err = c.request(method, api, false, param, values)
 	if err != nil {
 		return err
 	}
@@ -106,17 +103,13 @@ func (c *client) requestWithoutAccessToken(method, api string, param interface{}
 	return nil
 }
 
-func (c *client) request(method, api string, param interface{}, values url.Values, needAuth, retry bool) (result []byte, err error) {
+func (c *client) request(method, api string, needAuth bool, param interface{}, values url.Values) (result []byte, err error) {
 	if values == nil {
 		values = url.Values{}
 	}
 
 	if needAuth {
-		accessToken, err := c.GetToken()
-		if err != nil {
-			return nil, err
-		}
-		values.Set("access_token", accessToken)
+		values.Set("access_token", c.accessToken)
 	}
 
 	var body io.Reader
@@ -133,7 +126,7 @@ func (c *client) request(method, api string, param interface{}, values url.Value
 	if err != nil {
 		return nil, err
 	}
-	rsp, err := c.Client.Do(req)
+	rsp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -144,33 +137,16 @@ func (c *client) request(method, api string, param interface{}, values url.Value
 		return nil, err
 	}
 
-	if retry && string(result[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
-		if err = c.RefreshToken(); err != nil {
-			return nil, err
-		}
-		return c.request(method, api, param, values, needAuth, false)
-	}
 	return result, nil
 }
 
-func (c *client) uploadWithRetry(method, api, fieldName, filePath string, values url.Values, needAuth bool, result interface{}) error {
-	return c.upload(method, api, fieldName, filePath, values, needAuth, true, result)
-}
-
-func (c *client) upload(method, api, fieldName, filePath string, values url.Values, needAuth, retry bool, result interface{}) error {
+func (c *client) upload(method, api, fieldname, filename string, values url.Values, result interface{}) error {
 	if values == nil {
 		values = url.Values{}
 	}
+	values.Set("access_token", c.accessToken)
 
-	if needAuth {
-		accessToken, err := c.GetToken()
-		if err != nil {
-			return err
-		}
-		values.Set("access_token", accessToken)
-	}
-
-	file, err := os.Open(filePath)
+	file, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
@@ -179,7 +155,7 @@ func (c *client) upload(method, api, fieldName, filePath string, values url.Valu
 	var body = &bytes.Buffer{}
 	var writer = multipart.NewWriter(body)
 
-	part, err := writer.CreateFormFile(fieldName, filePath)
+	part, err := writer.CreateFormFile(fieldname, filename)
 	if err != nil {
 		return err
 	}
@@ -198,25 +174,13 @@ func (c *client) upload(method, api, fieldName, filePath string, values url.Valu
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
-	rsp, err := c.Client.Do(req)
+	rsp, err := c.client.Do(req)
 	if err != nil {
 		return err
 	}
 	defer rsp.Body.Close()
 
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return err
-	}
-
-	if retry && string(bodyBytes[11:16]) == strconv.Itoa(int(CodeInvalidCredential)) {
-		if err = c.RefreshToken(); err != nil {
-			return err
-		}
-		return c.upload(method, api, fieldName, filePath, values, needAuth, false, result)
-	}
-
-	if err = json.Unmarshal(bodyBytes, result); err != nil {
+	if err = json.NewDecoder(rsp.Body).Decode(result); err != nil {
 		return err
 	}
 	return nil

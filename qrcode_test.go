@@ -10,7 +10,7 @@ func TestMiniProgram_GetUnlimited(t *testing.T) {
 	p.Scene = "1"
 	p.Page = "pages/assist/gooddetail/gooddetail"
 
-	rsp, err := miniProgram.GetUnlimitedQRCode(p)
+	rsp, err := miniProgram.With(wxm.WithAccessToken("access token")).GetUnlimitedQRCode(p)
 	if err != nil {
 		t.Fatal(err)
 	}

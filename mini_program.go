@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"net/http"
 	"sort"
 	"strings"
 )
@@ -16,19 +17,28 @@ type MiniProgram struct {
 }
 
 func NewMiniProgram(appId, appSecret string) *MiniProgram {
-	var c = &MiniProgram{}
-	c.client = newClient(appId, appSecret)
-	return c
+	var n = &MiniProgram{}
+	n.client = newClient(appId, appSecret)
+	return n
+}
+
+func (m *MiniProgram) With(opts ...Option) *MiniProgram {
+	var n = &MiniProgram{}
+	n.client = m.client.With(opts...)
+	return n
+}
+
+func (m *MiniProgram) SetAccessToken(accessToken string) {
+	m.client.accessToken = accessToken
+}
+
+func (m *MiniProgram) SetHTTPClient(client *http.Client) {
+	m.client.client = client
 }
 
 // GetToken 小程序-获取全局唯一后台接口调用凭据（access_token）https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
-func (m *MiniProgram) GetToken() (result string, err error) {
+func (m *MiniProgram) GetToken() (token *Token, err error) {
 	return m.client.GetToken()
-}
-
-// RefreshToken 小程序-刷新本地全局唯一后台接口调用凭据（access_token）
-func (m *MiniProgram) RefreshToken() (err error) {
-	return m.client.RefreshToken()
 }
 
 func (m *MiniProgram) decrypt(sessionKey, ciphertext, iv string) (result []byte, err error) {

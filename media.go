@@ -10,15 +10,15 @@ const (
 )
 
 // UploadTempMedia 小程序-上传媒体文件到微信服务器 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.uploadTempMedia.html
-func (m *MiniProgram) UploadTempMedia(mediaType MediaType, filePath string) (result *UploadMediaResponse, err error) {
+func (m *MiniProgram) UploadTempMedia(mediaType MediaType, filename string) (result *UploadMediaResponse, err error) {
 	if mediaType == "" {
 		mediaType = MediaTypeOfImage
 	}
 
-	var v = url.Values{}
-	v.Add("type", string(mediaType))
+	var values = url.Values{}
+	values.Add("type", string(mediaType))
 
-	if err = m.client.uploadWithRetry(http.MethodPost, kUploadMedia, "media", filePath, v, true, &result); err != nil {
+	if err = m.client.upload(http.MethodPost, kUploadMedia, "media", filename, values, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
