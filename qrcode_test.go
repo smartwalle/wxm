@@ -18,5 +18,5 @@ func TestMiniProgram_GetUnlimited(t *testing.T) {
 	if rsp.IsFailure() {
 		t.Fatal(rsp.Msg)
 	}
-	t.Logf("%v", rsp)
+	t.Logf("%v", len(rsp.Data))
 }

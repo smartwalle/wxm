@@ -8,5 +8,5 @@ import (
 var officialAccount = wxm.NewOfficialAccount("xxx", "xxx")
 
 func TestOfficialAccount_GetToken(t *testing.T) {
-	t.Log(miniProgram.GetToken())
+	t.Log(officialAccount.GetToken())
 }
