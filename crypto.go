@@ -17,11 +17,11 @@ func AESCBCDecrypt(ciphertext, key, iv []byte) ([]byte, error) {
 
 	var mode = cipher.NewCBCDecrypter(block, iv)
 	mode.CryptBlocks(dst, ciphertext)
-	dst = PKCS7UnPad(dst)
+	dst = PKCS7Unpad(dst)
 	return dst, nil
 }
 
-func PKCS7UnPad(data []byte) []byte {
+func PKCS7Unpad(data []byte) []byte {
 	var length = len(data)
 	var unpadding = int(data[length-1])
 	if length < unpadding {
