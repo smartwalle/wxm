@@ -65,12 +65,12 @@ func (c *client) SetHTTPClient(client *http.Client) {
 
 // GetToken 小程序、公众号-获取全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
 func (c *client) GetToken() (token *Token, err error) {
-	var values = url.Values{}
-	values.Add("appid", c.appId)
-	values.Add("secret", c.appSecret)
-	values.Add("grant_type", "client_credential")
+	var v = url.Values{}
+	v.Add("appid", c.appId)
+	v.Add("secret", c.appSecret)
+	v.Add("grant_type", "client_credential")
 
-	if err = c.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, values, &token); err != nil {
+	if err = c.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, v, &token); err != nil {
 		return nil, err
 	}
 

@@ -95,7 +95,7 @@ func (m *MobileApp) RefreshAccessToken(refreshToken string) (result *RefreshToke
 }
 
 // JSCode2Session 小程序-登录凭证校验 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
-func (m *MiniProgram) JSCode2Session(code string) (result *JSCode2SessionRsp, err error) {
+func (m *MiniProgram) JSCode2Session(code string) (result *JSCode2SessionResponse, err error) {
 	var v = url.Values{}
 	v.Add("appid", m.client.appId)
 	v.Add("secret", m.client.appSecret)

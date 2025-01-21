@@ -7,16 +7,30 @@ import (
 )
 
 const (
-	kGetUserBaseInfo   = "https://api.weixin.qq.com/sns/userinfo"
-	kGetUserOpenIdList = "https://api.weixin.qq.com/cgi-bin/user/get"
-	kGetUserInfo       = "https://api.weixin.qq.com/cgi-bin/user/info"
-	kGetUserInfoList   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
+	kGetUserPhoneNumber = "https://api.weixin.qq.com/wxa/business/getuserphonenumber"
+	kGetUserBaseInfo    = "https://api.weixin.qq.com/sns/userinfo"
+	kGetUserOpenIdList  = "https://api.weixin.qq.com/cgi-bin/user/get"
+	kGetUserInfo        = "https://api.weixin.qq.com/cgi-bin/user/info"
+	kGetUserInfoList    = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
 )
+
+// GetUserPhoneNumber 获取手机号 https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html
+func (m *MiniProgram) GetUserPhoneNumber(code string) (result *GetUserPhoneNumberResponse, err error) {
+	var param = struct {
+		Code string `json:"code"`
+	}{
+		Code: code,
+	}
+	if err = m.client.requestWithAccessToken(http.MethodPost, kGetUserPhoneNumber, param, nil, &result); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
 
 // DecodePhoneNumber 小程序-解密手机号码数据 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/deprecatedGetPhoneNumber.html
 //
 // 小程序端申请获取用户的手机号码之后，获取到的是加密的数据，需要调用本方法对该数据进行解密，以获取手机号码。
-func (m *MiniProgram) DecodePhoneNumber(sessionKey, encryptedData, iv string) (result *MiniProgramPhoneNumberResponse, err error) {
+func (m *MiniProgram) DecodePhoneNumber(sessionKey, encryptedData, iv string) (result *PhoneInfo, err error) {
 	plaintext, err := m.decrypt(sessionKey, encryptedData, iv)
 	if err = json.Unmarshal(plaintext, &result); err != nil {
 		return nil, err

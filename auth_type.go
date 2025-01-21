@@ -25,7 +25,7 @@ type RefreshToken struct {
 	Scope        string `json:"scope"`
 }
 
-type JSCode2SessionRsp struct {
+type JSCode2SessionResponse struct {
 	Error
 	SessionKey string `json:"session_key"`
 	OpenId     string `json:"openid"`
