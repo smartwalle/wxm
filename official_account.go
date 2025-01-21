@@ -2,16 +2,15 @@ package wxm
 
 import (
 	"context"
-	"net/http"
 )
 
 type OfficialAccount struct {
 	client *client
 }
 
-func NewOfficialAccount(appId, appSecret string) *OfficialAccount {
+func NewOfficialAccount(appId, appSecret string, opts ...Option) *OfficialAccount {
 	var c = &OfficialAccount{}
-	c.client = newClient(appId, appSecret)
+	c.client = newClient(appId, appSecret, opts...)
 	return c
 }
 
@@ -23,10 +22,6 @@ func (o *OfficialAccount) With(opts ...Option) *OfficialAccount {
 
 func (o *OfficialAccount) SetAccessToken(accessToken string) {
 	o.client.accessToken = accessToken
-}
-
-func (o *OfficialAccount) SetHTTPClient(client *http.Client) {
-	o.client.client = client
 }
 
 // GetToken 公众号-获取全局唯一后台接口调用凭据（access_token）https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Get_access_token.html

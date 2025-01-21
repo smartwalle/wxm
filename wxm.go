@@ -39,11 +39,16 @@ type client struct {
 	accessToken string
 }
 
-func newClient(appId, appSecret string) *client {
+func newClient(appId, appSecret string, opts ...Option) *client {
 	var c = &client{}
 	c.appId = appId
 	c.appSecret = appSecret
 	c.client = http.DefaultClient
+	for _, opt := range opts {
+		if opt != nil {
+			opt(c)
+		}
+	}
 	return c
 }
 
@@ -60,10 +65,6 @@ func (c *client) With(opts ...Option) *client {
 
 func (c *client) SetAccessToken(accessToken string) {
 	c.accessToken = accessToken
-}
-
-func (c *client) SetHTTPClient(client *http.Client) {
-	c.client = client
 }
 
 // GetToken 小程序、公众号-获取全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html

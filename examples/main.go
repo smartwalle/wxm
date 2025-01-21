@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/smartwalle/wxm"
 	"net/http"
@@ -21,7 +22,7 @@ func main() {
 	s.GET("/", func(c *gin.Context) {
 		c.Request.ParseForm()
 		var code = c.Request.Form.Get("code")
-		var token, err = client.GetAccessToken(code)
+		var token, err = client.GetAccessToken(context.Background(), code)
 		if err != nil {
 			c.Writer.WriteString(err.Error())
 			return

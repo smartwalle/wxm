@@ -1,14 +1,12 @@
 package wxm
 
-import "net/http"
-
 type MobileApp struct {
 	client *client
 }
 
-func NewMobileApp(appId, appSecret string) *MobileApp {
+func NewMobileApp(appId, appSecret string, opts ...Option) *MobileApp {
 	var c = &MobileApp{}
-	c.client = newClient(appId, appSecret)
+	c.client = newClient(appId, appSecret, opts...)
 	return c
 }
 
@@ -20,8 +18,4 @@ func (m *MobileApp) With(opts ...Option) *MobileApp {
 
 func (m *MobileApp) SetAccessToken(accessToken string) {
 	m.client.accessToken = accessToken
-}
-
-func (m *MobileApp) SetHTTPClient(client *http.Client) {
-	m.client.client = client
 }

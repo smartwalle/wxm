@@ -8,7 +8,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"net/http"
 	"sort"
 	"strings"
 )
@@ -17,9 +16,9 @@ type MiniProgram struct {
 	client *client
 }
 
-func NewMiniProgram(appId, appSecret string) *MiniProgram {
+func NewMiniProgram(appId, appSecret string, opts ...Option) *MiniProgram {
 	var n = &MiniProgram{}
-	n.client = newClient(appId, appSecret)
+	n.client = newClient(appId, appSecret, opts...)
 	return n
 }
 
@@ -31,10 +30,6 @@ func (m *MiniProgram) With(opts ...Option) *MiniProgram {
 
 func (m *MiniProgram) SetAccessToken(accessToken string) {
 	m.client.accessToken = accessToken
-}
-
-func (m *MiniProgram) SetHTTPClient(client *http.Client) {
-	m.client.client = client
 }
 
 // GetToken 小程序-获取全局唯一后台接口调用凭据（access_token）https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
