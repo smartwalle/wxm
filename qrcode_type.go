@@ -17,6 +17,7 @@ type GetUnlimitedQRCodeParam struct {
 	LineColor  *LineColor `json:"line_color,omitempty"`
 	IsHyaline  bool       `json:"is_hyaline"`
 	EnvVersion EnvVersion `json:"env_version,omitempty"`
+	CheckPath  bool       `json:"check_path"`
 }
 
 type LineColor struct {
