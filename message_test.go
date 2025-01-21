@@ -1,6 +1,7 @@
 package wxm_test
 
 import (
+	"context"
 	"github.com/smartwalle/wxm"
 	"testing"
 )
@@ -14,7 +15,7 @@ func TestMiniProgram_SendSubscribeMessage(t *testing.T) {
 	p.AddData("date3", "2015年01月05日")
 	p.AddData("thing4", "aaa")
 
-	rsp, err := miniProgram.SendSubscribeMessage(p)
+	rsp, err := miniProgram.SendSubscribeMessage(context.Background(), p)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,7 +40,7 @@ func TestMiniProgram_SendUniformMessage(t *testing.T) {
 	p.MPTemplateMsg.AddData("keyword4", "10.19元", "#173177")
 	p.MPTemplateMsg.AddData("remark", "请及时查看处理！", "#173177")
 
-	rsp, err := miniProgram.SendUniformMessage(p)
+	rsp, err := miniProgram.SendUniformMessage(context.Background(), p)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -57,7 +58,7 @@ func TestMiniProgram_SendCustomerServiceMessage(t *testing.T) {
 	p.Image = &wxm.MsgImage{}
 	p.Image.MediaId = "Ge2GGIhdVoRBX2-R9wYrdWjjENa_KEp4Ag9VDy3VhALgKQBMA2EFdcRQjKKPl-J4"
 
-	rsp, err := miniProgram.SendCustomerServiceMessage(p)
+	rsp, err := miniProgram.SendCustomerServiceMessage(context.Background(), p)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -80,7 +81,7 @@ func TestOfficialAccount_SendTemplateMessage(t *testing.T) {
 	p.AddData("customerPhone", "18180103029", "#173177")
 	p.AddData("remark", "something else", "#173177")
 
-	rsp, err := officialAccount.SendTemplateMessage(p)
+	rsp, err := officialAccount.SendTemplateMessage(context.Background(), p)
 	if err != nil {
 		t.Fatal(err)
 	}

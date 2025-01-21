@@ -1,6 +1,7 @@
 package wxm
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 )
@@ -10,8 +11,8 @@ const (
 )
 
 // GetUnlimitedQRCode 小程序-获取小程序码 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
-func (m *MiniProgram) GetUnlimitedQRCode(param GetUnlimitedQRCodeParam) (result *GetUnlimitedQRCodeResponse, err error) {
-	data, err := m.client.request(http.MethodPost, kGetUnLimit, true, param, nil)
+func (m *MiniProgram) GetUnlimitedQRCode(ctx context.Context, param GetUnlimitedQRCodeParam) (result *GetUnlimitedQRCodeResponse, err error) {
+	data, err := m.client.request(ctx, http.MethodPost, kGetUnLimit, true, param, nil)
 	if err != nil {
 		return nil, err
 	}

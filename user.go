@@ -1,6 +1,7 @@
 package wxm
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/url"
@@ -15,13 +16,13 @@ const (
 )
 
 // GetUserPhoneNumber 获取手机号 https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html
-func (m *MiniProgram) GetUserPhoneNumber(code string) (result *GetUserPhoneNumberResponse, err error) {
+func (m *MiniProgram) GetUserPhoneNumber(ctx context.Context, code string) (result *GetUserPhoneNumberResponse, err error) {
 	var param = struct {
 		Code string `json:"code"`
 	}{
 		Code: code,
 	}
-	if err = m.client.requestWithAccessToken(http.MethodPost, kGetUserPhoneNumber, param, nil, &result); err != nil {
+	if err = m.client.requestWithAccessToken(ctx, http.MethodPost, kGetUserPhoneNumber, param, nil, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
@@ -49,53 +50,53 @@ func (m *MiniProgram) DecodeUserInfo(sessionKey, encryptedData, iv string) (resu
 	return result, nil
 }
 
-func (c *client) GetUserBaseInfo(accessToken, openId string, lang string) (result *GetUserBaseInfoResponse, err error) {
+func (c *client) GetUserBaseInfo(ctx context.Context, accessToken, openId string, lang string) (result *GetUserBaseInfoResponse, err error) {
 	var v = url.Values{}
 	v.Add("access_token", accessToken)
 	v.Add("openid", openId)
 	v.Add("lang", lang)
 
-	if err = c.requestWithoutAccessToken(http.MethodGet, kGetUserBaseInfo, nil, v, &result); err != nil {
+	if err = c.requestWithoutAccessToken(ctx, http.MethodGet, kGetUserBaseInfo, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
 }
 
 // GetUserBaseInfo 公众号-获取用户信息 https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
-func (o *OfficialAccount) GetUserBaseInfo(accessToken, openId, lang string) (result *GetUserBaseInfoResponse, err error) {
-	return o.client.GetUserBaseInfo(accessToken, openId, lang)
+func (o *OfficialAccount) GetUserBaseInfo(ctx context.Context, accessToken, openId, lang string) (result *GetUserBaseInfoResponse, err error) {
+	return o.client.GetUserBaseInfo(ctx, accessToken, openId, lang)
 }
 
 // GetUserBaseInfo 微信-获取用户信息 https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
-func (m *MobileApp) GetUserBaseInfo(accessToken, openId, lang string) (result *GetUserBaseInfoResponse, err error) {
-	return m.client.GetUserBaseInfo(accessToken, openId, lang)
+func (m *MobileApp) GetUserBaseInfo(ctx context.Context, accessToken, openId, lang string) (result *GetUserBaseInfoResponse, err error) {
+	return m.client.GetUserBaseInfo(ctx, accessToken, openId, lang)
 }
 
 // GetUserOpenIdList 公众号-获取帐号的关注者列表 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
-func (o *OfficialAccount) GetUserOpenIdList(nextOpenId string) (result *GetUserOpenIdListResponse, err error) {
+func (o *OfficialAccount) GetUserOpenIdList(ctx context.Context, nextOpenId string) (result *GetUserOpenIdListResponse, err error) {
 	var v = url.Values{}
 	v.Add("next_openid", nextOpenId)
 
-	if err = o.client.requestWithAccessToken(http.MethodGet, kGetUserOpenIdList, nil, v, &result); err != nil {
+	if err = o.client.requestWithAccessToken(ctx, http.MethodGet, kGetUserOpenIdList, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
 }
 
 // GetUserInfo 公众号-获取用户基本信息 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Get_users_basic_information_UnionID.html#UinonId
-func (o *OfficialAccount) GetUserInfo(openId, lang string) (result *GetUserInfoResponse, err error) {
+func (o *OfficialAccount) GetUserInfo(ctx context.Context, openId, lang string) (result *GetUserInfoResponse, err error) {
 	var v = url.Values{}
 	v.Add("openid", openId)
 	v.Add("lang", lang)
 
-	if err = o.client.requestWithAccessToken(http.MethodGet, kGetUserInfo, nil, v, &result); err != nil {
+	if err = o.client.requestWithAccessToken(ctx, http.MethodGet, kGetUserInfo, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
 }
 
 // GetUserInfoList 公众号-批量获取用户基本信息
-func (o *OfficialAccount) GetUserInfoList(openIds ...string) (result *GetUserInfoListResponse, err error) {
+func (o *OfficialAccount) GetUserInfoList(ctx context.Context, openIds ...string) (result *GetUserInfoListResponse, err error) {
 	if len(openIds) == 0 {
 		return &GetUserInfoListResponse{}, nil
 	}
@@ -109,7 +110,7 @@ func (o *OfficialAccount) GetUserInfoList(openIds ...string) (result *GetUserInf
 		param.UserList = append(param.UserList, map[string]string{"openid": openId})
 	}
 
-	if err = o.client.requestWithAccessToken(http.MethodPost, kGetUserInfoList, param, nil, &result); err != nil {
+	if err = o.client.requestWithAccessToken(ctx, http.MethodPost, kGetUserInfoList, param, nil, &result); err != nil {
 		return nil, err
 	}
 	return result, nil

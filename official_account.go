@@ -1,6 +1,9 @@
 package wxm
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
 type OfficialAccount struct {
 	client *client
@@ -27,6 +30,6 @@ func (o *OfficialAccount) SetHTTPClient(client *http.Client) {
 }
 
 // GetToken 公众号-获取全局唯一后台接口调用凭据（access_token）https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Get_access_token.html
-func (o *OfficialAccount) GetToken() (token *Token, err error) {
-	return o.client.GetToken()
+func (o *OfficialAccount) GetToken(ctx context.Context) (token *Token, err error) {
+	return o.client.GetToken(ctx)
 }

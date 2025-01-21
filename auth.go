@@ -1,6 +1,7 @@
 package wxm
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 )
@@ -39,70 +40,70 @@ func (w *Website) GetQRConnectURL(redirectURL string, state string) string {
 }
 
 // GetAccessToken 通过 Code 获取 AccessToken
-func (c *client) GetAccessToken(code string) (result *AccessToken, err error) {
+func (c *client) GetAccessToken(ctx context.Context, code string) (result *AccessToken, err error) {
 	var v = url.Values{}
 	v.Add("appid", c.appId)
 	v.Add("secret", c.appSecret)
 	v.Add("code", code)
 	v.Add("grant_type", "authorization_code")
 
-	if err = c.requestWithoutAccessToken(http.MethodGet, kAccessToken, nil, v, &result); err != nil {
+	if err = c.requestWithoutAccessToken(ctx, http.MethodGet, kAccessToken, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
 }
 
 // GetAccessToken 公众号-获取 AccessToken https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
-func (o *OfficialAccount) GetAccessToken(code string) (result *AccessToken, err error) {
-	return o.client.GetAccessToken(code)
+func (o *OfficialAccount) GetAccessToken(ctx context.Context, code string) (result *AccessToken, err error) {
+	return o.client.GetAccessToken(ctx, code)
 }
 
 // GetAccessToken 网站-获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html
-func (w *Website) GetAccessToken(code string) (result *AccessToken, err error) {
-	return w.client.GetAccessToken(code)
+func (w *Website) GetAccessToken(ctx context.Context, code string) (result *AccessToken, err error) {
+	return w.client.GetAccessToken(ctx, code)
 }
 
 // GetAccessToken 微信-获取 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
-func (m *MobileApp) GetAccessToken(code string) (result *AccessToken, err error) {
-	return m.client.GetAccessToken(code)
+func (m *MobileApp) GetAccessToken(ctx context.Context, code string) (result *AccessToken, err error) {
+	return m.client.GetAccessToken(ctx, code)
 }
 
-func (c *client) RefreshAccessToken(refreshToken string) (result *RefreshToken, err error) {
+func (c *client) RefreshAccessToken(ctx context.Context, refreshToken string) (result *RefreshToken, err error) {
 	var v = url.Values{}
 	v.Add("appid", c.appId)
 	v.Add("refresh_token", refreshToken)
 	v.Add("grant_type", "refresh_token")
 
-	if err = c.requestWithoutAccessToken(http.MethodGet, kRefreshToken, nil, v, &result); err != nil {
+	if err = c.requestWithoutAccessToken(ctx, http.MethodGet, kRefreshToken, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
 }
 
 // RefreshAccessToken 公众号-刷新 AccessToken https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
-func (o *OfficialAccount) RefreshAccessToken(refreshToken string) (result *RefreshToken, err error) {
-	return o.client.RefreshAccessToken(refreshToken)
+func (o *OfficialAccount) RefreshAccessToken(ctx context.Context, refreshToken string) (result *RefreshToken, err error) {
+	return o.client.RefreshAccessToken(ctx, refreshToken)
 }
 
 // RefreshAccessToken 网站-刷新 AccessToken https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html
-func (w *Website) RefreshAccessToken(refreshToken string) (result *RefreshToken, err error) {
-	return w.client.RefreshAccessToken(refreshToken)
+func (w *Website) RefreshAccessToken(ctx context.Context, refreshToken string) (result *RefreshToken, err error) {
+	return w.client.RefreshAccessToken(ctx, refreshToken)
 }
 
 // RefreshAccessToken 微信-刷新 AccessToken https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Authorized_API_call_UnionID.html
-func (m *MobileApp) RefreshAccessToken(refreshToken string) (result *RefreshToken, err error) {
-	return m.client.RefreshAccessToken(refreshToken)
+func (m *MobileApp) RefreshAccessToken(ctx context.Context, refreshToken string) (result *RefreshToken, err error) {
+	return m.client.RefreshAccessToken(ctx, refreshToken)
 }
 
 // JSCode2Session 小程序-登录凭证校验 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
-func (m *MiniProgram) JSCode2Session(code string) (result *JSCode2SessionResponse, err error) {
+func (m *MiniProgram) JSCode2Session(ctx context.Context, code string) (result *JSCode2SessionResponse, err error) {
 	var v = url.Values{}
 	v.Add("appid", m.client.appId)
 	v.Add("secret", m.client.appSecret)
 	v.Add("js_code", code)
 	v.Add("grant_type", "authorization_code")
 
-	if err = m.client.requestWithoutAccessToken(http.MethodGet, kJSCode2Session, nil, v, &result); err != nil {
+	if err = m.client.requestWithoutAccessToken(ctx, http.MethodGet, kJSCode2Session, nil, v, &result); err != nil {
 		return nil, err
 	}
 	return result, nil

@@ -1,6 +1,7 @@
 package wxm_test
 
 import (
+	"context"
 	"github.com/smartwalle/wxm"
 	"testing"
 )
@@ -8,7 +9,7 @@ import (
 var miniProgram = wxm.NewMiniProgram("xxx", "xxx")
 
 func TestMiniProgram_GetToken(t *testing.T) {
-	t.Log(miniProgram.GetToken())
+	t.Log(miniProgram.GetToken(context.Background()))
 }
 
 func TestMiniProgram_CheckMessageFromPushServer(t *testing.T) {

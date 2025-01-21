@@ -1,12 +1,13 @@
 package wxm_test
 
 import (
+	"context"
 	"github.com/smartwalle/wxm"
 	"testing"
 )
 
 func TestMiniProgram_UploadTempMedia(t *testing.T) {
-	rsp, err := miniProgram.UploadTempMedia(wxm.MediaTypeOfImage, "./a.png")
+	rsp, err := miniProgram.UploadTempMedia(context.Background(), wxm.MediaTypeOfImage, "./a.png")
 	if err != nil {
 		t.Error(err)
 	}

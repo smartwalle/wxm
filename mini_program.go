@@ -2,6 +2,7 @@ package wxm
 
 import (
 	"bytes"
+	"context"
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/hex"
@@ -37,8 +38,8 @@ func (m *MiniProgram) SetHTTPClient(client *http.Client) {
 }
 
 // GetToken 小程序-获取全局唯一后台接口调用凭据（access_token）https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
-func (m *MiniProgram) GetToken() (token *Token, err error) {
-	return m.client.GetToken()
+func (m *MiniProgram) GetToken(ctx context.Context) (token *Token, err error) {
+	return m.client.GetToken(ctx)
 }
 
 func (m *MiniProgram) decrypt(sessionKey, ciphertext, iv string) (result []byte, err error) {

@@ -2,6 +2,7 @@ package wxm
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"mime/multipart"
@@ -64,13 +65,13 @@ func (c *client) SetHTTPClient(client *http.Client) {
 }
 
 // GetToken 小程序、公众号-获取全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
-func (c *client) GetToken() (token *Token, err error) {
+func (c *client) GetToken(ctx context.Context) (token *Token, err error) {
 	var v = url.Values{}
 	v.Add("appid", c.appId)
 	v.Add("secret", c.appSecret)
 	v.Add("grant_type", "client_credential")
 
-	if err = c.requestWithoutAccessToken(http.MethodGet, kGetToken, nil, v, &token); err != nil {
+	if err = c.requestWithoutAccessToken(ctx, http.MethodGet, kGetToken, nil, v, &token); err != nil {
 		return nil, err
 	}
 
@@ -81,8 +82,8 @@ func (c *client) GetToken() (token *Token, err error) {
 	return token, nil
 }
 
-func (c *client) requestWithAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
-	var data, err = c.request(method, api, true, param, values)
+func (c *client) requestWithAccessToken(ctx context.Context, method, api string, param interface{}, values url.Values, result interface{}) error {
+	var data, err = c.request(ctx, method, api, true, param, values)
 	if err != nil {
 		return err
 	}
@@ -92,8 +93,8 @@ func (c *client) requestWithAccessToken(method, api string, param interface{}, v
 	return nil
 }
 
-func (c *client) requestWithoutAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
-	var data, err = c.request(method, api, false, param, values)
+func (c *client) requestWithoutAccessToken(ctx context.Context, method, api string, param interface{}, values url.Values, result interface{}) error {
+	var data, err = c.request(ctx, method, api, false, param, values)
 	if err != nil {
 		return err
 	}
@@ -103,7 +104,7 @@ func (c *client) requestWithoutAccessToken(method, api string, param interface{}
 	return nil
 }
 
-func (c *client) request(method, api string, needAuth bool, param interface{}, values url.Values) (result []byte, err error) {
+func (c *client) request(ctx context.Context, method, api string, needAuth bool, param interface{}, values url.Values) (result []byte, err error) {
 	if values == nil {
 		values = url.Values{}
 	}
@@ -122,7 +123,7 @@ func (c *client) request(method, api string, needAuth bool, param interface{}, v
 	}
 
 	var nURL = api + "?" + values.Encode()
-	req, err := http.NewRequest(method, nURL, body)
+	req, err := http.NewRequestWithContext(ctx, method, nURL, body)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +141,7 @@ func (c *client) request(method, api string, needAuth bool, param interface{}, v
 	return result, nil
 }
 
-func (c *client) upload(method, api, fieldname, filename string, values url.Values, result interface{}) error {
+func (c *client) upload(ctx context.Context, method, api, fieldname, filename string, values url.Values, result interface{}) error {
 	if values == nil {
 		values = url.Values{}
 	}
@@ -168,7 +169,7 @@ func (c *client) upload(method, api, fieldname, filename string, values url.Valu
 	}
 
 	var nURL = api + "?" + values.Encode()
-	req, err := http.NewRequest(method, nURL, body)
+	req, err := http.NewRequestWithContext(ctx, method, nURL, body)
 	if err != nil {
 		return err
 	}

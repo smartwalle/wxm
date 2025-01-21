@@ -1,6 +1,7 @@
 package wxm_test
 
 import (
+	"context"
 	"github.com/smartwalle/wxm"
 	"testing"
 )
@@ -10,7 +11,7 @@ func TestMiniProgram_GetUnlimited(t *testing.T) {
 	p.Scene = "1"
 	p.Page = "pages/assist/gooddetail/gooddetail"
 
-	rsp, err := miniProgram.With(wxm.WithAccessToken("access token")).GetUnlimitedQRCode(p)
+	rsp, err := miniProgram.With(wxm.WithAccessToken("access token")).GetUnlimitedQRCode(context.Background(), p)
 	if err != nil {
 		t.Fatal(err)
 	}

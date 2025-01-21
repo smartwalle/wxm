@@ -1,6 +1,7 @@
 package wxm_test
 
 import (
+	"context"
 	"github.com/smartwalle/wxm"
 	"testing"
 )
@@ -10,7 +11,7 @@ func TestMiniProgram_GetLiveInfo(t *testing.T) {
 	p.Start = 0
 	p.Limit = 100
 
-	rsp, err := miniProgram.GetLiveInfo(p)
+	rsp, err := miniProgram.GetLiveInfo(context.Background(), p)
 	if err != nil {
 		t.Fatal(err)
 	}
