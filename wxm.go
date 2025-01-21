@@ -26,7 +26,9 @@ func WithAccessToken(accessToken string) Option {
 
 func WithHTTPClient(c *http.Client) Option {
 	return func(nc *client) {
-		nc.client = c
+		if c != nil {
+			nc.client = c
+		}
 	}
 }
 
