@@ -97,6 +97,9 @@ func (c *client) requestWithAccessToken(method, api string, param interface{}, v
 
 func (c *client) requestWithoutAccessToken(method, api string, param interface{}, values url.Values, result interface{}) error {
 	var data, err = c.request(method, api, param, values, false, false)
+	if err != nil {
+		return err
+	}
 	if err = json.Unmarshal(data, result); err != nil {
 		return err
 	}
