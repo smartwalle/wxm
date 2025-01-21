@@ -100,8 +100,14 @@ func (o *OfficialAccount) GetUserInfoList(openIds ...string) (result *GetUserInf
 		return &GetUserInfoListResponse{}, nil
 	}
 
-	var param = &GetUserInfoListParam{}
-	param.AddOpenId(openIds...)
+	var param = struct {
+		UserList []map[string]string `json:"user_list"`
+	}{
+		UserList: make([]map[string]string, 0, len(openIds)),
+	}
+	for _, openId := range openIds {
+		param.UserList = append(param.UserList, map[string]string{"openid": openId})
+	}
 
 	if err = o.client.requestWithAccessToken(http.MethodPost, kGetUserInfoList, param, nil, &result); err != nil {
 		return nil, err

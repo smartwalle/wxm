@@ -83,23 +83,6 @@ type GetUserInfoResponse struct {
 	UserInfo
 }
 
-type GetUserInfoListParam struct {
-	UserList []map[string]string `json:"user_list"`
-}
-
-func (u *GetUserInfoListParam) AddOpenId(openIds ...string) {
-	if len(openIds) == 0 {
-		return
-	}
-	if len(u.UserList) == 0 {
-		u.UserList = make([]map[string]string, 0, len(openIds))
-	}
-
-	for _, openId := range openIds {
-		u.UserList = append(u.UserList, map[string]string{"openid": openId})
-	}
-}
-
 type GetUserInfoListResponse struct {
 	Error
 	UserInfoList []*UserInfo `json:"user_info_list"`
