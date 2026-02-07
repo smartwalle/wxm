@@ -1,13 +1,15 @@
-package wxm
+package miniprogram
+
+import "github.com/smartwalle/wxm"
 
 type MediaType string
 
 const (
-	MediaTypeOfImage MediaType = "image"
+	MediaTypeImage MediaType = "image"
 )
 
 type UploadMediaResponse struct {
-	Error
+	wxm.Error
 	Type      MediaType `json:"type"`
 	MediaId   string    `json:"media_id"`
 	CreatedAt int64     `json:"created_at"`

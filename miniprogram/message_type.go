@@ -1,4 +1,6 @@
-package wxm
+package miniprogram
+
+import "github.com/smartwalle/wxm"
 
 type MiniProgramState string
 
@@ -19,8 +21,8 @@ func (m MessageData) add(param, key, value string) {
 	m[param] = values
 }
 
-// SendSubscribeMessageParam https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/subscribe-message/subscribeMessage.send.html
-type SendSubscribeMessageParam struct {
+// SendSubscribeMessageRequest https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/subscribe-message/subscribeMessage.send.html
+type SendSubscribeMessageRequest struct {
 	ToUser           string           `json:"touser"`                      // 是 接收者（用户）的 openid
 	TemplateId       string           `json:"template_id"`                 // 是 所需下发的订阅模板id
 	Data             MessageData      `json:"data"`                        // 是 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }
@@ -29,7 +31,7 @@ type SendSubscribeMessageParam struct {
 	Lang             string           `json:"lang,omitempty"`              // 否 进入小程序查看”的语言类型，支持zh_CN(简体中文)、en_US(英文)、zh_HK(繁体中文)、zh_TW(繁体中文)，默认为zh_CN
 }
 
-func (m *SendSubscribeMessageParam) AddData(key, value string) {
+func (m *SendSubscribeMessageRequest) AddData(key, value string) {
 	if m.Data == nil {
 		m.Data = make(MessageData)
 	}
@@ -37,11 +39,11 @@ func (m *SendSubscribeMessageParam) AddData(key, value string) {
 }
 
 type SendSubscribeMessageResponse struct {
-	Error
+	wxm.Error
 }
 
-// SendUniformMessageParam https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/uniform-message/uniformMessage.send.html
-type SendUniformMessageParam struct {
+// SendUniformMessageRequest https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/uniform-message/uniformMessage.send.html
+type SendUniformMessageRequest struct {
 	ToUser           string            `json:"touser"`                       // 是 用户openid，可以是小程序的openid，也可以是mp_template_msg.appid对应的公众号的openid
 	WeAppTemplateMsg *WeAppTemplateMsg `json:"weapp_template_msg,omitempty"` // 否 小程序模板消息相关的信息，可以参考小程序模板消息接口; 有此节点则优先发送小程序模板消息
 	MPTemplateMsg    *MPTemplateMsg    `json:"mp_template_msg,omitempty"`    // 是 公众号模板消息相关的信息，可以参考公众号模板消息接口；有此节点并且没有weapp_template_msg节点时，发送公众号模板消息
@@ -79,7 +81,7 @@ func (m *MPTemplateMsg) AddData(key, value, color string) {
 }
 
 type SendUniformMessageReponse struct {
-	Error
+	wxm.Error
 }
 
 type MiniProgramInfo struct {
@@ -94,8 +96,8 @@ func NewMiniProgramInfo(appId, pagePath string) *MiniProgramInfo {
 	}
 }
 
-// SendCustomerServiceMessageParam https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.send.html
-type SendCustomerServiceMessageParam struct {
+// SendCustomerServiceMessageRequest https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.send.html
+type SendCustomerServiceMessageRequest struct {
 	ToUser          string              `json:"touser"`                    // 是 用户的 OpenID
 	MsgType         MsgType             `json:"msgtype"`                   // 是 消息类型
 	Text            *MsgText            `json:"text,omitempty"`            // 是 文本消息，msgtype="text" 时必填
@@ -135,26 +137,5 @@ type MsgMiniProgramPage struct {
 }
 
 type SendCustomerServiceMessageResponse struct {
-	Error
-}
-
-// SendTemplateMessageParam https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html
-type SendTemplateMessageParam struct {
-	ToUser      string           `json:"touser"`                // 是 接收者（用户）的 openid
-	TemplateId  string           `json:"template_id"`           // 是 模板ID
-	URL         string           `json:"url"`                   // 否 模板跳转链接（海外帐号没有跳转能力）
-	MiniProgram *MiniProgramInfo `json:"miniprogram,omitempty"` // 否 跳小程序所需数据，不需跳小程序可不用传该数据
-	Data        MessageData      `json:"data"`                  // 是 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }
-}
-
-func (m *SendTemplateMessageParam) AddData(key, value, color string) {
-	if m.Data == nil {
-		m.Data = make(MessageData)
-	}
-	m.Data.add(key, "value", value)
-	m.Data.add(key, "color", color)
-}
-
-type SendTemplateMessageResponse struct {
-	Error
+	wxm.Error
 }

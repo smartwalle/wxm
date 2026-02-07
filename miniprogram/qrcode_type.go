@@ -1,4 +1,6 @@
-package wxm
+package miniprogram
+
+import "github.com/smartwalle/wxm"
 
 type EnvVersion string
 
@@ -8,8 +10,8 @@ const (
 	EnvVersionDevelop EnvVersion = "develop" // 开发版
 )
 
-// GetUnlimitedQRCodeParam https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
-type GetUnlimitedQRCodeParam struct {
+// GetUnlimitedQRCodeRequest https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/qr-code/wxacode.getUnlimited.html
+type GetUnlimitedQRCodeRequest struct {
 	Scene      string     `json:"scene"`
 	Page       string     `json:"page"`
 	Width      int        `json:"width,omitempty"`
@@ -27,6 +29,6 @@ type LineColor struct {
 }
 
 type GetUnlimitedQRCodeResponse struct {
-	Error
+	wxm.Error
 	Data []byte `json:"data"`
 }

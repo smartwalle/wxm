@@ -25,10 +25,3 @@ type RefreshToken struct {
 	OpenId       string `json:"openid"`
 	Scope        string `json:"scope"`
 }
-
-type JSCode2SessionResponse struct {
-	Error
-	SessionKey string `json:"session_key"`
-	OpenId     string `json:"openid"`
-	UnionId    string `json:"unionid"`
-}

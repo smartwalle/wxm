@@ -1,0 +1,56 @@
+package officialaccount
+
+import (
+	"context"
+	"net/url"
+)
+
+const (
+	kGetUserOpenIdList = "https://api.weixin.qq.com/cgi-bin/user/get"
+	kGetUserInfo       = "https://api.weixin.qq.com/cgi-bin/user/info"
+	kGetUserInfoList   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
+)
+
+// GetUserOpenIdList 获取帐号的关注者列表 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
+func (o *OfficialAccount) GetUserOpenIdList(ctx context.Context, accessToken, nextOpenId string) (response *GetUserOpenIdListResponse, err error) {
+	var query = url.Values{}
+	query.Add("next_openid", nextOpenId)
+
+	if err = o.Get(ctx, accessToken, kGetUserOpenIdList, query, &response); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// GetUserInfo 获取用户基本信息 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Get_users_basic_information_UnionID.html#UinonId
+func (o *OfficialAccount) GetUserInfo(ctx context.Context, accessToken, openId, lang string) (response *GetUserInfoResponse, err error) {
+	var query = url.Values{}
+	query.Add("openid", openId)
+	query.Add("lang", lang)
+
+	if err = o.Get(ctx, accessToken, kGetUserInfo, query, &response); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// GetUserInfoList 批量获取用户基本信息
+func (o *OfficialAccount) GetUserInfoList(ctx context.Context, accessToken string, openIds []string) (response *GetUserInfoListResponse, err error) {
+	if len(openIds) == 0 {
+		return &GetUserInfoListResponse{}, nil
+	}
+
+	var request = struct {
+		UserList []map[string]string `json:"user_list"`
+	}{
+		UserList: make([]map[string]string, 0, len(openIds)),
+	}
+	for _, openId := range openIds {
+		request.UserList = append(request.UserList, map[string]string{"openid": openId})
+	}
+
+	if err = o.Post(ctx, accessToken, kGetUserInfoList, request, nil, &response); err != nil {
+		return nil, err
+	}
+	return response, nil
+}

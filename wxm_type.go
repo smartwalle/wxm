@@ -2,7 +2,6 @@ package wxm
 
 import (
 	"fmt"
-	"time"
 )
 
 type Code int
@@ -30,29 +29,20 @@ type Error struct {
 	Msg  string `json:"errmsg"`
 }
 
-func (e Error) Error() string {
-	return fmt.Sprintf("%d-%s", e.Code, e.Msg)
+func (err Error) Error() string {
+	return fmt.Sprintf("%d-%s", err.Code, err.Msg)
 }
 
-func (e Error) IsSuccess() bool {
-	return e.Code.IsSuccess()
+func (err Error) IsSuccess() bool {
+	return err.Code.IsSuccess()
 }
 
-func (e Error) IsFailure() bool {
-	return e.Code.IsFailure()
+func (err Error) IsFailure() bool {
+	return err.Code.IsFailure()
 }
 
 type Token struct {
 	Error
 	AccessToken string `json:"access_token"`
 	ExpiresIn   int64  `json:"expires_in"`
-	CreateTime  int64  `json:"create_time"`
-}
-
-func (t *Token) Valid() bool {
-	var now = time.Now().Unix()
-	if now < t.CreateTime+t.ExpiresIn-60 {
-		return true
-	}
-	return false
 }

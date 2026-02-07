@@ -1,4 +1,4 @@
-package wxm
+package miniprogram
 
 type MessageInfo struct {
 	ToUserName   string  `json:"ToUserName"`
