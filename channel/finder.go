@@ -31,3 +31,13 @@ func (c *Channel) GetFinderLiveRecordList(ctx context.Context, accessToken strin
 	}
 	return response, nil
 }
+
+// GetFinderLiveDataList 获取留资直播数据详情
+//
+//	接口文档：https://developers.weixin.qq.com/doc/channels/api/channels/leadslive/api_getfinderlivedatalist.html
+func (c *Channel) GetFinderLiveDataList(ctx context.Context, accessToken string, request GetFinderLiveDataListRequest) (response *GetFinderLiveDataListResponse, err error) {
+	if err = c.Post(ctx, APIGetFinderLiveDataList, accessToken, request, nil, &response); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
