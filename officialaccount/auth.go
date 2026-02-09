@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	APIAuthorize = "https://open.weixin.qq.com/connect/oauth2/authorize"
+	kAuthorize = "https://open.weixin.qq.com/connect/oauth2/authorize"
 )
 
 // GetAuthorizeURL 获取公众号登录 URL
@@ -21,5 +21,5 @@ func (o *OfficialAccount) GetAuthorizeURL(appId, redirectURL string, scope AuthS
 	query.Add("response_type", "code")
 	query.Add("scope", string(scope))
 	query.Add("state", state)
-	return APIAuthorize + "?" + query.Encode()
+	return kAuthorize + "?" + query.Encode()
 }
