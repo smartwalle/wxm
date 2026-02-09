@@ -15,6 +15,10 @@ func (c Code) IsFailure() bool {
 }
 
 const (
+	MessageSuccess = "ok"
+)
+
+const (
 	CodeSuccess           Code = 0     // 请求成功
 	CodeInvalidCredential Code = 40001 // access_token 无效或者 AppSecret 错误
 	CodeInvalidGrantType  Code = 40002 // 请确保 grant_type 字段值为 client_credential
