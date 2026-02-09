@@ -5,7 +5,7 @@ import (
 	"net/url"
 )
 
-const kJSCode2Session = "https://api.weixin.qq.com/sns/jscode2session"
+const APIJSCode2Session = "/sns/jscode2session"
 
 // JSCode2Session 登录凭证校验
 //
@@ -17,7 +17,7 @@ func (m *MiniProgram) JSCode2Session(ctx context.Context, appId, secret, code st
 	query.Add("js_code", code)
 	query.Add("grant_type", "authorization_code")
 
-	if err = m.Get(ctx, "", kJSCode2Session, query, &response); err != nil {
+	if err = m.Get(ctx, APIJSCode2Session, "", query, &response); err != nil {
 		return nil, err
 	}
 	return response, nil

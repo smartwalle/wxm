@@ -10,7 +10,8 @@ import (
 )
 
 const (
-	kGetToken = "https://api.weixin.qq.com/cgi-bin/token"
+	kDomain     = "https://api.weixin.qq.com"
+	APIGetToken = "/cgi-bin/token"
 )
 
 type Client struct {
@@ -31,13 +32,13 @@ func (c *Client) GetToken(ctx context.Context, appId, secret string) (token *Tok
 	v.Add("appid", appId)
 	v.Add("secret", secret)
 	v.Add("grant_type", "client_credential")
-	if err = c.Get(ctx, "", kGetToken, v, &token); err != nil {
+	if err = c.Get(ctx, APIGetToken, "", v, &token); err != nil {
 		return nil, err
 	}
 	return token, nil
 }
 
-func (c *Client) Post(ctx context.Context, accessToken, api string, payload interface{}, query url.Values, dst interface{}) (err error) {
+func (c *Client) buildRequest(method, api, accessToken string, query url.Values) *ngx.Request {
 	if query == nil {
 		query = url.Values{}
 	}
@@ -45,9 +46,15 @@ func (c *Client) Post(ctx context.Context, accessToken, api string, payload inte
 		query.Set("access_token", accessToken)
 	}
 
-	var req = ngx.NewRequest(ngx.Post, api)
+	var req = ngx.NewRequest(method, kDomain)
+	req.JoinPath(api)
 	req.Client = c.HTTPClient
 	req.Query = query
+	return req
+}
+
+func (c *Client) Post(ctx context.Context, api, accessToken string, payload interface{}, query url.Values, dst interface{}) (err error) {
+	var req = c.buildRequest(ngx.Post, api, accessToken, query)
 	if payload != nil {
 		req.Body = ngx.JSONEncoder(payload)
 	}
@@ -58,35 +65,16 @@ func (c *Client) Post(ctx context.Context, accessToken, api string, payload inte
 	return nil
 }
 
-func (c *Client) Get(ctx context.Context, accessToken, api string, query url.Values, dst interface{}) (err error) {
-	if query == nil {
-		query = url.Values{}
-	}
-	if accessToken != "" {
-		query.Set("access_token", accessToken)
-	}
-
-	var req = ngx.NewRequest(ngx.Post, api)
-	req.Client = c.HTTPClient
-	req.Query = query
-
+func (c *Client) Get(ctx context.Context, api, accessToken string, query url.Values, dst interface{}) (err error) {
+	var req = c.buildRequest(ngx.Get, api, accessToken, query)
 	if _, err = req.Decode(ctx, ngx.JSONDecoder(&dst)); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *Client) Request(ctx context.Context, accessToken, api string, payload interface{}, query url.Values) (result []byte, err error) {
-	if query == nil {
-		query = url.Values{}
-	}
-	if accessToken != "" {
-		query.Set("access_token", accessToken)
-	}
-
-	var req = ngx.NewRequest(ngx.Post, api)
-	req.Client = c.HTTPClient
-	req.Query = query
+func (c *Client) Request(ctx context.Context, method, api, accessToken string, payload interface{}, query url.Values) (result []byte, err error) {
+	var req = c.buildRequest(method, api, accessToken, query)
 	if payload != nil {
 		req.Body = ngx.JSONEncoder(payload)
 	}
@@ -104,17 +92,8 @@ func (c *Client) Request(ctx context.Context, accessToken, api string, payload i
 	return result, nil
 }
 
-func (c *Client) Upload(ctx context.Context, accessToken, api, fieldname, filename, filepath string, query url.Values, dst interface{}) (err error) {
-	if query == nil {
-		query = url.Values{}
-	}
-	if accessToken != "" {
-		query.Set("access_token", accessToken)
-	}
-
-	var req = ngx.NewRequest(ngx.Post, api)
-	req.Client = c.HTTPClient
-	req.Query = query
+func (c *Client) Upload(ctx context.Context, api, accessToken, fieldname, filename, filepath string, query url.Values, dst interface{}) (err error) {
+	var req = c.buildRequest(ngx.Post, api, accessToken, query)
 	req.FileForm.AddFilePath(fieldname, filename, filepath)
 
 	if _, err = req.Decode(ctx, ngx.JSONDecoder(&dst)); err != nil {

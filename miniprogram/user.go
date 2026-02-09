@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	kGetUserPhoneNumber = "https://api.weixin.qq.com/wxa/business/getuserphonenumber"
+	APIGetUserPhoneNumber = "/wxa/business/getuserphonenumber"
 )
 
 // GetUserPhoneNumber 获取手机号
@@ -18,7 +18,7 @@ func (m *MiniProgram) GetUserPhoneNumber(ctx context.Context, accessToken, code 
 	}{
 		Code: code,
 	}
-	if err = m.Post(ctx, accessToken, kGetUserPhoneNumber, request, nil, &response); err != nil {
+	if err = m.Post(ctx, APIGetUserPhoneNumber, accessToken, request, nil, &response); err != nil {
 		return nil, err
 	}
 	return response, nil

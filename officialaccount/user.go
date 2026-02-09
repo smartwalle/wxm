@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	kGetUserOpenIdList = "https://api.weixin.qq.com/cgi-bin/user/get"
-	kGetUserInfo       = "https://api.weixin.qq.com/cgi-bin/user/info"
-	kGetUserInfoList   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
+	APIGetUserOpenIdList = "/cgi-bin/user/get"
+	APIGetUserInfo       = "/cgi-bin/user/info"
+	APIGetUserInfoList   = "/cgi-bin/user/info/batchget"
 )
 
 // GetUserOpenIdList 获取帐号的关注者列表
@@ -18,7 +18,7 @@ func (o *OfficialAccount) GetUserOpenIdList(ctx context.Context, accessToken, ne
 	var query = url.Values{}
 	query.Add("next_openid", nextOpenId)
 
-	if err = o.Get(ctx, accessToken, kGetUserOpenIdList, query, &response); err != nil {
+	if err = o.Get(ctx, APIGetUserOpenIdList, accessToken, query, &response); err != nil {
 		return nil, err
 	}
 	return response, nil
@@ -32,7 +32,7 @@ func (o *OfficialAccount) GetUserInfo(ctx context.Context, accessToken, openId, 
 	query.Add("openid", openId)
 	query.Add("lang", lang)
 
-	if err = o.Get(ctx, accessToken, kGetUserInfo, query, &response); err != nil {
+	if err = o.Get(ctx, APIGetUserInfo, accessToken, query, &response); err != nil {
 		return nil, err
 	}
 	return response, nil
@@ -53,7 +53,7 @@ func (o *OfficialAccount) GetUserInfoList(ctx context.Context, accessToken strin
 		request.UserList = append(request.UserList, map[string]string{"openid": openId})
 	}
 
-	if err = o.Post(ctx, accessToken, kGetUserInfoList, request, nil, &response); err != nil {
+	if err = o.Post(ctx, APIGetUserInfoList, accessToken, request, nil, &response); err != nil {
 		return nil, err
 	}
 	return response, nil

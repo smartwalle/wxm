@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	kGetUserBaseInfo = "https://api.weixin.qq.com/sns/userinfo"
+	APIGetUserBaseInfo = "/sns/userinfo"
 )
 
 // GetUserBaseInfo 获取用户信息
@@ -19,7 +19,7 @@ func (c *Client) GetUserBaseInfo(ctx context.Context, accessToken, openId string
 	query.Add("openid", openId)
 	query.Add("lang", lang)
 
-	if err = c.Get(ctx, "", kGetUserBaseInfo, query, &result); err != nil {
+	if err = c.Get(ctx, APIGetUserBaseInfo, "", query, &result); err != nil {
 		return nil, err
 	}
 	return result, nil

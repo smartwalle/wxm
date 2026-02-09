@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	kAccessToken  = "https://api.weixin.qq.com/sns/oauth2/access_token"
-	kRefreshToken = "https://api.weixin.qq.com/sns/oauth2/refresh_token"
+	APIAccessToken  = "/sns/oauth2/access_token"
+	APIRefreshToken = "/sns/oauth2/refresh_token"
 )
 
 // GetAccessToken 通过 Code 获取 AccessToken
@@ -22,7 +22,7 @@ func (c *Client) GetAccessToken(ctx context.Context, appId, secret, code string)
 	query.Add("code", code)
 	query.Add("grant_type", "authorization_code")
 
-	if err = c.Get(ctx, "", kAccessToken, query, &token); err != nil {
+	if err = c.Get(ctx, APIAccessToken, "", query, &token); err != nil {
 		return nil, err
 	}
 	return token, nil
@@ -39,7 +39,7 @@ func (c *Client) RefreshAccessToken(ctx context.Context, appId, refreshToken str
 	query.Add("refresh_token", refreshToken)
 	query.Add("grant_type", "refresh_token")
 
-	if err = c.Get(ctx, "", kRefreshToken, query, &token); err != nil {
+	if err = c.Get(ctx, APIRefreshToken, "", query, &token); err != nil {
 		return nil, err
 	}
 	return token, nil
