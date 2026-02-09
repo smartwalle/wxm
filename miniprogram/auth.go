@@ -7,7 +7,9 @@ import (
 
 const kJSCode2Session = "https://api.weixin.qq.com/sns/jscode2session"
 
-// JSCode2Session 登录凭证校验 https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
+// JSCode2Session 登录凭证校验
+//
+//	接口文档：https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
 func (m *MiniProgram) JSCode2Session(ctx context.Context, appId, secret, code string) (response *JSCode2SessionResponse, err error) {
 	var query = url.Values{}
 	query.Add("appid", appId)

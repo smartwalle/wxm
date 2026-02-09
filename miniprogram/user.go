@@ -9,7 +9,9 @@ const (
 	kGetUserPhoneNumber = "https://api.weixin.qq.com/wxa/business/getuserphonenumber"
 )
 
-// GetUserPhoneNumber 获取手机号 https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html
+// GetUserPhoneNumber 获取手机号
+//
+//	接口文档：https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html
 func (m *MiniProgram) GetUserPhoneNumber(ctx context.Context, accessToken, code string) (response *GetUserPhoneNumberResponse, err error) {
 	var request = struct {
 		Code string `json:"code"`
@@ -22,7 +24,9 @@ func (m *MiniProgram) GetUserPhoneNumber(ctx context.Context, accessToken, code 
 	return response, nil
 }
 
-// DecodePhoneNumber 解密手机号码数据 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/deprecatedGetPhoneNumber.html
+// DecodePhoneNumber 解密手机号码数据
+//
+//	接口文档：https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/deprecatedGetPhoneNumber.html
 //
 //	小程序端申请获取用户的手机号码之后，获取到的是加密的数据，需要调用本方法对该数据进行解密，以获取手机号码。
 func (m *MiniProgram) DecodePhoneNumber(sessionKey, encryptedData, iv string) (phoneInfo *PhoneInfo, err error) {
@@ -33,7 +37,9 @@ func (m *MiniProgram) DecodePhoneNumber(sessionKey, encryptedData, iv string) (p
 	return phoneInfo, nil
 }
 
-// DecodeUserInfo 解密用户数据 https://developers.weixin.qq.com/miniprogram/dev/api/open-api/user-info/wx.getUserInfo.html
+// DecodeUserInfo 解密用户数据
+//
+//	接口文档：https://developers.weixin.qq.com/miniprogram/dev/api/open-api/user-info/wx.getUserInfo.html
 //
 //	小程序端申请获取用户的信息之后，获取到的有加密的数据，需要调用本方法对该数据进行解密，以获取加密信息。
 func (m *MiniProgram) DecodeUserInfo(sessionKey, encryptedData, iv string) (response *UserInfoResponse, err error) {

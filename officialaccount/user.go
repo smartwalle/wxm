@@ -11,7 +11,9 @@ const (
 	kGetUserInfoList   = "https://api.weixin.qq.com/cgi-bin/user/info/batchget"
 )
 
-// GetUserOpenIdList 获取帐号的关注者列表 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
+// GetUserOpenIdList 获取帐号的关注者列表
+//
+//	接口文档：https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
 func (o *OfficialAccount) GetUserOpenIdList(ctx context.Context, accessToken, nextOpenId string) (response *GetUserOpenIdListResponse, err error) {
 	var query = url.Values{}
 	query.Add("next_openid", nextOpenId)
@@ -22,7 +24,9 @@ func (o *OfficialAccount) GetUserOpenIdList(ctx context.Context, accessToken, ne
 	return response, nil
 }
 
-// GetUserInfo 获取用户基本信息 https://developers.weixin.qq.com/doc/offiaccount/User_Management/Get_users_basic_information_UnionID.html#UinonId
+// GetUserInfo 获取用户基本信息
+//
+//	接口文档：https://developers.weixin.qq.com/doc/offiaccount/User_Management/Get_users_basic_information_UnionID.html#UinonId
 func (o *OfficialAccount) GetUserInfo(ctx context.Context, accessToken, openId, lang string) (response *GetUserInfoResponse, err error) {
 	var query = url.Values{}
 	query.Add("openid", openId)

@@ -45,13 +45,17 @@ func (m *MiniProgram) decrypt(sessionKey, ciphertext, iv string) (result []byte,
 	return plaintextBytes, err
 }
 
-// CheckMessageFromPushServer 验证消息来自微信服务器 https://developers.weixin.qq.com/miniprogram/dev/framework/server-ability/message-push.html#option-url
+// CheckMessageFromPushServer 验证消息来自微信服务器
+//
+//	接口文档：https://developers.weixin.qq.com/miniprogram/dev/framework/server-ability/message-push.html#option-url
 func (m *MiniProgram) CheckMessageFromPushServer(token, timestamp, nonce, signature string) bool {
 	var values = []string{token, timestamp, nonce}
 	return m.verifyMessage(values, signature)
 }
 
-// DecodePushMessage 获取来自微信服务器的推送消息 https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Message_Encryption/Technical_Plan.html
+// DecodePushMessage 获取来自微信服务器的推送消息
+//
+//	接口文档：https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Message_Encryption/Technical_Plan.html
 func (m *MiniProgram) DecodePushMessage(token, timestamp, nonce, signature, key string, data []byte) (messageInfo *MessageInfo, err error) {
 	if err = json.Unmarshal(data, &messageInfo); err != nil {
 		return nil, err

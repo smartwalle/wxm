@@ -23,7 +23,9 @@ func New() *Client {
 	return c
 }
 
-// GetToken 获取全局唯一后台接口调用凭据（access_token） https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
+// GetToken 获取全局唯一后台接口调用凭据
+//
+//	接口文档：https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html
 func (c *Client) GetToken(ctx context.Context, appId, secret string) (token *Token, err error) {
 	var v = url.Values{}
 	v.Add("appid", appId)
