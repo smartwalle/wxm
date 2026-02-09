@@ -21,7 +21,7 @@ func (c *Channel) GetFinderAttr(ctx context.Context, accessToken string) (respon
 	return response, nil
 }
 
-// GetFinderLiveRecordList 获取视频号直播记录列表
+// GetFinderLiveRecordList 视频号获取当前的直播记录
 //
 //	接口文档：https://developers.weixin.qq.com/doc/channels/api/channels/live/api_getfinderliverecordlist.html
 func (c *Channel) GetFinderLiveRecordList(ctx context.Context, accessToken string) (response *GetFinderLiveRecordListResponse, err error) {

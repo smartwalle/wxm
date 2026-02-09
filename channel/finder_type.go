@@ -2,7 +2,7 @@ package channel
 
 import "github.com/smartwalle/wxm"
 
-// GetFinderAttrResponse 通过 AppID 获取视频号属性响应
+// GetFinderAttrResponse 获取视频号账号信息响应
 type GetFinderAttrResponse struct {
 	wxm.Error
 	FinderAttr *FinderAttr `json:"finder_attr"`
@@ -15,19 +15,17 @@ type FinderAttr struct {
 	FansCount int    `json:"fans_count"`
 }
 
-// GetFinderLiveRecordListResponse 获取视频号直播记录列表响应
+// GetFinderLiveRecordListResponse 视频号获取当前的直播记录响应
 type GetFinderLiveRecordListResponse struct {
 	wxm.Error
-	LiveRecordList []*LiveRecord `json:"live_record_list"`
-	TotalCount     int           `json:"total_count"`
+	LiveList []*LiveRecord `json:"live_list"`
 }
 
 // LiveRecord 直播记录
 type LiveRecord struct {
-	ExportId   string `json:"export_id"`   // 直播 ID
-	CreateTime int64  `json:"create_time"` // 创建时间
-	ExpireTime int64  `json:"expire_time"` // 过期时间
-	LiveStatus int    `json:"live_status"` // 直播状态：0-未开始，1-直播中，2-已结束，3-已过期，4-已取消
-	Name       string `json:"name"`        // 直播标题
-	CoverImg   string `json:"cover_img"`   // 直播封面
+	ExportId    string `json:"export_id"`   // 直播id
+	Description string `json:"description"` // 直播描述
+	CoverUrl    string `json:"cover_url"`   // 直播封面
+	Nickname    string `json:"nickname"`    // 开播视频号昵称
+	HeadUrl     string `json:"head_url"`    // 开播视频号头像
 }
