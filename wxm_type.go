@@ -46,3 +46,50 @@ type Token struct {
 	AccessToken string `json:"access_token"`
 	ExpiresIn   int64  `json:"expires_in"`
 }
+
+// RIDRequest RID请求详情
+type RIDRequest struct {
+	InvokeTime   int64  `json:"invoke_time"`   // 发起请求的时间戳
+	CostInMs     int64  `json:"cost_in_ms"`    // 请求毫秒级耗时
+	RequestURL   string `json:"request_url"`   // 请求的URL参数
+	RequestBody  string `json:"request_body"`  // post请求的请求参数
+	ResponseBody string `json:"response_body"` // 接口请求返回参数
+	ClientIP     string `json:"client_ip"`     // 接口请求的客户端ip
+}
+
+// GetRIDInfoResponse 查询RID信息响应
+type GetRIDInfoResponse struct {
+	Error
+	Request *RIDRequest `json:"request"` // 该rid对应的请求详情
+}
+
+// Quota API调用额度详情，表示某个接口的调用配额信息
+type Quota struct {
+	DailyLimit int64 `json:"daily_limit"` // 当天该账号可调用该接口的次数
+	Used       int64 `json:"used"`        // 当天已经调用的次数
+	Remain     int64 `json:"remain"`      // 当天剩余调用次数
+}
+
+// RateLimit 调用频率限制，表示接口在某个周期内的调用限制
+type RateLimit struct {
+	CallCount     int64 `json:"call_count"`     // 周期内可调用数量，单位 次
+	RefreshSecond int64 `json:"refresh_second"` // 更新周期，单位 秒
+}
+
+// GetAPIQuotaResponse 查询API调用额度响应
+type GetAPIQuotaResponse struct {
+	Error
+	Quota              *Quota     `json:"quota"`                // quota详情
+	RateLimit          *RateLimit `json:"rate_limit"`           // 普通调用频率限制
+	ComponentRateLimit *RateLimit `json:"component_rate_limit"` // 代调用频率限制
+}
+
+// ClearQuotaResponse 重置API调用次数响应
+type ClearQuotaResponse struct {
+	Error
+}
+
+// ClearAPIQuotaResponse 重置指定API调用次数响应
+type ClearAPIQuotaResponse struct {
+	Error
+}
