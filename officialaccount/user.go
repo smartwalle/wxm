@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	APIGetUserOpenIdList = "/cgi-bin/user/get"
-	APIGetUserInfo       = "/cgi-bin/user/info"
-	APIGetUserInfoList   = "/cgi-bin/user/info/batchget"
+	APIGetUseList      = "/cgi-bin/user/get"
+	APIGetUserInfo     = "/cgi-bin/user/info"
+	APIGetUserInfoList = "/cgi-bin/user/info/batchget"
 )
 
 // GetUserList 获取帐号的关注者列表
@@ -20,7 +20,7 @@ func (o *OfficialAccount) GetUserList(ctx context.Context, accessToken, nextOpen
 		query.Add("next_openid", nextOpenId)
 	}
 
-	if err = o.Get(ctx, APIGetUserOpenIdList, accessToken, query, &response); err != nil {
+	if err = o.Get(ctx, APIGetUseList, accessToken, query, &response); err != nil {
 		return nil, err
 	}
 	return response, nil
