@@ -6,16 +6,16 @@ import (
 
 type Code int
 
-func (c Code) IsSuccess() bool {
+func (c Code) OK() bool {
 	return c == CodeSuccess
 }
 
-func (c Code) IsFailure() bool {
+func (c Code) Failed() bool {
 	return c != CodeSuccess
 }
 
 const (
-	MessageSuccess = "ok"
+	MessageOK = "ok"
 )
 
 const (
@@ -37,12 +37,12 @@ func (err Error) Error() string {
 	return fmt.Sprintf("%d-%s", err.Code, err.Msg)
 }
 
-func (err Error) IsSuccess() bool {
-	return err.Code.IsSuccess()
+func (err Error) OK() bool {
+	return err.Code.OK()
 }
 
-func (err Error) IsFailure() bool {
-	return err.Code.IsFailure()
+func (err Error) Failed() bool {
+	return err.Code.Failed()
 }
 
 type Token struct {
