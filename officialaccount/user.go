@@ -11,12 +11,14 @@ const (
 	APIGetUserInfoList   = "/cgi-bin/user/info/batchget"
 )
 
-// GetUserOpenIdList 获取帐号的关注者列表
+// GetUserList 获取帐号的关注者列表
 //
 //	接口文档：https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
-func (o *OfficialAccount) GetUserOpenIdList(ctx context.Context, accessToken, nextOpenId string) (response *GetUserOpenIdListResponse, err error) {
+func (o *OfficialAccount) GetUserList(ctx context.Context, accessToken, nextOpenId string) (response *GetUserListResponse, err error) {
 	var query = url.Values{}
-	query.Add("next_openid", nextOpenId)
+	if nextOpenId != "" {
+		query.Add("next_openid", nextOpenId)
+	}
 
 	if err = o.Get(ctx, APIGetUserOpenIdList, accessToken, query, &response); err != nil {
 		return nil, err

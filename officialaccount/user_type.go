@@ -2,7 +2,7 @@ package officialaccount
 
 import "github.com/smartwalle/wxm"
 
-type GetUserOpenIdListResponse struct {
+type GetUserListResponse struct {
 	wxm.Error
 	Total int `json:"total"`
 	Count int `json:"count"`
