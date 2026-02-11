@@ -181,9 +181,9 @@ func (c *Client) Request(ctx context.Context, method, api, accessToken string, p
 	return result, nil
 }
 
-func (c *Client) Upload(ctx context.Context, api, accessToken, fieldname, filename, filepath string, query url.Values, dst interface{}) (err error) {
+func (c *Client) Upload(ctx context.Context, api, accessToken, key, filename, filepath string, query url.Values, dst interface{}) (err error) {
 	var req = c.buildRequest(ngx.Post, api, accessToken, query)
-	req.FileForm.AddFilePath(fieldname, filename, filepath)
+	req.File.AddFile(key, filename, filepath)
 
 	if _, err = req.Decode(ctx, ngx.JSONDecoder(&dst)); err != nil {
 		return err
