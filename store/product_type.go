@@ -179,6 +179,7 @@ type SKUDeliverInfo struct {
 	PresaleEndTime                 int64 `json:"presale_end_time,omitempty"`                   // sku预售周期结束时间，秒级时间戳
 	FullPaymentPresaleDeliveryTime int   `json:"full_payment_presale_delivery_time,omitempty"` // sku发货时效
 	SpotAfterPresaleEnd            int   `json:"spot_after_presale_end,omitempty"`             // 是否在预售结束后自动转为现货
+	PredictDeliveryTime            int64 `json:"predict_delivery_time"`                        // 预计发货时间(stock_type=1时返回该字段)
 }
 
 // AfterSaleInfo 商品售后信息
