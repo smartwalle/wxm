@@ -1,4 +1,4 @@
-package channel
+package channels
 
 import "github.com/smartwalle/wxm"
 
