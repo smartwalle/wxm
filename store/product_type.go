@@ -292,3 +292,36 @@ type WarehouseStock struct {
 	Num            int    `json:"num"`              // 区域库存数量
 	LockStock      int    `json:"lock_stock"`       // 区域库存的锁定库存（已下单未支付的库存）数量
 }
+
+// BatchGetStockRequest 批量获取库存信息请求参数
+type BatchGetStockRequest struct {
+	ProductIDs []string `json:"product_id"` // 商品ID列表，上限为50
+}
+
+// BatchGetStockResponse 批量获取库存信息响应
+type BatchGetStockResponse struct {
+	wxm.Error
+	Data *BatchStockData `json:"data,omitempty"` // 批量库存数据
+}
+
+// BatchStockData 批量库存数据
+type BatchStockData struct {
+	SPUStockList []SPUStock `json:"spu_stock_list,omitempty"` // spu库存
+}
+
+// SPUStock spu库存
+type SPUStock struct {
+	ProductID string     `json:"product_id"`          // 商品ID
+	SKUStock  []SKUStock `json:"sku_stock,omitempty"` // sku库存
+}
+
+// SKUStock sku库存
+type SKUStock struct {
+	SKUID                   string           `json:"sku_id"`                     // skuID
+	NormalStockNum          int              `json:"normal_stock_num"`           // 普通/通用库存数量
+	LimitedDiscountStockNum int              `json:"limited_discount_stock_num"` // 限时抢购库存数量
+	WarehouseStocks         []WarehouseStock `json:"warehouse_stocks,omitempty"` // 区域库存
+	FinderTotalNum          int              `json:"finder_total_num,omitempty"` // 达人专属计划营销库存数量
+	TotalStockNum           int              `json:"total_stock_num"`            // 库存总量：普通/通用库存数量 + 限时抢购库存数量 + 区域库存总量 + 直播预热/专享库存
+	ExclusiveNum            int              `json:"exclusive_num,omitempty"`    // 直播预热专属库存
+}

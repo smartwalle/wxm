@@ -11,6 +11,7 @@ const (
 	APIGetProductList = "/channels/ec/product/list/get"
 	APIGetProduct     = "/channels/ec/product/get"
 	APIGetStock       = "/channels/ec/product/stock/get"
+	APIBatchGetStock  = "/channels/ec/product/stock/batchget"
 )
 
 // GetProductList 获取商品列表
@@ -56,6 +57,16 @@ func (s *Store) GetProduct(ctx context.Context, accessToken string, request GetP
 //	接口文档：https://developers.weixin.qq.com/doc/store/shop/API/channels-shop-product/stock/api_getstock.html
 func (s *Store) GetStock(ctx context.Context, accessToken string, request GetStockRequest) (response *GetStockResponse, err error) {
 	if err = s.Post(ctx, APIGetStock, accessToken, request, nil, &response); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// BatchGetStock 批量获取库存信息
+//
+//	接口文档：https://developers.weixin.qq.com/doc/store/shop/API/channels-shop-product/stock/api_batchgetstock.html
+func (s *Store) BatchGetStock(ctx context.Context, accessToken string, request BatchGetStockRequest) (response *BatchGetStockResponse, err error) {
+	if err = s.Post(ctx, APIBatchGetStock, accessToken, request, nil, &response); err != nil {
 		return nil, err
 	}
 	return response, nil
