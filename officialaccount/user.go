@@ -13,7 +13,7 @@ const (
 
 // GetUserList 获取帐号的关注者列表
 //
-//	接口文档：https://developers.weixin.qq.com/doc/offiaccount/User_Management/Getting_a_User_List.html
+//	接口文档：https://developers.weixin.qq.com/doc/service/api/usermanage/userinfo/api_getfans
 func (o *OfficialAccount) GetUserList(ctx context.Context, accessToken, nextOpenId string) (response *GetUserListResponse, err error) {
 	var query = url.Values{}
 	if nextOpenId != "" {
@@ -28,7 +28,7 @@ func (o *OfficialAccount) GetUserList(ctx context.Context, accessToken, nextOpen
 
 // GetUserInfo 获取用户基本信息
 //
-//	接口文档：https://developers.weixin.qq.com/doc/offiaccount/User_Management/Get_users_basic_information_UnionID.html#UinonId
+//	接口文档：https://developers.weixin.qq.com/doc/service/api/usermanage/userinfo/api_userinfo
 func (o *OfficialAccount) GetUserInfo(ctx context.Context, accessToken, openId, lang string) (response *GetUserInfoResponse, err error) {
 	var query = url.Values{}
 	query.Add("openid", openId)
@@ -41,6 +41,7 @@ func (o *OfficialAccount) GetUserInfo(ctx context.Context, accessToken, openId, 
 }
 
 // GetUserInfoList 批量获取用户基本信息
+// 接口文档：https://developers.weixin.qq.com/doc/service/api/usermanage/userinfo/api_batchuserinfo
 func (o *OfficialAccount) GetUserInfoList(ctx context.Context, accessToken string, openIds []string) (response *GetUserInfoListResponse, err error) {
 	if len(openIds) == 0 {
 		return &GetUserInfoListResponse{}, nil
