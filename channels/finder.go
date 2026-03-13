@@ -7,7 +7,7 @@ import (
 const (
 	APIGetFinderAttr           = "/channels/finderlive/get_finder_attr_by_appid"
 	APIGetFinderLiveRecordList = "/channels/ec/finderlive/getfinderliverecordlist"
-	APIGetFinderLiveDataList   = "/channels/ec/finderlive/get_finder_live_data_list"
+	APIGetFinderLiveDataList   = "/channels/finderlive/get_finder_live_data_list"
 )
 
 // GetFinderAttr 获取视频号账号信息
