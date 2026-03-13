@@ -5,8 +5,9 @@ import (
 )
 
 const (
-	APIGetShopOverall     = "/channels/ec/compass/shop/overall/get"
-	APIGetShopProductData = "/channels/ec/compass/shop/product/data/get"
+	APIGetShopOverall                 = "/channels/ec/compass/shop/overall/get"
+	APIGetShopProductData             = "/channels/ec/compass/shop/product/data/get"
+	APIGetShopFinderAuthorizationList = "/channels/ec/compass/shop/finder/authorization/list/get"
 )
 
 // GetShopOverall 获取电商数据概览
@@ -24,6 +25,16 @@ func (s *Store) GetShopOverall(ctx context.Context, accessToken string, request 
 //	接口文档：https://developers.weixin.qq.com/doc/store/shop/API/compass/api_getshopproductdata.html
 func (s *Store) GetShopProductData(ctx context.Context, accessToken string, request GetShopProductDataRequest) (response *GetShopProductDataResponse, err error) {
 	if err = s.Post(ctx, APIGetShopProductData, accessToken, request, nil, &response); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// GetShopFinderAuthorizationList 获取授权视频号列表
+//
+//	接口文档：https://developers.weixin.qq.com/doc/store/shop/API/compass/api_getshopfinderauthorizationlist.html
+func (s *Store) GetShopFinderAuthorizationList(ctx context.Context, accessToken string) (response *GetShopFinderAuthorizationListResponse, err error) {
+	if err = s.Post(ctx, APIGetShopFinderAuthorizationList, accessToken, struct{}{}, nil, &response); err != nil {
 		return nil, err
 	}
 	return response, nil

@@ -82,3 +82,9 @@ type ShopProductDataInfo struct {
 	RefundCnt                  string   `json:"refund_cnt"`                             // 退款订单数
 	RefundUV                   string   `json:"refund_uv"`                              // 退款人数
 }
+
+// GetShopFinderAuthorizationListResponse 获取授权视频号列表响应
+type GetShopFinderAuthorizationListResponse struct {
+	wxm.Error
+	AuthorizedFinderIdList []string `json:"authorized_finder_id_list,omitempty"` // 授权视频号id列表
+}
