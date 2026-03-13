@@ -5,7 +5,7 @@ import "github.com/smartwalle/wxm"
 // GetFinderAttrResponse 获取视频号账号信息响应
 type GetFinderAttrResponse struct {
 	wxm.Error
-	FinderAttr FinderAttr `json:"finder_attr"`
+	FinderAttr *FinderAttr `json:"finder_attr"`
 }
 
 // FinderAttr 视频号属性
