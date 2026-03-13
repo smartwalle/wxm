@@ -10,6 +10,7 @@ import (
 const (
 	APIGetProductList = "/channels/ec/product/list/get"
 	APIGetProduct     = "/channels/ec/product/get"
+	APIGetStock       = "/channels/ec/product/stock/get"
 )
 
 // GetProductList 获取商品列表
@@ -45,6 +46,16 @@ func (s *Store) GetProductList(ctx context.Context, accessToken string, request 
 //	接口文档：https://developers.weixin.qq.com/doc/store/shop/API/channels-shop-product/shop/api_getproduct.html
 func (s *Store) GetProduct(ctx context.Context, accessToken string, request GetProductRequest) (response *GetProductResponse, err error) {
 	if err = s.Post(ctx, APIGetProduct, accessToken, request, nil, &response); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// GetStock 获取库存
+//
+//	接口文档：https://developers.weixin.qq.com/doc/store/shop/API/channels-shop-product/stock/api_getstock.html
+func (s *Store) GetStock(ctx context.Context, accessToken string, request GetStockRequest) (response *GetStockResponse, err error) {
+	if err = s.Post(ctx, APIGetStock, accessToken, request, nil, &response); err != nil {
 		return nil, err
 	}
 	return response, nil

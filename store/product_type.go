@@ -265,3 +265,30 @@ type SKUResult struct {
 type AuditInfo struct {
 	UserStrategyFlagList []int `json:"user_strategy_flag_list,omitempty"` // 提审的商品上架策略
 }
+
+// GetStockRequest 获取库存请求参数
+type GetStockRequest struct {
+	ProductID string `json:"product_id"` // 内部商品ID
+	SKUID     string `json:"sku_id"`     // 内部sku_id
+}
+
+// GetStockResponse 获取库存响应
+type GetStockResponse struct {
+	wxm.Error
+	Data *StockData `json:"data,omitempty"` // 库存数据
+}
+
+// StockData 库存数据
+type StockData struct {
+	NormalStockNum          int              `json:"normal_stock_num"`           // 通用库存数量
+	LimitedDiscountStockNum int              `json:"limited_discount_stock_num"` // 限时抢购库存数量
+	WarehouseStocks         []WarehouseStock `json:"warehouse_stocks,omitempty"` // 区域库存
+	TotalStockNum           int              `json:"total_stock_num"`            // 库存总量：通用库存数量 + 限时抢购库存数量 + 区域库存总量
+}
+
+// WarehouseStock 区域库存
+type WarehouseStock struct {
+	OutWarehouseID string `json:"out_warehouse_id"` // 区域库存外部id
+	Num            int    `json:"num"`              // 区域库存数量
+	LockStock      int    `json:"lock_stock"`       // 区域库存的锁定库存（已下单未支付的库存）数量
+}
