@@ -20,7 +20,7 @@ const (
 func (s *Store) GetProductList(ctx context.Context, accessToken string, request GetProductListRequest) (response *GetProductListResponse, err error) {
 	var aux = struct {
 		wxm.Error
-		ProductIDs []int64 `json:"product_ids"` // 商品id列表
+		ProductIds []int64 `json:"product_ids"` // 商品id列表
 		NextKey    string  `json:"next_key"`    // 本次翻页的上下文，用于请求下一页
 		TotalNum   int     `json:"total_num"`   // 商品总数
 	}{}
@@ -30,13 +30,13 @@ func (s *Store) GetProductList(ctx context.Context, accessToken string, request 
 	}
 	response = &GetProductListResponse{
 		Error:      aux.Error,
-		ProductIDs: make([]string, 0, len(aux.ProductIDs)),
+		ProductIds: make([]string, 0, len(aux.ProductIds)),
 		NextKey:    aux.NextKey,
 		TotalNum:   aux.TotalNum,
 	}
 
-	for _, productID := range aux.ProductIDs {
-		response.ProductIDs = append(response.ProductIDs, strconv.FormatInt(productID, 10))
+	for _, productId := range aux.ProductIds {
+		response.ProductIds = append(response.ProductIds, strconv.FormatInt(productId, 10))
 	}
 
 	return response, nil

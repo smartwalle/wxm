@@ -22,7 +22,7 @@ const (
 	CodeSuccess           Code = 0     // 请求成功
 	CodeInvalidCredential Code = 40001 // access_token 无效或者 AppSecret 错误
 	CodeInvalidGrantType  Code = 40002 // 请确保 grant_type 字段值为 client_credential
-	CodeInvalidAppId      Code = 40013 // 不合法的 AppID，请开发者检查 AppID 的正确性，避免异常字符，注意大小写
+	CodeInvalidAppId      Code = 40013 // 不合法的 AppId，请开发者检查 AppId 的正确性，避免异常字符，注意大小写
 	CodeInvalidCode       Code = 40029 // 不合法的 code
 	CodeMaxRate           Code = 45009 // 调用分钟频率受限(目前5000次/分钟，会调整)，如需大量小程序码，建议预生成。
 	CodeInvalidPage       Code = 41030 // 所传page页面不存在，或者小程序没有发布
@@ -51,8 +51,8 @@ type Token struct {
 	ExpiresIn   int64  `json:"expires_in"`
 }
 
-// RIDRequest RID请求详情
-type RIDRequest struct {
+// RIdRequest RId请求详情
+type RIdRequest struct {
 	InvokeTime   int64  `json:"invoke_time"`   // 发起请求的时间戳
 	CostInMs     int64  `json:"cost_in_ms"`    // 请求毫秒级耗时
 	RequestURL   string `json:"request_url"`   // 请求的URL参数
@@ -61,10 +61,10 @@ type RIDRequest struct {
 	ClientIP     string `json:"client_ip"`     // 接口请求的客户端ip
 }
 
-// GetRIDInfoResponse 查询RID信息响应
-type GetRIDInfoResponse struct {
+// GetRIdInfoResponse 查询RId信息响应
+type GetRIdInfoResponse struct {
 	Error
-	Request *RIDRequest `json:"request"` // 该rid对应的请求详情
+	Request *RIdRequest `json:"request"` // 该rid对应的请求详情
 }
 
 // Quota API调用额度详情，表示某个接口的调用配额信息

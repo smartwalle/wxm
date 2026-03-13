@@ -50,7 +50,7 @@ type SendUniformMessageRequest struct {
 }
 
 type WeAppTemplateMsg struct {
-	TemplateId      string      `json:"template_id"`      // 是	小程序模板ID
+	TemplateId      string      `json:"template_id"`      // 是	小程序模板Id
 	Page            string      `json:"page"`             // 是	小程序页面路径
 	FormId          string      `json:"form_id"`          // 是	小程序模板消息 formid
 	Data            MessageData `json:"data"`             // 是	小程序模板数据
@@ -66,7 +66,7 @@ func (m *WeAppTemplateMsg) AddData(key, value string) {
 
 type MPTemplateMsg struct {
 	AppId       string           `json:"appid"`                 // 是 公众号appid，要求与小程序有绑定且同主体
-	TemplateId  string           `json:"template_id"`           // 是 模板ID
+	TemplateId  string           `json:"template_id"`           // 是 模板Id
 	URL         string           `json:"url"`                   // 否 模板跳转链接（海外帐号没有跳转能力）
 	MiniProgram *MiniProgramInfo `json:"miniprogram,omitempty"` // 否 跳小程序所需数据，不需跳小程序可不用传该数据
 	Data        MessageData      `json:"data"`                  // 是 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }
@@ -98,7 +98,7 @@ func NewMiniProgramInfo(appId, pagePath string) *MiniProgramInfo {
 
 // SendCustomerServiceMessageRequest https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.send.html
 type SendCustomerServiceMessageRequest struct {
-	ToUser          string              `json:"touser"`                    // 是 用户的 OpenID
+	ToUser          string              `json:"touser"`                    // 是 用户的 OpenId
 	MsgType         MsgType             `json:"msgtype"`                   // 是 消息类型
 	Text            *MsgText            `json:"text,omitempty"`            // 是 文本消息，msgtype="text" 时必填
 	Image           *MsgImage           `json:"image,omitempty"`           // 是 图片消息，msgtype="image" 时必填

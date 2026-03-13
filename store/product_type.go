@@ -60,14 +60,14 @@ type GetProductListRequest struct {
 // GetProductListResponse 获取商品列表响应
 type GetProductListResponse struct {
 	wxm.Error
-	ProductIDs []string `json:"product_ids"` // 商品id列表
+	ProductIds []string `json:"product_ids"` // 商品id列表
 	NextKey    string   `json:"next_key"`    // 本次翻页的上下文，用于请求下一页
 	TotalNum   int      `json:"total_num"`   // 商品总数
 }
 
 // GetProductRequest 获取商品请求参数
 type GetProductRequest struct {
-	ProductID string   `json:"product_id"`          // 商品ID
+	ProductId string   `json:"product_id"`          // 商品Id
 	DataType  DataType `json:"data_type,omitempty"` // 数据类型：1-获取线上数据；2-获取草稿数据；3-同时获取线上和草稿数据
 }
 
@@ -84,8 +84,8 @@ type GetProductResponse struct {
 
 // Product 商品信息
 type Product struct {
-	ProductID        string            `json:"product_id"`                   // 小店内部商品ID
-	OutProductID     string            `json:"out_product_id,omitempty"`     // 外部平台自定义商品ID
+	ProductId        string            `json:"product_id"`                   // 小店内部商品Id
+	OutProductId     string            `json:"out_product_id,omitempty"`     // 外部平台自定义商品Id
 	Title            string            `json:"title,omitempty"`              // 标题
 	SubTitle         string            `json:"sub_title,omitempty"`          // 副标题（已废弃）
 	HeadImgs         []string          `json:"head_imgs,omitempty"`          // 主图，多张，列表，最多9张，每张不超过2MB
@@ -103,12 +103,12 @@ type Product struct {
 	CatsV2           []Cat             `json:"cats_v2,omitempty"`            // 新类目树
 	Attrs            []Attribute       `json:"attrs,omitempty"`              // 属性键key（属性自定义用）
 	SPUCode          string            `json:"spu_code,omitempty"`           // 商家自定义的商品编码
-	BrandID          string            `json:"brand_id,omitempty"`           // 品牌id，无品牌为"2100000000"
+	BrandId          string            `json:"brand_id,omitempty"`           // 品牌id，无品牌为"2100000000"
 	SKUs             []SKU             `json:"skus,omitempty"`               // sku信息
 	ProductType      int               `json:"product_type,omitempty"`       // 商品类型。1: 小店普通自营商品；2: 福袋抽奖商品；3: 直播间闪电购商品
 	EditTime         int64             `json:"edit_time,omitempty"`          // 商品草稿最近一次修改时间
 	AfterSaleInfo    *AfterSaleInfo    `json:"after_sale_info,omitempty"`    // 商品售后信息
-	SrcProductID     string            `json:"src_product_id,omitempty"`     // 来源商品id
+	SrcProductId     string            `json:"src_product_id,omitempty"`     // 来源商品id
 	ProductQuaInfos  []ProductQuaInfo  `json:"product_qua_infos,omitempty"`  // 商品资质列表
 	SizeChart        *SizeChart        `json:"size_chart,omitempty"`         // 尺码信息
 	TimingOnsaleInfo *TimingOnsaleInfo `json:"timing_onsale_info,omitempty"` // 商品待开售信息
@@ -120,7 +120,7 @@ type Product struct {
 
 // Cat 类目
 type Cat struct {
-	CatID string `json:"cat_id"` // 类目ID
+	CatId string `json:"cat_id"` // 类目Id
 }
 
 // Attribute 属性
@@ -137,7 +137,7 @@ type DescInfo struct {
 
 // ExpressInfo 运费信息
 type ExpressInfo struct {
-	TemplateID string `json:"template_id,omitempty"` // 运费模板ID
+	TemplateId string `json:"template_id,omitempty"` // 运费模板Id
 	Weight     int64  `json:"weight,omitempty"`      // 商品重量，单位克
 }
 
@@ -159,8 +159,8 @@ type ExtraService struct {
 
 // SKU 商品SKU信息
 type SKU struct {
-	SKUID          string          `json:"sku_id"`                     // skuID
-	OutSKUID       string          `json:"out_sku_id,omitempty"`       // 外部平台自定义skuID
+	SKUId          string          `json:"sku_id"`                     // skuId
+	OutSKUId       string          `json:"out_sku_id,omitempty"`       // 外部平台自定义skuId
 	ThumbImg       string          `json:"thumb_img,omitempty"`        // sku小图
 	SalePrice      int64           `json:"sale_price,omitempty"`       // 售卖价格，以分为单位
 	StockNum       int             `json:"stock_num,omitempty"`        // sku库存
@@ -184,12 +184,12 @@ type SKUDeliverInfo struct {
 
 // AfterSaleInfo 商品售后信息
 type AfterSaleInfo struct {
-	AfterSaleAddressID string `json:"after_sale_address_id,omitempty"` // 商品的售后地址id
+	AfterSaleAddressId string `json:"after_sale_address_id,omitempty"` // 商品的售后地址id
 }
 
 // ProductQuaInfo 商品资质
 type ProductQuaInfo struct {
-	QuaID  int64    `json:"qua_id"`            // 商品资质id
+	QuaId  int64    `json:"qua_id"`            // 商品资质id
 	QuaURL []string `json:"qua_url,omitempty"` // 商品资质图片列表
 }
 
@@ -220,7 +220,7 @@ type TimingOnsaleInfo struct {
 	Status      int   `json:"status,omitempty"`        // 状态
 	OnsaleTime  int64 `json:"onsale_time,omitempty"`   // 开售时间，秒级时间戳，0为未配置时间
 	IsHidePrice int   `json:"is_hide_price,omitempty"` // 是否隐藏价格
-	TaskID      int64 `json:"task_id,omitempty"`       // 待开售任务ID
+	TaskId      int64 `json:"task_id,omitempty"`       // 待开售任务Id
 }
 
 // SPUDeliverInfo spu维度的sku预售配置
@@ -257,7 +257,7 @@ type CmpPriceInfo struct {
 
 // SKUResult SKU高价预警结果
 type SKUResult struct {
-	SKUID              int64 `json:"sku_id"`               // skuID
+	SKUId              int64 `json:"sku_id"`               // skuId
 	IsExpensiveWarning bool  `json:"is_expensive_warning"` // 是否被检测为高价
 }
 
@@ -268,8 +268,8 @@ type AuditInfo struct {
 
 // GetStockRequest 获取库存请求参数
 type GetStockRequest struct {
-	ProductID string `json:"product_id"` // 内部商品ID
-	SKUID     string `json:"sku_id"`     // 内部sku_id
+	ProductId string `json:"product_id"` // 内部商品Id
+	SKUId     string `json:"sku_id"`     // 内部sku_id
 }
 
 // GetStockResponse 获取库存响应
@@ -288,14 +288,14 @@ type StockData struct {
 
 // WarehouseStock 区域库存
 type WarehouseStock struct {
-	OutWarehouseID string `json:"out_warehouse_id"` // 区域库存外部id
+	OutWarehouseId string `json:"out_warehouse_id"` // 区域库存外部id
 	Num            int    `json:"num"`              // 区域库存数量
 	LockStock      int    `json:"lock_stock"`       // 区域库存的锁定库存（已下单未支付的库存）数量
 }
 
 // BatchGetStockRequest 批量获取库存信息请求参数
 type BatchGetStockRequest struct {
-	ProductIDs []string `json:"product_id"` // 商品ID列表，上限为50
+	ProductIds []string `json:"product_id"` // 商品Id列表，上限为50
 }
 
 // BatchGetStockResponse 批量获取库存信息响应
@@ -311,13 +311,13 @@ type BatchStockData struct {
 
 // SPUStock spu库存
 type SPUStock struct {
-	ProductID string     `json:"product_id"`          // 商品ID
+	ProductId string     `json:"product_id"`          // 商品Id
 	SKUStock  []SKUStock `json:"sku_stock,omitempty"` // sku库存
 }
 
 // SKUStock sku库存
 type SKUStock struct {
-	SKUID                   string           `json:"sku_id"`                     // skuID
+	SKUId                   string           `json:"sku_id"`                     // skuId
 	NormalStockNum          int              `json:"normal_stock_num"`           // 普通/通用库存数量
 	LimitedDiscountStockNum int              `json:"limited_discount_stock_num"` // 限时抢购库存数量
 	WarehouseStocks         []WarehouseStock `json:"warehouse_stocks,omitempty"` // 区域库存

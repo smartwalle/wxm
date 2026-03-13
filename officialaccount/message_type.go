@@ -30,7 +30,7 @@ func NewMiniProgramInfo(appId, pagePath string) *MiniProgramInfo {
 // SendTemplateMessageRequest https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html
 type SendTemplateMessageRequest struct {
 	ToUser      string           `json:"touser"`                // 是 接收者（用户）的 openid
-	TemplateId  string           `json:"template_id"`           // 是 模板ID
+	TemplateId  string           `json:"template_id"`           // 是 模板Id
 	URL         string           `json:"url"`                   // 否 模板跳转链接（海外帐号没有跳转能力）
 	MiniProgram *MiniProgramInfo `json:"miniprogram,omitempty"` // 否 跳小程序所需数据，不需跳小程序可不用传该数据
 	Data        MessageData      `json:"data"`                  // 是 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }

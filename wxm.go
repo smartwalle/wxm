@@ -13,7 +13,7 @@ const (
 	kDomain           = "https://api.weixin.qq.com"
 	APIGetToken       = "/cgi-bin/token"
 	APIGetStableToken = "/cgi-bin/stable_token"
-	APIGetRIDInfo     = "/cgi-bin/openapi/rid/get"
+	APIGetRIdInfo     = "/cgi-bin/openapi/rid/get"
 	APIGetAPIQuota    = "/cgi-bin/openapi/quota/get"
 	APIClearQuota     = "/cgi-bin/clear_quota"
 	APIClearQuotaV2   = "/cgi-bin/clear_quota/v2"
@@ -60,14 +60,14 @@ func (c *Client) GetStableToken(ctx context.Context, appId, secret string, force
 	return token, nil
 }
 
-// GetRIDInfo 查询RID信息
+// GetRIdInfo 查询RId信息
 //
 //	接口文档：https://developers.weixin.qq.com/miniprogram/dev/server/API/openApi-mgnt/api_getridinfo.html
-func (c *Client) GetRIDInfo(ctx context.Context, accessToken, rid string) (response *GetRIDInfoResponse, err error) {
+func (c *Client) GetRIdInfo(ctx context.Context, accessToken, rid string) (response *GetRIdInfoResponse, err error) {
 	var request = map[string]string{
 		"rid": rid,
 	}
-	if err = c.Post(ctx, APIGetRIDInfo, accessToken, request, nil, &response); err != nil {
+	if err = c.Post(ctx, APIGetRIdInfo, accessToken, request, nil, &response); err != nil {
 		return nil, err
 	}
 	return response, nil
