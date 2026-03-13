@@ -34,7 +34,8 @@ func (s *Store) GetShopProductData(ctx context.Context, accessToken string, requ
 //
 //	接口文档：https://developers.weixin.qq.com/doc/store/shop/API/compass/api_getshopfinderauthorizationlist.html
 func (s *Store) GetShopFinderAuthorizationList(ctx context.Context, accessToken string) (response *GetShopFinderAuthorizationListResponse, err error) {
-	if err = s.Post(ctx, APIGetShopFinderAuthorizationList, accessToken, struct{}{}, nil, &response); err != nil {
+	var request = struct{}{}
+	if err = s.Post(ctx, APIGetShopFinderAuthorizationList, accessToken, request, nil, &response); err != nil {
 		return nil, err
 	}
 	return response, nil
