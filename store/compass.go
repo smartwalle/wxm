@@ -8,6 +8,7 @@ const (
 	APIGetShopOverall                 = "/channels/ec/compass/shop/overall/get"
 	APIGetShopProductData             = "/channels/ec/compass/shop/product/data/get"
 	APIGetShopFinderAuthorizationList = "/channels/ec/compass/shop/finder/authorization/list/get"
+	APIGetShopFinderList              = "/channels/ec/compass/shop/finder/list/get"
 )
 
 // GetShopOverall 获取电商数据概览
@@ -36,6 +37,16 @@ func (s *Store) GetShopProductData(ctx context.Context, accessToken string, requ
 func (s *Store) GetShopFinderAuthorizationList(ctx context.Context, accessToken string) (response *GetShopFinderAuthorizationListResponse, err error) {
 	var request = struct{}{}
 	if err = s.Post(ctx, APIGetShopFinderAuthorizationList, accessToken, request, nil, &response); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// GetShopFinderList 获取带货达人列表
+//
+//	接口文档：https://developers.weixin.qq.com/doc/store/shop/API/compass/api_getshopfinderlist.html
+func (s *Store) GetShopFinderList(ctx context.Context, accessToken string, request GetShopFinderListRequest) (response *GetShopFinderListResponse, err error) {
+	if err = s.Post(ctx, APIGetShopFinderList, accessToken, request, nil, &response); err != nil {
 		return nil, err
 	}
 	return response, nil

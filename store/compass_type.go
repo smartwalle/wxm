@@ -88,3 +88,35 @@ type GetShopFinderAuthorizationListResponse struct {
 	wxm.Error
 	AuthorizedFinderIdList []string `json:"authorized_finder_id_list,omitempty"` // 授权视频号id列表
 }
+
+// GetShopFinderListRequest 获取带货达人列表请求参数
+type GetShopFinderListRequest struct {
+	Date    string `json:"ds"`      // 日期，格式YYYYMMDD
+	Version string `json:"version"` // 填'v2'会返回带货者身份的id
+}
+
+// GetShopFinderListResponse 获取带货达人列表响应
+type GetShopFinderListResponse struct {
+	wxm.Error
+	FinderList []*ShopFinderInfo `json:"finder_list,omitempty"` // 视频号列表
+}
+
+// ShopFinderInfo 视频号信息
+type ShopFinderInfo struct {
+	FinderID       string          `json:"finder_id"`       // 视频号id
+	FinderNickname string          `json:"finder_nickname"` // 视频号昵称
+	Data           *ShopFinderData `json:"data,omitempty"`  // 成交数据
+	TalentID       string          `json:"talent_id"`       // 带货者id
+	TalentNickname string          `json:"talent_nickname"` // 带货者昵称
+	MpID           string          `json:"mp_id"`           // 公众号id
+	MpNickname     string          `json:"mp_nickname"`     // 公众号昵称
+}
+
+// ShopFinderData 成交数据
+type ShopFinderData struct {
+	PayGMV          string `json:"pay_gmv"`            // 成交金额，单位分
+	PayProductIDCnt string `json:"pay_product_id_cnt"` // 动销商品数
+	PayUV           string `json:"pay_uv"`             // 成交人数
+	RefundGMV       string `json:"refund_gmv"`         // 退款金额，单位分
+	PayRefundGMV    string `json:"pay_refund_gmv"`     // 成交退款金额，单位分
+}
